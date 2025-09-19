@@ -49,10 +49,11 @@ def event():
     time += events[event_id]["choices"][choice]["results"][outcome]["time"]
     artefacts += events[event_id]["choices"][choice]["results"][outcome]["artefacts"]
 
-event()
-print(money)
-print(time)
-print(artefacts)
+while True:
+    event()
+    print(money)
+    print(time)
+    print(artefacts)
 
 
 
