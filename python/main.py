@@ -46,38 +46,44 @@ def event():
         choice = input(events[event_id]["input"]).strip().lower()
 
         if choice in events[event_id]["choices"]:
-            if money < events[event_id]["choices"][choice]["cost"]["money"] and time < events[event_id]["choices"][choice]["cost"]["time"] and len(artefacts) < events[event_id]["choices"][choice]["cost"]["artefacts"]:
+            if money < events[event_id]["choices"][choice]["cost"]["money"] and time < events[event_id]["choices"][choice]["cost"]["time"] and artefacts < events[event_id]["choices"][choice]["cost"]["artefacts"]:
                 print("Before acting on it, you realize that you don't have enough of anything for this option.")
             elif money < events[event_id]["choices"][choice]["cost"]["money"] and time < events[event_id]["choices"][choice]["cost"]["time"]:
                 print("Before acting on it, you realize that you don't have enough money nor time for this option.")
-            elif money < events[event_id]["choices"][choice]["cost"]["artefacts"] and len(artefacts) < events[event_id]["choices"][choice]["cost"]["artefacts"]:
+            elif money < events[event_id]["choices"][choice]["cost"]["artefacts"] and artefacts < events[event_id]["choices"][choice]["cost"]["artefacts"]:
                 print("Before acting on it, you realize that you don't have enough money nor artefacts for this option.")
-            elif time < events[event_id]["choices"][choice]["cost"]["time"] and len(artefacts) < events[event_id]["choices"][choice]["cost"]["artefacts"]:
+            elif time < events[event_id]["choices"][choice]["cost"]["time"] and artefacts < events[event_id]["choices"][choice]["cost"]["artefacts"]:
                 print("Before acting on it, you realize that you don't have enough time nor artefacts for this option.")
             elif money < events[event_id]["choices"][choice]["cost"]["money"]:
-                print("Before acting on it, you realize that you don't have enough money for this option.")
+                print(f"Before acting on it, you realize that you don't have enough money for this option.\n----")
             elif time < events[event_id]["choices"][choice]["cost"]["time"]:
                 print("Before acting on it, you realize that you don't have enough time for this option.")
-            elif len(artefacts) < events[event_id]["choices"][choice]["cost"]["artefacts"]:
+            elif artefacts < events[event_id]["choices"][choice]["cost"]["artefacts"]:
                 print("Before acting on it, you realize that you don't have enough artefacts for this option.")
 
+    print("----")
     money -= events[event_id]["choices"][choice]["cost"]["money"]
     time -= events[event_id]["choices"][choice]["cost"]["time"]
 
     if events[event_id]["choices"][choice]["cost"]["artefacts"] > 0:
         remove_artefact(events[event_id]["choices"][choice]["cost"]["artefacts"])
     outcome = random.randint(1, len(events[event_id]["choices"][choice]["results"]))
-    print(events[event_id]["choices"][choice]["results"][outcome]["text"])
+    print(events[event_id]["choices"][choice]["results"][outcome]["text"],f"\n----")
     money += events[event_id]["choices"][choice]["results"][outcome]["money"]
     time += events[event_id]["choices"][choice]["results"][outcome]["time"]
     #artefacts += events[event_id]["choices"][choice]["results"][outcome]["artefacts"]
     add_artefact(events[event_id]["choices"][choice]["results"][outcome]["artefacts"])
-
 event()
 add_artefact(1)
 print(money)
 print(time)
 print(artefacts[0].nimi, artefacts[0].arvo, artefacts[0].manner)
+
+while True:
+    event()
+    if input("Check money, time, artifacts? y/n") == "y":
+        print(f"You have \033[32m${money}\033[0m, \033[34m{time} days\033[0m and \033[33m{artefacts} artefact(s)\033[0m.")
+    print("----")
 
 
 
