@@ -65,7 +65,7 @@ events = {
     },
     4:{
         "event":"You stumble upon some sort of monument. There is a sign asking you to pray.",
-        "input":"Do you pray on your \033[35mknees\033[0m, \033[35mstanding\033[0m up (s) or do you \033[35mleave\033[0m (l)?",
+        "input":"Do you pray on your \033[35mknees\033[0m, \033[35mstanding\033[0m up or do you \033[35mleave\033[0m?",
         "choices":{
             "knees":{
                 "cost":{"money":0,"time":0,"artefacts":0},
