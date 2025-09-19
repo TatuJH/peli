@@ -5,6 +5,12 @@ money = 1000
 time = 365
 artefacts = 0
 
+class Auto:
+    def __init__(self, nimi, arvo, manner):
+        self.nimi = nimi
+        self.arvo = arvo
+        self.manner = manner
+
 
 def event():
     global money
@@ -17,6 +23,7 @@ def event():
     while choice not in events[event_id]["choices"] or money < events[event_id]["choices"][choice]["cost"][
         "money"] or time < events[event_id]["choices"][choice]["cost"]["time"] or artefacts < events[event_id]["choices"][choice]["cost"]["artefacts"]:
         choice = input(events[event_id]["input"]).strip().lower()
+
         if choice in events[event_id]["choices"]:
             if money < events[event_id]["choices"][choice]["cost"]["money"] and time < events[event_id]["choices"][choice]["cost"]["time"] and artefacts < events[event_id]["choices"][choice]["cost"]["artefacts"]:
                 print("Before acting on it, you realize that you don't have enough of anything for this option.")
@@ -32,6 +39,7 @@ def event():
                 print("Before acting on it, you realize that you don't have enough time for this option.")
             elif artefacts < events[event_id]["choices"][choice]["cost"]["artefacts"]:
                 print("Before acting on it, you realize that you don't have enough artefacts for this option.")
+
     money -= events[event_id]["choices"][choice]["cost"]["money"]
     time -= events[event_id]["choices"][choice]["cost"]["time"]
     artefacts -= events[event_id]["choices"][choice]["cost"]["artefacts"]
@@ -45,3 +53,6 @@ event()
 print(money)
 print(time)
 print(artefacts)
+
+
+
