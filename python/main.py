@@ -1,5 +1,4 @@
 import random
-from random import shuffle
 from event_list import *
 from artefacts import *
 
