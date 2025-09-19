@@ -1,4 +1,5 @@
 import random
+from random import shuffle
 from event_list import *
 from artefacts import *
 
@@ -19,16 +20,44 @@ class Artefact:
 
 def add_artefact(count):
     global cont
-    # satunnainen raha-arvo
-    val = random.randint(600,1000)
 
-    tup = artefact_names[cont]
+    # Hanki kaikki mahd. aarteiden nimet mantereen perusteella
+    tup = list(artefact_names[cont])
 
-    # Hanki nimi mantereen perusteella toisesta tiedostosta
-    for i in range(0,count):
-        nimi = tup[random.randint(0, len(tup) - 1)]
-        artefacts.append(Artefact(nimi, val, cont))
+    # Sekoita artefaktien lista jotta pelaaja ei saa jokaisella pelikerralla samoja aarteita ekana
+    random.shuffle(tup)
 
+    # Luo erikseen lista pelaajan omistamista aarteiden nimistä
+    # -> artefacts listaa olioita eikä sanoja joten ei voida verrata sillä
+    names = list()
+    for nm in artefacts:
+        names.append(nm.name)
+
+
+    # Montako artefaktia lisätään?
+    for c in range(0,count):
+        # Satunnainen rahamäärä
+        val = random.randint(600, 1000)
+
+        # Montako mahdollista nimeä on?
+        for i in range(0,len(tup)-1):
+            nimi = tup[i]
+
+            # Pelaaja ei voi saada duplikaatteja artifakteista
+            if nimi not in names:
+                artefacts.append(Artefact(nimi, val, cont))
+                names.append(nimi)
+                # Poistu loopista jos löydettiin käyttämätön nimi
+                break
+            else:
+                if i == len(tup)-2:
+                    # Mikäli pelaajalla on jo JOKAINEN aarre mantereelta, valitse satunnaisesti duplikaatti
+                    nimi = tup[random.randint(0,len(tup)-1)]
+                    artefacts.append(Artefact(nimi, val, cont))
+                    names.append(nimi)
+
+
+# Poista aarre randomilla
 def remove_artefact(count):
     if len(artefacts) > 0:
         i = random.randint(0, len(artefacts)-1)
@@ -78,9 +107,10 @@ def event():
     money += events[event_id]["choices"][choice]["results"][outcome]["money"]
     time += events[event_id]["choices"][choice]["results"][outcome]["time"]
     #artefacts += events[event_id]["choices"][choice]["results"][outcome]["artefacts"]
-    add_artefact(events[event_id]["choices"][choice]["results"][outcome]["artefacts"])
+    if events[event_id]["choices"][choice]["results"][outcome]["artefacts"] > 0:
+        add_artefact(events[event_id]["choices"][choice]["results"][outcome]["artefacts"])
 event()
-add_artefact(1)
+add_artefact(4)
 print(money)
 print(time)
 
