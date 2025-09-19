@@ -91,15 +91,20 @@ events = {
 }
 
 #Eventin lisäys pohja:
-#NUMERO:{
-#        "event":,
-#        "input":,
+#JÄRJESTYSLUKY:{
+#        "event":, !!!EVENTIN TEKSTI
+#        "input":, !!!MITÄ EVENTTI KYSYY (ESIM ACCEPT (A) OR DECLINE (D)
 #        "choices":{
-#            "TEKSTI":{
-#                "cost":{"money":,"time":,"artefacts":},
+#            "VAIHTOEHTO (ESIM A TAI D)":{
+#                "cost":{"money":,"time":,"artefacts":}, !!!MITÄ VAIHTOEHTO MAKSAA (AINA POSITIIVINEN)
 #                "results":{
-#                    NUMERO:{"money":,"time":,"artefacts":,"text":},
+#                    JÄRJESTYSLUKU, ALKAA AINA 1:{"money":,"time":,"artefacts":,"text":}, !!!EKAT KOLME ANTAA PELAAJALLE RESURSSIA (NEG/POS), "TEXT" ON MITÄ PRINTATAAN
 #               }
 #            },
 #        }
 #    },
+
+#HUOM! VÄRIKOODIT:
+#Raha (vihreä): \033[32m$X\033[0m
+#Aika (sininen): \033[34mX DAYS\033[0m
+#Artefaktit (keltainen): \033[33mX ARTEFACT(S)\033[0m
