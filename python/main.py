@@ -63,7 +63,7 @@ def remove_artefact(count):
 
 def list_artefacts():
     for a in artefacts:
-        print(f"\033[33m{a.name}, valued at ${a.value}, origin: {a.continent}\033[0m")
+        print(f"\033[33m{a.name}\033[0m, valued at \033[32m${a.value}\033[0m, origin: \033[31m{a.continent}\033[0m")
 
 
 
@@ -108,16 +108,13 @@ def event():
     #artefacts += events[event_id]["choices"][choice]["results"][outcome]["artefacts"]
     if events[event_id]["choices"][choice]["results"][outcome]["artefacts"] > 0:
         add_artefact(events[event_id]["choices"][choice]["results"][outcome]["artefacts"])
-event()
-add_artefact(4)
-print(money)
-print(time)
 
+add_artefact(4)
 
 while True:
     event()
     if input("Check money, time, artifacts? y/n") == "y":
-        print(f"You have \033[32m${money}\033[0m, \033[34m{time} days\033[33m \nCurrent artefacts: ")
+        print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[0m \nCurrent artefacts: ")
         list_artefacts()
     print("----")
 
