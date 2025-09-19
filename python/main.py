@@ -51,9 +51,9 @@ def event():
 
 while True:
     event()
-    print(money)
-    print(time)
-    print(artefacts)
+    if input("Check money, time, artifacts? y/n") == "y":
+        print(f"You have \033[32m${money}\033[0m, \033[34m{time} days\033[0m and \033[33m{artefacts} artefact(s)\033[0m.")
+    print("----")
 
 
 
