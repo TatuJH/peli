@@ -62,5 +62,44 @@ events = {
                 }
             }
         }
+    },
+    4:{
+        "event":"You stumble upon some sort of monument. There is a sign asking you to pray.",
+        "input":"Do you pray on your knees (k), standing up (s) or do you leave (l)?",
+        "choices":{
+            "k":{
+                "cost":{"money":0,"time":0,"artefacts":0},
+                "results":{
+                    1:{"money":0,"time":0,"artefacts":1,"text":"Something rumbles. A hatch opens underneath the monument, revealing \033[33m1 artefact\033[0m! The gods must be pleased."}
+                }
+            },
+            "s":{
+                "cost":{"money":0,"time":0,"artefacts":0},
+                "results":{
+                    1:{"money":-100,"time":-10,"artefacts":0,"text":"The monument starts glowing red. The gods didn't seem to like your praying. You feel a curse sweeping through you, draining you of \033[32m$100\033[0m and \033[34m10 days\033[0m."}
+                }
+            },
+            "l":{
+                "cost":{"money":0,"time":0,"artefacts":0},
+                "results":{
+                    1:{"money":0,"time":0,"artefacts":0,"text":"You decide to leave. Better not accidentally disrespect the gods."},
+                    2:{"money":0,"time":-5,"artefacts":0,"text":"You decide to leave, but feel the earth starting to tremble. The gods weren't happy about your lack of praying. You black out and lose \033[34m5 days\033[0m."}
+                }
+            }
+        }
     }
 }
+
+#Eventin lisäys pohja:
+#NUMERO:{
+#        "event":,
+#        "input":,
+#        "choices":{
+#            "TEKSTI":{
+#                "cost":{"money":,"time":,"artefacts":},
+#                "results":{
+#                    NUMERO:{"money":,"time":,"artefacts":,"text":},
+#               }
+#            },
+#        }
+#    },
