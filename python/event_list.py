@@ -90,7 +90,7 @@ events = {
     },
     5:{
         "event":"You see a man in a suit strolling on the street. He seems to be giving money to everyone kind enough to greet him.",
-        "input":"Do you greet him with a \033[35mhello\033[0m, a \033[35mgood evening\033[0m sir or do you do \033[35mnothing\033[0m?",
+        "input":'Do you greet him with a "\033[35mhello\033[0m", a "\033[35mgood evening\033[0m sir" or do you do \033[35mnothing\033[0m?',
         "choices":{
             "hello":{
                 "cost":{"money":0,"time":0,"artefacts":0},
@@ -108,7 +108,7 @@ events = {
             "nothing":{
                 "cost":{"money":0,"time":0,"artefacts":0},
                 "results":{
-                    1:{"money":0,"time":0,"artefacts":0,"text":"You pass him by. You didn't need his pity money."}
+                    1:{"money":0,"time":0,"artefacts":0,"text":"You pass him by. You don't need his pity money."}
                 }
             }
         }
