@@ -1,6 +1,5 @@
 import random
 from event_list import *
-from trivia_list import *
 
 money = 1000
 time = 365
@@ -49,18 +48,6 @@ def event():
     money += events[event_id]["choices"][choice]["results"][outcome]["money"]
     time += events[event_id]["choices"][choice]["results"][outcome]["time"]
     artefacts += events[event_id]["choices"][choice]["results"][outcome]["artefacts"]
-
-def trivia(continent):
-    question_number = random.randint(1, 5)
-    question = kysymykset[continent][question_number]["kysymys"]
-    answer = kysymykset[continent][question_number]["vastaus"]
-
-    if input(question) == answer:
-        print("Right Answer!")
-        #lisäätään pelaajalle rahaa
-    else:
-        print("Wrong Answer!")
-        #ei raahaa / pelaaja menettää rahaa
 
 while True:
     event()

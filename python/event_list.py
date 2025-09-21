@@ -26,7 +26,7 @@ events = {
             "accept":{
                 "cost":{"money":100,"time":0,"artefacts":0},
                 "results":{
-                    1:{"money":0,"time":30,"artefacts":0,"text":"You bought yourself some time with \033[32m$100\033[0m. \033[34m30 days\033[0m to be exact."}
+                    1:{"money":0,"time":30,"artefacts":0,"text":"You bought yourself some time. \033[34m30 days\033[0m to be exact."}
                 }
             },
             "decline":{
@@ -39,7 +39,7 @@ events = {
     },
     3:{
         "event":"You get lost, somehow.",
-        "input":"Would you like to turn \033[35mleft\033[0m, \033[35mright\033[0m or continue \033[35mstraight\033[0m (s)?",
+        "input":"Would you like to turn \033[35mleft\033[0m, \033[35mright\033[0m or continue \033[35mstraight\033[0m?",
         "choices":{
             "left":{
                 "cost":{"money":0,"time":0,"artefacts":0},
@@ -65,7 +65,7 @@ events = {
     },
     4:{
         "event":"You stumble upon some sort of monument. There is a sign asking you to pray.",
-        "input":"Do you pray on your \033[35mknees\033[0m, \033[35mstanding\033[0m up (s) or do you \033[35mleave\033[0m (l)?",
+        "input":"Do you pray on your \033[35mknees\033[0m, \033[35mstanding\033[0m up or do you \033[35mleave\033[0m?",
         "choices":{
             "knees":{
                 "cost":{"money":0,"time":0,"artefacts":0},
@@ -83,7 +83,7 @@ events = {
                 "cost":{"money":0,"time":0,"artefacts":0},
                 "results":{
                     1:{"money":0,"time":0,"artefacts":0,"text":"You decide to leave. Better not accidentally disrespect the gods."},
-                    2:{"money":0,"time":-5,"artefacts":0,"text":"You decide to leave, but feel the earth starting to tremble. The gods weren't happy about your lack of praying. You black out and lose \033[34m5 days\033[0m."}
+                    2:{"money":0,"time":-5,"artefacts":0,"text":"You decide to leave, but feel the earth starting to tremble. The gods weren't happy about you not honoring them. You black out and lose \033[34m5 days\033[0m."}
                 }
             }
         }
@@ -112,6 +112,54 @@ events = {
                 }
             }
         }
+    },
+    6:{
+        "event":'You accidentally bump into a towering man on the street. You try to apologize, but the man seeks \033[32m$200\033[0m in compensation for "physical pain". Like he felt anything.',
+        "input":"Do you pay him the \033[32m$\033[0m\033[35m200\033[0m he asks for, try to settle for \033[32m$\033[0m\033[35m100\033[0m or \033[35mrefuse\033[0m to pay?",
+        "choices":{
+            "200":{
+                "cost":{"money":200,"time":0,"artefacts":0},
+                "results":{
+                    1:{"money":0,"time":0,"artefacts":0,"text":"The man scoffs, relieving you of your \033[32m$200\033[0m. He gives you one last angry look and leaves."}
+                }
+            },
+            "100":{
+                "cost":{"money":100,"time":0,"artefacts":0},
+                "results":{
+                    1:{"money":0,"time":-5,"artefacts":0,"text":"The man seems unimpressed. He looks you up and down, takes your \033[32m$100\033[0m and pushes you to the ground. You lose \033[34m 5 days\033[0m."}
+                }
+            },
+            "refuse":{
+                "cost":{"money":0,"time":0,"artefacts":0},
+                "results":{
+                    1:{"money":-200,"time":0,"artefacts":0,"text":"The man seems outright outraged. He quickly reaches into your pocket and takes \033[32m$200\033[0m."},
+                    2:{"money":-150,"time":0,"artefacts":0,"text":"The man seems outright outraged. He quickly reaches into your pocket and takes \033[32m$150\033[0m."}
+                }
+            }
+        }
+    },
+    7:{
+        "event":'You notice a small well. A woman stands next to it, holding a cardboard sign. On it, she has written: "One coin = \033[32m$300\033[0m." Must be a wishing well.',
+        "input":"Do you want to \033[35mbuy\033[0m a coin for \033[32m$300\033[0m or \033[35mpass\033[0m on the opportunity?",
+        "choices":{
+            "buy":{
+                "cost":{"money":300,"time":0,"artefacts":0},
+                "results":{
+                    1:{"money":300,"time":0,"artefacts":0,"text":"You toss the coin into the well and a bag of money falls from the sky. You're not sure how, but you also don't really care. Inside it you find \033[32m$300\033[0m."},
+                    2:{"money":450,"time":0,"artefacts":0,"text":"You toss the coin into the well and a bag of money falls from the sky. You're not sure how, but you also don't really care. Inside it you find \033[32m$450\033[0m."},
+                    3:{"money":600,"time":0,"artefacts":0,"text":"You toss the coin into the well and a bag of money falls from the sky. You're not sure how, but you also don't really care. Inside it you find \033[32m$600\033[0m."},
+                    4:{"money":0,"time":30,"artefacts":0,"text":"You toss the coin into the well and feel a surge of energy coursing through you. You receive \033[34m30 days\033[0m."},
+                    5:{"money":0,"time":45,"artefacts":0,"text":"You toss the coin into the well and feel a surge of energy coursing through you. You receive \033[34m45 days\033[0m."},
+                    6:{"money":0,"time":60,"artefacts":0,"text":"You toss the coin into the well and feel a surge of energy coursing through you. You receive \033[34m60 days\033[0m."}
+                }
+            },
+            "pass":{
+                "cost":{"money":0,"time":0,"artefacts":0},
+                "results":{
+                    1:{"money":0,"time":0,"artefacts":0,"text":"You? Superstitious? Like any normal person, you decide to save your money."}
+                }
+            }
+        }
     }
 }
 
@@ -134,3 +182,4 @@ events = {
 #Aika (sininen): \033[34mX DAYS\033[0m
 #Artefaktit (keltainen): \033[33mX ARTEFACT(S)\033[0m
 #Vaihtoehdot (magenta): \033[35mTEKSTI\033[0m
+#Maanosat (punainen): \033[31mTEKSTI\033[0m
