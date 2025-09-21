@@ -174,6 +174,18 @@ def event():
     if events[event_id]["choices"][choice]["results"][outcome]["artefacts"] > 0:
         add_artefact(events[event_id]["choices"][choice]["results"][outcome]["artefacts"])
 
+def trivia(continent):
+    question_number = random.randint(1, 5)
+    question = kysymykset[continent][question_number]["kysymys"]
+    answer = kysymykset[continent][question_number]["vastaus"]
+
+    if input(question) == answer:
+        print("Right Answer!")
+        #lisäätään pelaajalle rahaa
+    else:
+        print("Wrong Answer!")
+        #ei raahaa / pelaaja menettää rahaa
+
 add_artefact(1)
 while True:
     event()
