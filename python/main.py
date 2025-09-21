@@ -1,7 +1,6 @@
 import random
 from event_list import *
 from artefacts import *
-from event_list import *
 
 money = 1000
 time = 365
@@ -13,7 +12,7 @@ cont = "EU"
 
 
 class Artefact:
-    def _init_(self, nimi, arvo, manner):
+    def __init__(self, nimi, arvo, manner):
         self.name = nimi
         self.value = arvo
         self.continent = manner
@@ -185,3 +184,7 @@ while True:
     if len(artefacts) > 0:
         if input("Would you like to sell\033[33m artefacts\033[0m? (y/n) ") == "y":
             sell_artefacts()
+    print("----")
+
+
+
