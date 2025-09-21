@@ -84,5 +84,4 @@ kysymykset = {
            "vastaus":"Blue Whale"}
     }
 }
-
 #maanosien nimet pitää päivittää vastaamaan tietokannoissa olevia
