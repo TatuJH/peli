@@ -62,8 +62,11 @@ def remove_artefact(count):
         i = random.randint(0, len(artefacts)-1)
 
 def list_artefacts():
-    for a in artefacts:
-        print(f"\033[33m{a.name}\033[0m, valued at \033[32m${a.value}\033[0m, origin: \033[31m{a.continent}\033[0m")
+    if len(artefacts) > 0:
+        for a in artefacts:
+            print(f"\033[33m{a.name}\033[0m, valued at \033[32m${a.value}\033[0m, origin: \033[31m{a.continent}\033[0m")
+    else:
+        print(f"None")
 
 
 #Hoitaa eventit
@@ -95,12 +98,15 @@ def event():
                 print("Before acting on it, you realize that you don't have enough artefacts for this option.")
 
     print("----")
+    # Tapahtuman hinta
     money -= events[event_id]["choices"][choice]["cost"]["money"]
     time -= events[event_id]["choices"][choice]["cost"]["time"]
-
     if events[event_id]["choices"][choice]["cost"]["artefacts"] > 0:
         remove_artefact(events[event_id]["choices"][choice]["cost"]["artefacts"])
+
     outcome = random.randint(1, len(events[event_id]["choices"][choice]["results"]))
+
+    #Tapahtuman lopputulos
     print(events[event_id]["choices"][choice]["results"][outcome]["text"],f"\n----")
     money += events[event_id]["choices"][choice]["results"][outcome]["money"]
     if money < 0:
@@ -112,7 +118,6 @@ def event():
     if events[event_id]["choices"][choice]["results"][outcome]["artefacts"] > 0:
         add_artefact(events[event_id]["choices"][choice]["results"][outcome]["artefacts"])
 
-add_artefact(4)
 
 while True:
     event()
