@@ -57,8 +57,10 @@ def trivia(continent):
 
     if input(question) == answer:
         print("Right Answer!")
+        #lisäätään pelaajalle rahaa
     else:
         print("Wrong Answer!")
+        #ei raahaa / pelaaja menettää rahaa
 
 while True:
     event()
