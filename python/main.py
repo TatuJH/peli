@@ -49,6 +49,7 @@ def event():
     time += events[event_id]["choices"][choice]["results"][outcome]["time"]
     artefacts += events[event_id]["choices"][choice]["results"][outcome]["artefacts"]
 
+
 while True:
     event()
     if input("Check money, time, artifacts? y/n") == "y":
