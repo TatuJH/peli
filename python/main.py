@@ -32,7 +32,8 @@ def add_artefact(count):
     for nm in artefacts:
         names.append(nm.name)
 
-
+    if count is None:
+        count = 1
     # Montako artefaktia lisätään?
     for c in range(0,count):
         # Satunnainen rahamäärä
@@ -56,15 +57,54 @@ def add_artefact(count):
                     names.append(nimi)
 
 
-# Poista aarre randomilla
-def remove_artefact(count):
+def sell_artefacts():
+    global money
     if len(artefacts) > 0:
-        i = random.randint(0, len(artefacts)-1)
+        l = list()
+
+        # Tee uusi lista jossa on pelkästään artefaktien numerot :p
+        for a in artefacts:
+            l.append(artefacts.index(a)+1)
+
+        # looppaa kunnes pelaaja antaa pätevän vastausken tai häipyy
+        i = -1
+        print(f"\nYou arrive at the local auctionhouse...\n")
+        while i not in l:
+            print(f"You currently own the following:")
+            print(f"\033[33m----\033[00m")
+            list_artefacts()
+            print(f"\033[33m----\033[00m")
+            print(f"Which\033[33m artefact\033[0m would you like to sell? Leave empty to cancel")
+            i = int(input(f"number of \033[33martefact\033[0m to sell: ").strip())
+
+
+            if i == "":
+                print("You awkwardly shuffle back out of the auctionhouse after doing nothing")
+                return
+        # poista indeksistä 1 koska näin ne listit toimii
+        i -= 1
+        money += artefacts[int(i)].value
+        print(f"Sold the \033[33m{artefacts[int(i)].name}\033[0m for\033[32m ${artefacts[int(i)].value}\033[0m!")
+        artefacts.remove(artefacts[i])
+    else:
+        print(f"You have no\033[33m artefacts\033[0m to sell.")
+
+
+
+def remove_artefact(index):
+    if len(artefacts) > 0:
+        # Tee randomilla jos ei anneta indeksiä (eli jos jokin event ottaa pelaajalta)
+        if not index:
+                i = random.randint(0, len(artefacts)-1)
+                artefacts.remove(i)
+        else:
+            artefacts.remove(index)
+
 
 def list_artefacts():
     if len(artefacts) > 0:
         for a in artefacts:
-            print(f"\033[33m{a.name}\033[0m, valued at \033[32m${a.value}\033[0m, origin: \033[31m{a.continent}\033[0m")
+            print(f"{artefacts.index(a)+1}. \033[33m{a.name}\033[0m, valued at \033[32m${a.value}\033[0m, origin: \033[31m{a.continent}\033[0m")
     else:
         print(f"None")
 
@@ -115,12 +155,15 @@ def event():
     if events[event_id]["choices"][choice]["results"][outcome]["artefacts"] > 0:
         add_artefact(events[event_id]["choices"][choice]["results"][outcome]["artefacts"])
 
-
+add_artefact(1)
 while True:
     event()
-    if input("Check money, time, artifacts? y/n") == "y":
-        print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[0m \nCurrent artefacts: ")
+    if input("Check money, time, artifacts? (y/n) ") == "y":
+        print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[33m \nCurrent artefacts:\033[0m ")
         list_artefacts()
+    print("----")
+    if input("Would you like to sell\033[33m artefacts\033[0m? (y/n) ") == "y":
+        sell_artefacts()
     print("----")
 
 
