@@ -83,7 +83,7 @@ events = {
                 "cost":{"money":0,"time":0,"artefacts":0},
                 "results":{
                     1:{"money":0,"time":0,"artefacts":0,"text":"You decide to leave. Better not accidentally disrespect the gods."},
-                    2:{"money":0,"time":-5,"artefacts":0,"text":"You decide to leave, but feel the earth starting to tremble. The gods weren't happy about your lack of praying. You black out and lose \033[34m5 days\033[0m."}
+                    2:{"money":0,"time":-5,"artefacts":0,"text":"You decide to leave, but feel the earth starting to tremble. The gods weren't happy about you not honoring them. You black out and lose \033[34m5 days\033[0m."}
                 }
             }
         }
@@ -134,3 +134,4 @@ events = {
 #Aika (sininen): \033[34mX DAYS\033[0m
 #Artefaktit (keltainen): \033[33mX ARTEFACT(S)\033[0m
 #Vaihtoehdot (magenta): \033[35mTEKSTI\033[0m
+#Maanosat (punainen): \033[31mTEKSTI\033[0m
