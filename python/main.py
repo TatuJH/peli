@@ -1,6 +1,7 @@
 import random
 from event_list import *
 from artefacts import *
+from trivia_list import *
 
 money = 1000
 time = 365
