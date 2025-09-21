@@ -62,30 +62,43 @@ def sell_artefacts():
     if len(artefacts) > 0:
         l = list()
 
-        # Tee uusi lista jossa on pelkästään artefaktien numerot :p
-        for a in artefacts:
-            l.append(artefacts.index(a)+1)
-
-        # looppaa kunnes pelaaja antaa pätevän vastausken tai häipyy
-        i = -1
+        auctioning = True
         print(f"\nYou arrive at the local auctionhouse...\n")
-        while i not in l:
-            print(f"You currently own the following:")
-            print(f"\033[33m----\033[00m")
-            list_artefacts()
-            print(f"\033[33m----\033[00m")
-            print(f"Which\033[33m artefact\033[0m would you like to sell? Leave empty to cancel")
-            i = int(input(f"number of \033[33martefact\033[0m to sell: ").strip())
+
+        while auctioning:
+            i = -1
+            # Tee uusi lista jossa on pelkästään artefaktien numerot :p
+            for a in artefacts:
+                l.append(artefacts.index(a) + 1)
+
+            # looppaa kunnes pelaaja antaa pätevän vastausken tai häipyy
+            while i not in l:
+
+                print(f"You currently own the following:")
+                print(f"\033[33m----\033[00m")
+                list_artefacts()
+                print(f"\033[33m----\033[00m")
+                print(f"Which\033[33m artefact\033[0m would you like to sell? Leave empty to cancel")
+                i = int(input(f"number of \033[33martefact\033[0m to sell: ").strip())
 
 
-            if i == "":
-                print("You awkwardly shuffle back out of the auctionhouse after doing nothing")
-                return
-        # poista indeksistä 1 koska näin ne listit toimii
-        i -= 1
-        money += artefacts[int(i)].value
-        print(f"Sold the \033[33m{artefacts[int(i)].name}\033[0m for\033[32m ${artefacts[int(i)].value}\033[0m!")
-        artefacts.remove(artefacts[i])
+                if i == "":
+                    print("You awkwardly shuffle back out of the auctionhouse after doing nothing")
+                    return
+            # poista indeksistä 1 koska näin ne listit toimii
+            i -= 1
+            money += artefacts[int(i)].value
+            print(f"Sold the \033[33m{artefacts[int(i)].name}\033[0m for\033[32m ${artefacts[int(i)].value}\033[0m!")
+            artefacts.remove(artefacts[i])
+
+            l.clear()
+
+            if len(artefacts) > 0:
+                if input("Sell something else? (y/n) ") != "y":
+                    auctioning = False
+            else:
+                auctioning = False
+        print("You leave the auctionhouse.")
     else:
         print(f"You have no\033[33m artefacts\033[0m to sell.")
 
@@ -162,8 +175,9 @@ while True:
         print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[33m \nCurrent artefacts:\033[0m ")
         list_artefacts()
     print("----")
-    if input("Would you like to sell\033[33m artefacts\033[0m? (y/n) ") == "y":
-        sell_artefacts()
+    if len(artefacts) > 0:
+        if input("Would you like to sell\033[33m artefacts\033[0m? (y/n) ") == "y":
+            sell_artefacts()
     print("----")
 
 
