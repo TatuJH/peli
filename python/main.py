@@ -86,6 +86,9 @@ def sell_artefacts():
                     print("You awkwardly shuffle back out of the auctionhouse after doing nothing")
                     return
             # poista indeksistä 1 koska näin ne listit toimii
+
+            # TODO: VAROITA PELAAJAA JOS MYY AINOAN JOSTAKIN MANTEREELTA OLEVAN AARTEEN - ehkä ainoastaan jos hän ei ole kyseisellä mantereella sillä hetkellä :-)
+
             i -= 1
             money += artefacts[int(i)].value
             print(f"Sold the \033[33m{artefacts[int(i)].name}\033[0m for\033[32m ${artefacts[int(i)].value}\033[0m!")
