@@ -66,14 +66,13 @@ def list_artefacts():
         print(f"\033[33m{a.name}\033[0m, valued at \033[32m${a.value}\033[0m, origin: \033[31m{a.continent}\033[0m")
 
 
-
+#Hoitaa eventit
 def event():
     global money
     global time
     global artefacts
     event_id = random.randint(1, len(events))
     print(events[event_id]["event"])
-
     choice = ""
     while choice not in events[event_id]["choices"] or money < events[event_id]["choices"][choice]["cost"][
         "money"] or time < events[event_id]["choices"][choice]["cost"]["time"] or len(artefacts) < events[event_id]["choices"][choice]["cost"]["artefacts"]:
@@ -104,7 +103,11 @@ def event():
     outcome = random.randint(1, len(events[event_id]["choices"][choice]["results"]))
     print(events[event_id]["choices"][choice]["results"][outcome]["text"],f"\n----")
     money += events[event_id]["choices"][choice]["results"][outcome]["money"]
+    if money < 0:
+        money = 0
     time += events[event_id]["choices"][choice]["results"][outcome]["time"]
+    if time < 0:
+        time = 0
     #artefacts += events[event_id]["choices"][choice]["results"][outcome]["artefacts"]
     if events[event_id]["choices"][choice]["results"][outcome]["artefacts"] > 0:
         add_artefact(events[event_id]["choices"][choice]["results"][outcome]["artefacts"])
