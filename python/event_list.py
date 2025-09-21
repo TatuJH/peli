@@ -39,7 +39,7 @@ events = {
     },
     3:{
         "event":"You get lost, somehow.",
-        "input":"Would you like to turn \033[35mleft\033[0m, \033[35mright\033[0m or continue \033[35mstraight\033[0m (s)?",
+        "input":"Would you like to turn \033[35mleft\033[0m, \033[35mright\033[0m or continue \033[35mstraight\033[0m?",
         "choices":{
             "left":{
                 "cost":{"money":0,"time":0,"artefacts":0},
