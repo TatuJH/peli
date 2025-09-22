@@ -1,4 +1,5 @@
 import random
+import mysql.connector
 from event_list import *
 from artefacts import *
 from trivia_list import *
@@ -8,8 +9,22 @@ money = 1000
 time = 365
 artefacts = list()
 
+conn = mysql.connector.connect(
+    host='localhost',
+    port=3306,
+    database='demogame',
+    user='tatu',
+    password='Tietokannat1',
+    autocommit=True
+)
+
 # testausta varten
 cont = "EU"
+conts = ["AF", "AN", "AS", "EU", "NA", "OC", "SA"]
+airport = "Helsinki Vantaa Airport"
+country = "Finland"
+size = "large_airport"
+
 
 class Artefact:
     def __init__(self, nimi, arvo, manner):
