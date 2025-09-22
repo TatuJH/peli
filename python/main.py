@@ -1,17 +1,7 @@
 import random
-import mysql.connector
 from event_list import *
 from artefacts import *
 from trivia_list import *
-
-conn = mysql.connector.connect(
-    host='localhost',
-    port=3306,
-    database='demogame',
-    user='tatu',
-    password='Tietokannat1',
-    autocommit=True
-)
 
 money = 1000
 time = 365
@@ -19,10 +9,6 @@ artefacts = list()
 
 # testausta varten
 cont = "EU"
-airport= "Helsinki Vantaa Airport"
-conts = ["AF", "AN", "AS", "EU", "NA", "OC", "SA"]
-size = "large_airport"
-country = "Finland"
 
 
 
@@ -179,17 +165,10 @@ def event():
 
     #Tapahtuman lopputulos
     print(events[event_id]["choices"][choice]["results"][outcome]["text"],f"\n----")
-    if size == "medium_airport":
-        money += int(events[event_id]["choices"][choice]["results"][outcome]["money"] * 1.5)
-        time += int(events[event_id]["choices"][choice]["results"][outcome]["time"] * 1.5)
-    elif size == "large_airport":
-        money += int(events[event_id]["choices"][choice]["results"][outcome]["money"] * 2)
-        time += int(events[event_id]["choices"][choice]["results"][outcome]["time"] * 2)
-    else:
-        money += events[event_id]["choices"][choice]["results"][outcome]["money"]
-        time += events[event_id]["choices"][choice]["results"][outcome]["time"]
+    money += events[event_id]["choices"][choice]["results"][outcome]["money"]
     if money < 0:
         money = 0
+    time += events[event_id]["choices"][choice]["results"][outcome]["time"]
     if time < 0:
         time = 0
     #artefacts += events[event_id]["choices"][choice]["results"][outcome]["artefacts"]
@@ -295,4 +274,69 @@ while True:
         list_artefacts()
     print("----")
 
+add_artefact(3)
 
+def check_inventory():
+    while True:
+        event()
+        if input("Check money, time, artifacts? (y/n) ") == "y":
+            print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[33m \nCurrent artefacts:\033[0m ")
+            list_artefacts()
+        print("----")
+        if len(artefacts) > 0:
+            inp = input("Would you like to \033[35mbuy \033[0mor \033[35msell\033[33m artefacts\033[0m?")
+            if inp.__contains__("sell"):
+                sell_artefacts()
+            elif inp.__contains__("buy"):
+                shop()
+        print("----")
+
+
+def airport_actions():
+    first_action = input(
+        "Hey there explorer! It seems like you have landed at the (airport).\n"
+        "Remember, the Spirit Demon is after you, so your time here is limited.\n"
+        "What would you like to do here? (1. Work, 2. Explore, 3. Buy an artefact)\n"
+        ">"
+    )
+
+    while first_action not in ["1", "2", "3"]:
+        first_action = input(
+            "Invalid reply. Please answer with '1' for Working, '2' for Exploring or '3' for Buying an artefact.\n"
+            ">"
+        )
+    if first_action == "1":
+        print("You have chosen to work here. A safe choice indeed. You will be awarded 100 credits, but lose 20 days.")
+    elif first_action == "2":
+        print("Explore")
+    elif first_action == "3":
+        add_artefact(1)
+
+    second_action = input(
+        "Well, I sure hope you made the right decision, because the Spirit Demon will be here soon. You only have time for one more action at this airport. \n"
+        "Would you like to either 1. Work, 2. Explore or 3. Buy an artifact or 4. Travel to a new airport?\n"
+        ">"
+    )
+    while second_action not in ["1", "2", "3", "4"]:
+        second_action = input(
+            "Invalid reply. Please answer with '1' for Working, '2' for Exploring or '3' for Buying an artefact.\n"
+            ">"
+        )
+    if second_action == "1":
+        print("You have chosen to work here. A safe choice indeed. You will be awarded 100 credits, but lose 20 days.")
+    elif second_action == "2":
+        print("Explore")
+    elif second_action == "3":
+        print("Buy an artefact")
+    next_move = input("The Spirit Demon is here. To escape from it, you will have to leave as soon as possible. Do you wish to travel to a new continent? (Y/N)")
+
+    while second_action not in ["Y", "N"]:
+        second_action = input("Invalid reply. Please answer with either 'Y' to travel to a new continent or with 'N' to travel to a new airport in your current continent.")
+    if next_move == "Y":
+        next_continent = input("Which continent do you wish to travel to?")
+    elif next_move == "N":
+        print("1") #TODO maan sisänen lento
+    else:
+        print("Invalid reply. Please answer with either 'Y' to travel to a new continent or with 'N' to travel to a new airport in your current continent.")
+
+airport_actions()

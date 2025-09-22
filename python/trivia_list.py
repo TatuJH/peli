@@ -1,5 +1,5 @@
 kysymykset = {
-    "na": {
+    "NA": {
         1:{"kysymys":"What is the highest mountain in North America? _____  _______: ",
            "vastaus":"Mount McKinley"},
         2:{"kysymys":"Who was the first president of the United States? ______  __________ ",
@@ -11,7 +11,7 @@ kysymykset = {
         5:{"kysymys":"What is the largest city in North America by population? ______  ____:",
            "vastaus":"Mexico City"}
     },
-    "sa": {
+    "SA": {
         1:{"kysymys":"What is the largest country in South America by area? ______: ",
            "vastaus":"Brazil"},
         2:{"kysymys":"The tango dance originated in which South American country? _________: ",
@@ -23,7 +23,7 @@ kysymykset = {
         5:{"kysymys":"What is the longest river in South America? The ______  _____: ",
            "vastaus":"The Amazon River"}
     },
-    "eu": {
+    "EU": {
         1:{"kysymys":"Which European country is famous for inventing pizza and pasta? _____: ",
            "vastaus":"Italy"},
         2:{"kysymys":"What is the smallest country in Europe, by both population and area? _______  ____: ",
@@ -35,7 +35,7 @@ kysymykset = {
         5:{"kysymys":"Which year did the Soviet Union collapse? ____: ",
            "vastaus":"1991"}
     },
-    "asia": {
+    "AS": {
         1:{"kysymys":"What is the highest mountain in Asia? _____  _______: ",
            "vastaus":"Mount Everest"},
         2:{"kysymys":"In which country is the longest river in Asia located? _____: ",
@@ -47,7 +47,7 @@ kysymykset = {
         5:{"kysymys":"In which country can you ride the world’s fastest train, the Maglev? _____: ",
            "vastaus":"China"}
     },
-    "aus": {
+    "OC": {
         1:{"kysymys":"What is the largest city in Australia by population? ______: ",
            "vastaus":"Sydney"},
         2:{"kysymys":"Which reef system, visible from space, lies off the coast of Queensland? The _____  _______  ____: ",
@@ -59,7 +59,7 @@ kysymykset = {
         5:{"kysymys":"What is the capital city of Australia? _______: ",
            "vastaus":"Canberra"}
     },
-    "afr": {
+    "AF": {
         1:{"kysymys":"What is the longest river in Africa? The ____ _____: ",
            "vastaus":"The Nile River"},
         2:{"kysymys":"What is the largest desert in Africa? The ______ ______: ",
@@ -71,7 +71,7 @@ kysymykset = {
         5:{"kysymys":"What is the highest mountain in Africa? Mount __________: ",
            "vastaus":"Mount Kilimanjaro"}
     },
-    "ant": {
+    "AN": {
         1:{"kysymys":"Which continent is larger: Antarctica or Europe? __________: ",
            "vastaus":"Antarctica"},
         2:{"kysymys":"Which ocean surrounds Antarctica? The ________  ______: ",
