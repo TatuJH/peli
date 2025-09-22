@@ -1,6 +1,7 @@
 import random
 from event_list import *
 from artefacts import *
+from time import sleep
 
 money = 1000
 time = 365
@@ -40,7 +41,7 @@ def add_artefact(count):
         val = random.randint(600, 1000)
 
         # Montako mahdollista nimeä on?
-        for i in range(0,len(tup)-1):
+        for i in range(0,len(tup)):
             nimi = tup[i]
 
             # Pelaaja ei voi saada duplikaatteja artifakteista
@@ -50,7 +51,7 @@ def add_artefact(count):
                 # Poistu loopista jos löydettiin käyttämätön nimi
                 break
             else:
-                if i == len(tup)-2:
+                if i == len(tup)-1:
                     # Mikäli pelaajalla on jo JOKAINEN aarre mantereelta, valitse satunnaisesti duplikaatti
                     nimi = tup[random.randint(0,len(tup)-1)]
                     artefacts.append(Artefact(nimi, val, cont))
@@ -64,6 +65,8 @@ def sell_artefacts():
 
         auctioning = True
         print(f"\nYou arrive at the local auctionhouse...\n")
+        # has sold
+        b = False
 
         while auctioning:
             i = -1
@@ -79,18 +82,26 @@ def sell_artefacts():
                 list_artefacts()
                 print(f"\033[33m----\033[00m")
                 print(f"Which\033[33m artefact\033[0m would you like to sell? Leave empty to cancel")
-                i = int(input(f"number of \033[33martefact\033[0m to sell: ").strip())
 
-
+                i = input(f"number of \033[33martefact\033[0m to sell: ").strip()
                 if i == "":
-                    print("You awkwardly shuffle back out of the auctionhouse after doing nothing")
+                    if b:
+                        print(f"You leave the auctionhouse.")
+                        return
+                    else:
+                        print("You awkwardly shuffle back out of the auctionhouse after doing nothing")
                     return
+
+                #muuta numeroksi
+                i = int(i)
+
             # poista indeksistä 1 koska näin ne listit toimii
 
             # TODO: VAROITA PELAAJAA JOS MYY AINOAN JOSTAKIN MANTEREELTA OLEVAN AARTEEN - ehkä ainoastaan jos hän ei ole kyseisellä mantereella sillä hetkellä :-)
 
             i -= 1
             money += artefacts[int(i)].value
+            b = True
             print(f"Sold the \033[33m{artefacts[int(i)].name}\033[0m for\033[32m ${artefacts[int(i)].value}\033[0m!")
             artefacts.remove(artefacts[i])
 
@@ -104,6 +115,110 @@ def sell_artefacts():
         print("You leave the auctionhouse.")
     else:
         print(f"You have no\033[33m artefacts\033[0m to sell.")
+
+
+def shop():
+    global money
+    l = list()
+
+    # Tee uusi lista jossa on pelkästään artefaktien numerot :p
+    items = list()
+    tup = list(artefact_names[cont])
+    # Sekoita artefaktien lista jotta pelaaja ei saa jokaisella pelikerralla samoja aarteita ekana
+    random.shuffle(tup)
+
+    # Lista nykyisistä pelaajan artefakteista
+    names = list()
+    for nm in artefacts:
+        names.append(nm.name)
+    # Montako artefaktia kaupassa
+    for i in range(0, random.randint(3, 6)):
+        val = random.randint(600, 1000)
+        # kaupan vero
+        val += 500
+        # Montako mahdollista nimeä on?
+        for n in range(0, len(tup) - 1):
+            nimi = tup[n]
+
+            # Pelaaja ei voi saada duplikaatteja artifakteista
+            if nimi not in names:
+                items.append(Artefact(nimi, val, cont))
+                names.append(nimi)
+                # Poistu loopista jos löydettiin käyttämätön nimi
+                break
+            else:
+                if n == len(tup) - 1:
+                    # Mikäli pelaajalla on jo JOKAINEN aarre mantereelta, valitse satunnaisesti duplikaatti
+                    nimi = tup[random.randint(0, len(tup))]
+                    artefacts.append(Artefact(nimi, val, cont))
+                    names.append(nimi)
+
+    auctioning = True
+    print(f"\nYou arrive at the local auctionhouse...\n")
+
+    while auctioning:
+
+        b = False
+
+        for a in items:
+            l.append(items.index(a) + 1)
+
+        for p in items:
+            print(f"{items.index(p)}. artifact is {p.name}")
+
+        for e in l:
+            print(e)
+
+
+        i = -1
+        # looppaa kunnes pelaaja antaa pätevän vastausken tai häipyy
+        while i not in l:
+
+            print(f"The shop has the following onsale:")
+            print(f"\033[33m----\033[00m")
+            for art in items:
+                print(f"\033[35m{items.index(art)+1}\033[0m.\033[33m {art.name}, price:\033[32m ${art.value}")
+            print(f"\033[33m----\033[00m")
+            print(f"You have\033[32m ${money}\033[0m")
+            print(f"Which\033[33m artefact\033[0m would you like to buy? Leave empty to cancel")
+            i = input(f"number of\033[33m artefact\033[0m to to purchase: ").strip()
+
+
+            if i == "":
+                if b:
+                    print("You exit the auctionhouse, new treasure in tow.")
+                    return
+                else:
+                    print("You awkwardly shuffle back out of the auctionhouse after doing nothing")
+                    return
+
+            i = int(i)
+
+            if money < items[i-1].value:
+                print(f"You can't afford this item :/")
+                sleep(1.5)
+                print("----")
+                i = -1
+        # poista indeksistä 1 koska näin ne listit toimii
+        i -= 1
+        money -= items[int(i)].value
+        print(f"Purchased the \033[33m{items[int(i)].name}\033[0m for\033[32m ${items[int(i)].value}\033[0m!")
+        # vähennä kaupan vero
+        items[i].value -= 500
+        artefacts.append(items[i])
+        # poista kaupasta !!!
+        items.remove(items[i])
+        b = True
+
+        l.clear()
+
+        if len(artefacts) > 0:
+            if input("Buy something else? (y/n) ") != "y":
+                auctioning = False
+        else:
+            auctioning = False
+    print("You leave the auctionhouse.")
+
 
 
 
@@ -174,7 +289,7 @@ def event():
     if events[event_id]["choices"][choice]["results"][outcome]["artefacts"] > 0:
         add_artefact(events[event_id]["choices"][choice]["results"][outcome]["artefacts"])
 
-add_artefact(1)
+add_artefact(3)
 while True:
     event()
     if input("Check money, time, artifacts? (y/n) ") == "y":
@@ -182,8 +297,11 @@ while True:
         list_artefacts()
     print("----")
     if len(artefacts) > 0:
-        if input("Would you like to sell\033[33m artefacts\033[0m? (y/n) ") == "y":
+        inp = input("Would you like to \033[35mbuy \033[0mor \033[35msell\033[33m artefacts\033[0m?")
+        if inp.__contains__("sell"):
             sell_artefacts()
+        elif inp.__contains__("buy"):
+            shop()
     print("----")
 
 
