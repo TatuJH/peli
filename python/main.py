@@ -3,7 +3,6 @@ import mysql.connector
 from event_list import *
 from artefacts import *
 from trivia_list import *
-from time import sleep
 
 money = 5000
 time = 365
@@ -29,6 +28,15 @@ class Artefact:
         self.name = nimi
         self.value = arvo
         self.continent = manner
+
+def intro():
+    #Tähän joku tarina tai jotain
+    #Mahollisesti pelin säännöt
+    print(f"This game is color-coded.\nYour resources are as follows: \033[32mgreen\033[0m is for money, \033[34mblue\033[0m is for time and \033[33myellow\033[0m is for artefacts.\nLocations are marked with \033[31mred\033[0m.\nWhenever you are faced with a choice, each typeable option is colored with \033[35mmagenta\033[0m.")
+    temp = ""
+    while temp != "understood":
+        temp = input("\033[35mUnderstood\033[0m?").lower().strip()
+    print("----\nGood luck!\n----")
 
 def print_all():
     print(money, time, cont, country, size, airport, artefacts)
@@ -272,7 +280,6 @@ def list_artefacts(selling):
     else:
         print(f"You don't have any artefacts.")
 
-#Hoitaa eventit
 def event():
     global money
     global time
@@ -481,5 +488,5 @@ def airport_actions():
 #   else:
 #        print("Invalid reply. Please answer with either 'Y' to travel to a new continent or with 'N' to travel to a new airport in your current continent.")
 
-add_artefact(2)
+intro()
 airport_actions()
