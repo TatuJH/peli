@@ -3,6 +3,7 @@ import mysql.connector
 from event_list import *
 from artefacts import *
 from trivia_list import *
+from time import sleep
 
 money = 5000
 time = 365
@@ -17,7 +18,7 @@ remaining_actions = 2
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demogame',
+    database='demokanta',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -28,15 +29,6 @@ class Artefact:
         self.name = nimi
         self.value = arvo
         self.continent = manner
-
-def intro():
-    #Tähän joku tarina tai jotain
-    #Mahollisesti pelin säännöt
-    print(f"This game is color-coded.\nYour resources are as follows: \033[32mgreen\033[0m is for money, \033[34mblue\033[0m is for time and \033[33myellow\033[0m is for artefacts.\nLocations are marked with \033[31mred\033[0m.\nWhenever you are faced with a choice, each typeable option is colored with \033[35mmagenta\033[0m.")
-    temp = ""
-    while temp != "understood":
-        temp = input("\033[35mUnderstood\033[0m?").lower().strip()
-    print("----\nGood luck!\n----")
 
 def print_all():
     print(money, time, cont, country, size, airport, artefacts)
@@ -102,7 +94,7 @@ def sell_artefacts():
 
                 print(f"You own the following artefacts:")
                 list_artefacts(True)
-                i = input(f"Choose which artefact you would like to sell or \033[35mcancel\033[0m the auction.").strip().lower()
+                i = input(f"Choose which artefact you would like to sell or \033[35mcancel\033[0m the auction.\n> ").strip().lower()
                 print("----")
                 if i == "cancel":
                     if b:
@@ -126,7 +118,7 @@ def sell_artefacts():
                 if len(sm) < 2:
                     # looppaa kunnes tulee korrekti vastaus y/n
                     while True:
-                        p = input(f"That's your only artefact from \033[31m{ct}\033[0m. Are you sure you want to \033[35msell\033[0m it, or would you rather \033[35mback\033[0m out?").strip().lower()
+                        p = input(f"That's your only artefact from \033[31m{ct}\033[0m. Are you sure you want to \033[35msell\033[0m it, or would you rather \033[35mback\033[0m out?\n> ").strip().lower()
                         if p == "sell":
                             break
                         elif p == "back":
@@ -144,7 +136,7 @@ def sell_artefacts():
 
             if len(artefacts) > 0:
                 while True:
-                    p = input("Would you like to \033[35msell\033[0m something else or \033[35mleave\033[0m the auction house?").strip().lower()
+                    p = input("Would you like to \033[35msell\033[0m something else or \033[35mleave\033[0m the auction house?\n> ").strip().lower()
                     if p == "leave":
                         auctioning = False
                         break
@@ -212,7 +204,7 @@ def shop():
             print(f"You have\033[32m ${money}\033[0m. The following artefacts are on auction:")
             for art in items:
                 print(f"\033[35m{items.index(art)+1}\033[0m.\033[33m {art.name}\033[0m, \033[32m${art.value}\033[0m")
-            i = input(f"Choose which artefact you would like to buy or \033[35mcancel\033[0m the auction.").strip().lower()
+            i = input(f"Choose which artefact you would like to buy or \033[35mcancel\033[0m the auction.\n> ").strip().lower()
             print("----")
             if i == "cancel":
                 if b:
@@ -245,7 +237,7 @@ def shop():
 
         if len(artefacts) > 0:
             while True:
-                p = input("Would you like to \033[35mbuy\033[0m something else or \033[35mleave\033[0m the auction house?")
+                p = input("Would you like to \033[35mbuy\033[0m something else or \033[35mleave\033[0m the auction house?\n> ")
                 if p == "leave":
                     auctioning = False
                     break
@@ -274,6 +266,7 @@ def list_artefacts(selling):
     else:
         print(f"You don't have any artefacts.")
 
+#Hoitaa eventit
 def event():
     global money
     global time
@@ -338,7 +331,7 @@ def check_inventory():
     temp = ["your water bottle", "some snacks", "your phone", "a picture of mommy", "an amulet", "a dreamcatcher", "your lucky rock collection"]
     temp1 = random.choice(temp)
     while True:
-        temp = input(f"You open your backpack and reach for {temp1}. While you're at it, would you like to \033[35mcheck\033[0m your money, time and artefacts or \033[35mclose\033[0m the backpack?")
+        temp = input(f"You open your backpack and reach for {temp1}. While you're at it, would you like to \033[35mcheck\033[0m your money, time and artefacts or \033[35mclose\033[0m the backpack?\n> ")
         if  temp == "check":
             print("----")
             print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[0m.\nYou own the following artefacts:")
@@ -360,7 +353,7 @@ def choose_continent():
                     print(f"\033[35m{conts[i]}\033[0m", end=", ")
                 else:
                     print(f"\033[35m{conts[i]}\033[0m.")
-        cont_temp = input(f"You can either \033[35mstay\033[0m in \033[31m{cont}\033[0m or choose a new continent from the list above.").strip().upper()
+        cont_temp = input(f"You can either \033[35mstay\033[0m in \033[31m{cont}\033[0m or choose a new continent from the list above.\n> ").strip().upper()
         if cont_temp == "STAY":
             cont = cont
             new_cont = False
@@ -407,7 +400,7 @@ def choose_airport(new_cont):
     if available_airports_temp != 0:
         while answer_temp not in range(1, len(airport_results)+1):
             try:
-                answer_temp = int(input("Which airport would you like to travel to?"))
+                answer_temp = int(input("Which airport would you like to travel to?\n> "))
             except ValueError:
                 print("Which airport would you like to travel to?")
         airport = airport_names_temp[answer_temp-1]
@@ -435,7 +428,7 @@ def airport_actions():
 
     print(f"You just arrived, and thus have {remaining_actions} actions remaining on this airport before the spirit catches you.")
     while first_action not in ["work", "explore", "auction"]:
-        first_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, or visit the \033[35mauction\033[0m house?")
+        first_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, or visit the \033[35mauction\033[0m house?\n> ")
     print("----")
     if first_action == "work":
         work = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher", "cucumber quality inspector", "tree doctor", "farmer's assistant", "professional supermarket greeter"]
@@ -452,7 +445,7 @@ def airport_actions():
     check_inventory()
     print(f"You have {remaining_actions} action remaining on this airport before the spirit catches you.")
     while second_action not in ["work", "explore", "auction", "leave"]:
-        second_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mleave\033[0m this airport?")
+        second_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mleave\033[0m this airport?\n> ")
     print("----")
     if second_action == "work":
         work = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher",
@@ -481,7 +474,7 @@ def airport_actions():
 #   else:
 #        print("Invalid reply. Please answer with either 'Y' to travel to a new continent or with 'N' to travel to a new airport in your current continent.")
 
-intro()
+add_artefact(2)
 airport_actions()
 shop()
 check_inventory()

@@ -1,7 +1,7 @@
 events = {
     1:{
         "event":"You are given an investment opportunity on the street by a man in a trench coat. He says that by giving him \033[32m$100\033[0m you could make \033[32m$300\033[0m." ,
-        "input":"Do you \033[35maccept\033[0m or \033[35mdecline\033[0m?",
+        "input":"Do you \033[35maccept\033[0m or \033[35mdecline\033[0m?\n> ",
         "choices":{
             "accept":{
                 "cost":{"money":100,"time":0,"artefacts":0},
@@ -21,7 +21,7 @@ events = {
     },
     2:{
         "event":"You meet a witch, who says she can buy you time. Literally. She offers you \033[34m15 days\033[0m in exchange for \033[32m$100\033[0m.",
-        "input":"Do you \033[35maccept\033[0m or \033[35mdecline\033[0m?",
+        "input":"Do you \033[35maccept\033[0m or \033[35mdecline\033[0m?\n> ",
         "choices":{
             "accept":{
                 "cost":{"money":100,"time":0,"artefacts":0},
@@ -39,7 +39,7 @@ events = {
     },
     3:{
         "event":"You get lost, somehow.",
-        "input":"Would you like to turn \033[35mleft\033[0m, \033[35mright\033[0m or continue \033[35mstraight\033[0m?",
+        "input":"Would you like to turn \033[35mleft\033[0m, \033[35mright\033[0m or continue \033[35mstraight\033[0m?\n> ",
         "choices":{
             "left":{
                 "cost":{"money":0,"time":0,"artefacts":0},
@@ -65,7 +65,7 @@ events = {
     },
     4:{
         "event":"You stumble upon some sort of monument. There is a sign asking you to pray.",
-        "input":"Do you pray on your \033[35mknees\033[0m, \033[35mstanding\033[0m up or do you \033[35mleave\033[0m?",
+        "input":"Do you pray on your \033[35mknees\033[0m, \033[35mstanding\033[0m up or do you \033[35mleave\033[0m?\n> ",
         "choices":{
             "knees":{
                 "cost":{"money":0,"time":0,"artefacts":0},
@@ -90,7 +90,7 @@ events = {
     },
     5:{
         "event":"You see a man in a suit strolling on the street. He seems to be giving money to everyone kind enough to greet him.",
-        "input":'Do you greet him with a "\033[35mhello\033[0m", a "\033[35mgood evening\033[0m sir" or do you do \033[35mnothing\033[0m?',
+        "input":'Do you greet him with a "\033[35mhello\033[0m", a "\033[35mgood evening\033[0m sir" or do you do \033[35mnothing\033[0m?\n> ',
         "choices":{
             "hello":{
                 "cost":{"money":0,"time":0,"artefacts":0},
@@ -115,7 +115,7 @@ events = {
     },
     6:{
         "event":'You accidentally bump into a towering man on the street. You try to apologize, but the man seeks \033[32m$200\033[0m in compensation for "physical pain". Like he felt anything.',
-        "input":"Do you pay him the \033[32m$\033[0m\033[35m200\033[0m he asks for, try to settle for \033[32m$\033[0m\033[35m100\033[0m or \033[35mrefuse\033[0m to pay?",
+        "input":"Do you pay him the \033[32m$\033[0m\033[35m200\033[0m he asks for, try to settle for \033[32m$\033[0m\033[35m100\033[0m or \033[35mrefuse\033[0m to pay?\n> ",
         "choices":{
             "200":{
                 "cost":{"money":200,"time":0,"artefacts":0},
@@ -140,7 +140,7 @@ events = {
     },
     7:{
         "event":'You notice a small well. A woman stands next to it, holding a cardboard sign. On it, she has written: "One coin = \033[32m$300\033[0m." Must be a wishing well.',
-        "input":"Do you want to \033[35mbuy\033[0m a coin for \033[32m$300\033[0m or \033[35mpass\033[0m on the opportunity?",
+        "input":"Do you want to \033[35mbuy\033[0m a coin for \033[32m$300\033[0m or \033[35mpass\033[0m on the opportunity?\n> ",
         "choices":{
             "buy":{
                 "cost":{"money":300,"time":0,"artefacts":0},
