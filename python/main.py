@@ -270,7 +270,7 @@ def event():
     global money
     global time
     global artefacts
-    event_id = len(events)
+    event_id = random.randint(1,len(events))
     print(events[event_id]["event"])
     choice = ""
     while choice not in events[event_id]["choices"] or money < events[event_id]["choices"][choice]["cost"][
