@@ -20,13 +20,13 @@ events = {
         }
     },
     2:{
-        "event":"You meet a witch, who says she can buy you time. Literally. She offers you \033[34m30 days\033[0m in exchange for \033[32m$100\033[0m.",
+        "event":"You meet a witch, who says she can buy you time. Literally. She offers you \033[34m15 days\033[0m in exchange for \033[32m$100\033[0m.",
         "input":"Do you \033[35maccept\033[0m or \033[35mdecline\033[0m?",
         "choices":{
             "accept":{
                 "cost":{"money":100,"time":0,"artefacts":0},
                 "results":{
-                    1:{"money":0,"time":30,"artefacts":0,"text":"You bought yourself some time. \033[34m30 days\033[0m to be exact."}
+                    1:{"money":0,"time":15,"artefacts":0,"text":"You bought yourself some time. \033[34m15 days\033[0m to be exact."}
                 }
             },
             "decline":{
