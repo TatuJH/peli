@@ -109,10 +109,23 @@ def sell_artefacts():
                 #muuta numeroksi
                 i = int(i)
 
+                sm = list()
+                ct = artefacts[i-1].continent
+
+                for ar in artefacts:
+                    if ar.continent == ct:
+                        sm.append(ar)
+
+                if len(sm) < 2:
+                    # looppaa kunnes tulee korrekti vastaus y/n
+                    while True:
+                        p = input(f"You only have one artefact from the continent of\033[31m {ct}\033[0m! Are you sure you want to sell this item?\n (y/n) " )
+                        if p == "y":
+                            break
+                        elif p == "n":
+                            break
+
             # poista indeksistä 1 koska näin ne listit toimii
-
-            # TODO: VAROITA PELAAJAA JOS MYY AINOAN JOSTAKIN MANTEREELTA OLEVAN AARTEEN - ehkä ainoastaan jos hän ei ole kyseisellä mantereella sillä hetkellä :-)
-
             i -= 1
             money += artefacts[int(i)].value
             b = True
@@ -122,8 +135,13 @@ def sell_artefacts():
             l.clear()
 
             if len(artefacts) > 0:
-                if input("Sell something else? (y/n) ") != "y":
-                    auctioning = False
+                while True:
+                    p = input("Sell something else? (y/n) ")
+                    if p == "n":
+                        auctioning = False
+                        break
+                    elif p == "y":
+                        break
             else:
                 auctioning = False
         print("You leave the auctionhouse.")
@@ -227,10 +245,13 @@ def shop():
         l.clear()
 
         if len(artefacts) > 0:
-            if input("Buy something else? (y/n) ") != "y":
-                auctioning = False
-        else:
-            auctioning = False
+            while True:
+                p = input("Sell something else? (y/n) ")
+                if p == "n":
+                    auctioning = False
+                    break
+                elif p == "y":
+                    break
     print("You leave the auctionhouse.")
 
 
