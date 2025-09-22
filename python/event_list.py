@@ -70,7 +70,7 @@ events = {
             "knees":{
                 "cost":{"money":0,"time":0,"artefacts":0},
                 "results":{
-                    1:{"money":0,"time":0,"artefacts":1,"text":"Something rumbles. A hatch opens underneath the monument, revealing \033[33m1 artefact\033[0m! The gods must be pleased."}
+                    1:{"money":0,"time":0,"artefacts":1,"text":"Something rumbles. A hatch opens underneath the monument, revealing an \033[33martefact\033[0m. The gods must be pleased."}
                 }
             },
             "standing":{
@@ -157,6 +157,34 @@ events = {
                 "cost":{"money":0,"time":0,"artefacts":0},
                 "results":{
                     1:{"money":0,"time":0,"artefacts":0,"text":"You? Superstitious? Like any normal person, you decide to save your money."}
+                }
+            }
+        }
+    },
+    8:{
+        "event":"You hear sounds of metal hitting rock. Upon further inspection, you find a dig site, where a dozen men are swinging their pickaxes.",
+        "input":"One of the men offers you their position for \033[34m20 days\033[0m. Do you \033[35maccept\033[0m it, \033[35mpay\033[0m the man \033[32m$200\033[0m to dig for you or \033[35mrefuse\033[0m?\n> ",
+        "choices":{
+            "accept":{
+                "cost":{"money":0,"time":20,"artefacts":0},
+                "results":{
+                    1:{"money":0,"time":0,"artefacts":1,"text":"You dig and dig. Finally, your pickaxe strikes something softer. You frantically wipe away some dirt, revealing a slightly battered \033[33martefact\033[0m."},
+                    2:{"money":50,"time":0,"artefacts":1,"text":"You dig and dig. Finally, your pickaxe strikes something softer. Unfortunately, it's just a small gold nugget. Might be worth around \033[32m$50\033[0m."}
+                }
+            },
+            "pay":{
+                "cost":{"money":200,"time":0,"artefacts":0},
+                "results":{
+                    1:{"money":0,"time":0,"artefacts":1,"text":"The man digs and digs. Finally, his pickaxe strikes something softer. You rush to the scene, frantically wipe away some dirt and reveal a slightly battered \033[33martefact\033[0m."},
+                    2:{"money":50,"time":0,"artefacts":1,"text":"The man digs and digs. Finally, his pickaxe strikes something softer. Unfortunately, it's just a small gold nugget. Might be worth around \033[32m$50\033[0m."},
+                    3:{"money":100,"time":0,"artefacts":1,"text":"The man digs and digs. Finally, his pickaxe strikes something softer. Unfortunately, it's just a small gold nugget. Might be worth around \033[32m$100\033[0m."},
+                    4:{"money":150,"time":0,"artefacts":1,"text":"The man digs and digs. Finally, his pickaxe strikes something softer. Unfortunately, it's just a small gold nugget. Might be worth around \033[32m$150\033[0m."}
+                }
+            },
+            "refuse":{
+                "cost":{"money":0,"time":0,"artefacts":0},
+                "results":{
+                    1:{"money":0,"time":0,"artefacts":0,"text":"You don't have the energy nor the money for this. What were they even digging for, stones?"}
                 }
             }
         }

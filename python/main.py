@@ -3,7 +3,6 @@ import mysql.connector
 from event_list import *
 from artefacts import *
 from trivia_list import *
-from time import sleep
 
 money = 5000
 time = 365
@@ -18,7 +17,7 @@ remaining_actions = 2
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demokanta',
+    database='demogame',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -271,7 +270,7 @@ def event():
     global money
     global time
     global artefacts
-    event_id = random.randint(1, len(events))
+    event_id = len(events)
     print(events[event_id]["event"])
     choice = ""
     while choice not in events[event_id]["choices"] or money < events[event_id]["choices"][choice]["cost"][
