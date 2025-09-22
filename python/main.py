@@ -8,6 +8,11 @@ from time import sleep
 money = 1000
 time = 365
 artefacts = list()
+cont = "EU"
+conts = ["AF", "AN", "AS", "EU", "NA", "OC", "SA"]
+airport = "Helsinki Vantaa Airport"
+country = "Finland"
+size = "large_airport"
 
 conn = mysql.connector.connect(
     host='localhost',
@@ -18,19 +23,14 @@ conn = mysql.connector.connect(
     autocommit=True
 )
 
-# testausta varten
-cont = "EU"
-conts = ["AF", "AN", "AS", "EU", "NA", "OC", "SA"]
-airport = "Helsinki Vantaa Airport"
-country = "Finland"
-size = "large_airport"
-
-
 class Artefact:
     def __init__(self, nimi, arvo, manner):
         self.name = nimi
         self.value = arvo
         self.continent = manner
+
+def print_all():
+    print(money, time, cont, country, size, airport, artefacts)
 
 def add_artefact(count):
     global cont
@@ -70,7 +70,6 @@ def add_artefact(count):
                     nimi = tup[random.randint(0,len(tup)-1)]
                     artefacts.append(Artefact(nimi, val, cont))
                     names.append(nimi)
-
 
 def sell_artefacts():
     global money
@@ -147,7 +146,6 @@ def sell_artefacts():
         print("You leave the auctionhouse.")
     else:
         print(f"You have no\033[33m artefacts\033[0m to sell.")
-
 
 def shop():
     global money
@@ -254,9 +252,6 @@ def shop():
                     break
     print("You leave the auctionhouse.")
 
-
-
-
 def remove_artefact(index):
     if len(artefacts) > 0:
         # Tee randomilla jos ei anneta indeksiä (eli jos jokin event ottaa pelaajalta)
@@ -266,14 +261,12 @@ def remove_artefact(index):
         else:
             artefacts.remove(index)
 
-
 def list_artefacts():
     if len(artefacts) > 0:
         for a in artefacts:
             print(f"{artefacts.index(a)+1}. \033[33m{a.name}\033[0m, valued at \033[32m${a.value}\033[0m, origin: \033[31m{a.continent}\033[0m")
     else:
         print(f"None")
-
 
 #Hoitaa eventit
 def event():
@@ -335,9 +328,6 @@ def trivia(continent):
     else:
         print("Wrong Answer!")
         #ei raahaa / pelaaja menettää rahaa
-
-
-add_artefact(3)
 
 def check_inventory():
     while True:
@@ -477,5 +467,3 @@ def airport_actions():
         print("1") #TODO maan sisänen lento
     else:
         print("Invalid reply. Please answer with either 'Y' to travel to a new continent or with 'N' to travel to a new airport in your current continent.")
-
-airport_actions()

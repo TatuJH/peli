@@ -182,4 +182,4 @@ events = {
 #Aika (sininen): \033[34mX DAYS\033[0m
 #Artefaktit (keltainen): \033[33mX ARTEFACT(S)\033[0m
 #Vaihtoehdot (magenta): \033[35mTEKSTI\033[0m
-#Maanosat (punainen): \033[31mTEKSTI\033[0m
+#Paikat (punainen): \033[31mTEKSTI\033[0m
