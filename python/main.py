@@ -439,7 +439,7 @@ def airport_actions():
     elif first_action == "2":
         event()
     elif first_action == "3":
-        add_artefact(1)
+        shop()
 
     second_action = input(
         "Well, I sure hope you made the right decision, because the Spirit Demon will be here soon. You only have time for one more action at this airport. \n"
@@ -456,13 +456,16 @@ def airport_actions():
     elif second_action == "2":
         event()
     elif second_action == "3":
-        print("Buy an artefact")
+        shop()
+    elif second_action == "4":
+        i = input("Do you wish to travel to a new continent? (Y/N)")
+
     next_move = input("The Spirit Demon is here. To escape from it, you will have to leave as soon as possible. Do you wish to travel to a new continent? (Y/N)")
 
     while second_action not in ["Y", "N"]:
         second_action = input("Invalid reply. Please answer with either 'Y' to travel to a new continent or with 'N' to travel to a new airport in your current continent.")
     if next_move == "Y":
-        next_continent = input("Which continent do you wish to travel to?")
+        choose_continent()
     elif next_move == "N":
         print("1") #TODO maan sisänen lento
     else:
