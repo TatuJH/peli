@@ -349,18 +349,20 @@ def trivia(continent):
 
 
 add_artefact(3)
-while True:
-    event()
-    if input("Check money, time, artifacts? (y/n) ") == "y":
-        print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[33m \nCurrent artefacts:\033[0m ")
-        list_artefacts()
-    print("----")
-    if len(artefacts) > 0:
-        inp = input("Would you like to \033[35mbuy \033[0mor \033[35msell\033[33m artefacts\033[0m?")
-        if inp.__contains__("sell"):
-            sell_artefacts()
-        elif inp.__contains__("buy"):
-            shop()
-    print("----")
+
+def check_inventory():
+    while True:
+        event()
+        if input("Check money, time, artifacts? (y/n) ") == "y":
+            print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[33m \nCurrent artefacts:\033[0m ")
+            list_artefacts()
+        print("----")
+        if len(artefacts) > 0:
+            inp = input("Would you like to \033[35mbuy \033[0mor \033[35msell\033[33m artefacts\033[0m?")
+            if inp.__contains__("sell"):
+                sell_artefacts()
+            elif inp.__contains__("buy"):
+                shop()
+        print("----")
 
 
