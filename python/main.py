@@ -12,7 +12,7 @@ artefacts = list()
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demogame',
+    database='demokanta',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -341,7 +341,6 @@ add_artefact(3)
 
 def check_inventory():
     while True:
-        event()
         if input("Check money, time, artifacts? (y/n) ") == "y":
             print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[33m \nCurrent artefacts:\033[0m ")
             list_artefacts()
@@ -432,6 +431,7 @@ def choose_airport(new_cont):
         print("You don't have enough money for any airport.")
 
 def airport_actions():
+    check_inventory()
     first_action = input(
         "Hey there explorer! It seems like you have landed at the (airport).\n"
         "Remember, the Spirit Demon is after you, so your time here is limited.\n"
@@ -447,7 +447,7 @@ def airport_actions():
     if first_action == "1":
         print("You have chosen to work here. A safe choice indeed. You will be awarded 100 credits, but lose 20 days.")
     elif first_action == "2":
-        print("Explore")
+        event()
     elif first_action == "3":
         add_artefact(1)
 
@@ -464,7 +464,7 @@ def airport_actions():
     if second_action == "1":
         print("You have chosen to work here. A safe choice indeed. You will be awarded 100 credits, but lose 20 days.")
     elif second_action == "2":
-        print("Explore")
+        event()
     elif second_action == "3":
         print("Buy an artefact")
     next_move = input("The Spirit Demon is here. To escape from it, you will have to leave as soon as possible. Do you wish to travel to a new continent? (Y/N)")
