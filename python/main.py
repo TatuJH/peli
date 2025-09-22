@@ -11,53 +11,6 @@ artefacts = list()
 # testausta varten
 cont = "EU"
 
-def airport_actions():
-    first_action = input(
-        "Hey there explorer! It seems like you have landed at the (airport).\n"
-        "Remember, the Spirit Demon is after you, so your time here is limited.\n"
-        "What would you like to do here? (1. Work, 2. Explore, 3. Buy an artefact)\n"
-        ">"
-    )
-
-    while first_action not in ["1", "2", "3"]:
-        first_action = input(
-            "Invalid reply. Please answer with '1' for Working, '2' for Exploring or '3' for Buying an artefact.\n"
-            ">"
-        )
-    if first_action == "1":
-        print("You have chosen to work here. A safe choice indeed. You will be awarded 100 credits, but lose 20 days.")
-    elif first_action == "2":
-        print("Explore")
-    elif first_action == "3":
-        add_artefact(1)
-
-    second_action = input(
-        "Well, I sure hope you made the right decision, because the Spirit Demon will be here soon. You only have time for one more action at this airport. \n"
-        "Would you like to either 1. Work, 2. Explore or 3. Buy an artifact or 4. Travel to a new airport?\n"
-        ">"
-    )
-    while second_action not in ["1", "2", "3", "4"]:
-        second_action = input(
-            "Invalid reply. Please answer with '1' for Working, '2' for Exploring or '3' for Buying an artefact.\n"
-            ">"
-        )
-    if second_action == "1":
-        print("You have chosen to work here. A safe choice indeed. You will be awarded 100 credits, but lose 20 days.")
-    elif second_action == "2":
-        print("Explore")
-    elif second_action == "3":
-        print("Buy an artefact")
-    next_move = input("The Spirit Demon is here. To escape from it, you will have to leave as soon as possible. Do you wish to travel to a new continent? (Y/N)")
-
-    while second_action not in ["Y", "N"]:
-        second_action = input("Invalid reply. Please answer with either 'Y' to travel to a new continent or with 'N' to travel to a new airport in your current continent.")
-    if next_move == "Y":
-        next_continent = input("Which continent do you wish to travel to?")
-    elif next_move == "N":
-        print("1") #TODO maan sisänen lento
-    else:
-        print("Invalid reply. Please answer with either 'Y' to travel to a new continent or with 'N' to travel to a new airport in your current continent.")
-
 class Artefact:
     def __init__(self, nimi, arvo, manner):
         self.name = nimi
@@ -366,3 +319,51 @@ def check_inventory():
         print("----")
 
 
+def airport_actions():
+    first_action = input(
+        "Hey there explorer! It seems like you have landed at the (airport).\n"
+        "Remember, the Spirit Demon is after you, so your time here is limited.\n"
+        "What would you like to do here? (1. Work, 2. Explore, 3. Buy an artefact)\n"
+        ">"
+    )
+
+    while first_action not in ["1", "2", "3"]:
+        first_action = input(
+            "Invalid reply. Please answer with '1' for Working, '2' for Exploring or '3' for Buying an artefact.\n"
+            ">"
+        )
+    if first_action == "1":
+        print("You have chosen to work here. A safe choice indeed. You will be awarded 100 credits, but lose 20 days.")
+    elif first_action == "2":
+        print("Explore")
+    elif first_action == "3":
+        add_artefact(1)
+
+    second_action = input(
+        "Well, I sure hope you made the right decision, because the Spirit Demon will be here soon. You only have time for one more action at this airport. \n"
+        "Would you like to either 1. Work, 2. Explore or 3. Buy an artifact or 4. Travel to a new airport?\n"
+        ">"
+    )
+    while second_action not in ["1", "2", "3", "4"]:
+        second_action = input(
+            "Invalid reply. Please answer with '1' for Working, '2' for Exploring or '3' for Buying an artefact.\n"
+            ">"
+        )
+    if second_action == "1":
+        print("You have chosen to work here. A safe choice indeed. You will be awarded 100 credits, but lose 20 days.")
+    elif second_action == "2":
+        print("Explore")
+    elif second_action == "3":
+        print("Buy an artefact")
+    next_move = input("The Spirit Demon is here. To escape from it, you will have to leave as soon as possible. Do you wish to travel to a new continent? (Y/N)")
+
+    while second_action not in ["Y", "N"]:
+        second_action = input("Invalid reply. Please answer with either 'Y' to travel to a new continent or with 'N' to travel to a new airport in your current continent.")
+    if next_move == "Y":
+        next_continent = input("Which continent do you wish to travel to?")
+    elif next_move == "N":
+        print("1") #TODO maan sisänen lento
+    else:
+        print("Invalid reply. Please answer with either 'Y' to travel to a new continent or with 'N' to travel to a new airport in your current continent.")
+
+airport_actions()
