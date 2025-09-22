@@ -333,6 +333,82 @@ def check_inventory():
                 shop()
         print("----")
 
+def choose_continent():
+    global cont
+    cont_temp = ""
+    new_cont = False
+    while cont_temp != "stay" or cont_temp not in conts:
+        print(f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m. Other available continents are", end=" ")
+        for i in range(len(conts)):
+            if cont != conts[i]:
+                if i < len(conts)-1:
+                    print(f"\033[35m{conts[i]}\033[0m", end=", ")
+                else:
+                    print(f"\033[35m{conts[i]}\033[0m.")
+        cont_temp = input(f"You can either \033[35mstay\033[0m in \033[31m{cont}\033[0m or choose a new continent from the list above.").strip().upper()
+        if cont_temp == "STAY":
+            cont = cont
+            new_cont = False
+            break
+        else:
+            if cont_temp in conts:
+                cont = cont_temp
+                new_cont = True
+                break
+    print("----")
+    choose_airport(new_cont)
+
+def choose_airport(new_cont):
+    global airport
+    global size
+    global country
+    global money
+    global time
+    airport_names_temp = []
+    airport_sizes_temp = []
+    airport_country_temp = []
+    available_airports_temp = 0
+    costs = [100, 200, 300]
+    answer_temp = 0
+    sql = f'((SELECT airport.name, type, country.name AS country FROM airport, country WHERE type="small_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name, type, country.name AS country FROM airport, country WHERE type="medium_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name, type, country.name AS country FROM airport, country WHERE type="large_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1));'
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(sql)
+    airport_results = cursor.fetchall()
+    print(f'Available airports in \033[31m{cont}\033[0m:')
+    for i in range(len(airport_results)):
+        if new_cont:
+            if money >= int(costs[i] * 1.5):
+                print(f'\033[35m{i+1}\033[0m: \033[31m{airport_results[i]["name"]}\033[0m, a {airport_results[i]["type"].replace("_"," ")} in \033[31m{airport_results[i]["country"]}\033[0m - \033[32m${int(costs[i] * 1.5)}\033[0m, \033[34m10 days\033[0m')
+                airport_names_temp.append(airport_results[i]["name"])
+                airport_sizes_temp.append(airport_results[i]["type"])
+                airport_country_temp.append(airport_results[i]["country"])
+                available_airports_temp += 1
+        else:
+            print(f'\033[35m{i + 1}\033[0m: \033[31m{airport_results[i]["name"]}\033[0m, a {airport_results[i]["type"].replace("_", " ")} in \033[31m{airport_results[i]["country"]}\033[0m - \033[32m${int(costs[i])}\033[0m, \033[34m5 days\033[0m')
+            airport_names_temp.append(airport_results[i]["name"])
+            airport_sizes_temp.append(airport_results[i]["type"])
+            airport_country_temp.append(airport_results[i]["country"])
+            available_airports_temp += 1
+    if available_airports_temp != 0:
+        while answer_temp not in range(1, len(airport_results)+1):
+            try:
+                answer_temp = int(input("Which airport would you like to travel to?"))
+            except ValueError:
+                print("Which airport would you like to travel to?")
+        airport = airport_names_temp[answer_temp-1]
+        size = airport_sizes_temp[answer_temp-1]
+        country = airport_country_temp[answer_temp-1]
+        if new_cont:
+            money -= int(costs[answer_temp-1] * 1.5)
+            time -= 10
+        else:
+            money -= int(costs[answer_temp-1])
+            time -= 5
+        print("----")
+        print(f"You arrive in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m.")
+        print("----")
+    else:
+        print("You don't have enough money for any airport.")
 
 def airport_actions():
     first_action = input(
