@@ -5,7 +5,7 @@ from artefacts import *
 from trivia_list import *
 from time import sleep
 
-money = 1000
+money = 5000
 time = 365
 artefacts = list()
 cont = "EU"
@@ -13,11 +13,12 @@ conts = ["AF", "AN", "AS", "EU", "NA", "OC", "SA"]
 airport = "Helsinki Vantaa Airport"
 country = "Finland"
 size = "large_airport"
+remaining_actions = 2
 
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demokanta',
+    database='demogame',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -77,7 +78,8 @@ def sell_artefacts():
         l = list()
 
         auctioning = True
-        print(f"\nYou arrive at the local auctionhouse...\n")
+        print(f"You arrive at the local auction house.")
+        print("----")
         # has sold
         b = False
 
@@ -90,19 +92,17 @@ def sell_artefacts():
             # looppaa kunnes pelaaja antaa pätevän vastausken tai häipyy
             while i not in l:
 
-                print(f"You currently own the following:")
-                print(f"\033[33m----\033[00m")
-                list_artefacts()
-                print(f"\033[33m----\033[00m")
-                print(f"Which\033[33m artefact\033[0m would you like to sell? Leave empty to cancel")
-
-                i = input(f"number of \033[33martefact\033[0m to sell: ").strip()
-                if i == "":
+                print(f"You own the following artefacts:")
+                list_artefacts(True)
+                i = input(f"Choose which artefact you would like to sell or \033[35mcancel\033[0m the auction.").strip().lower()
+                print("----")
+                if i == "cancel":
                     if b:
-                        print(f"You leave the auctionhouse.")
+                        print(f"You leave the auction house just a tad richer.")
                         return
                     else:
-                        print("You awkwardly shuffle back out of the auctionhouse after doing nothing")
+                        print("You awkwardly shuffle out of the auction house after doing nothing.")
+                        print("----")
                     return
 
                 #muuta numeroksi
@@ -118,34 +118,36 @@ def sell_artefacts():
                 if len(sm) < 2:
                     # looppaa kunnes tulee korrekti vastaus y/n
                     while True:
-                        p = input(f"You only have one artefact from the continent of\033[31m {ct}\033[0m! Are you sure you want to sell this item?\n (y/n) " )
-                        if p == "y":
+                        p = input(f"That's your only artefact from \033[31m{ct}\033[0m. Are you sure you want to \033[35msell\033[0m it, or would you rather \033[35mback\033[0m out?").strip().lower()
+                        if p == "sell":
                             break
-                        elif p == "n":
+                        elif p == "back":
                             break
-
+                    print("----")
             # poista indeksistä 1 koska näin ne listit toimii
             i -= 1
             money += artefacts[int(i)].value
             b = True
-            print(f"Sold the \033[33m{artefacts[int(i)].name}\033[0m for\033[32m ${artefacts[int(i)].value}\033[0m!")
+            print(f"You sold the \033[33m{artefacts[int(i)].name}\033[0m for\033[32m ${artefacts[int(i)].value}\033[0m.")
             artefacts.remove(artefacts[i])
+            print("----")
 
             l.clear()
 
             if len(artefacts) > 0:
                 while True:
-                    p = input("Sell something else? (y/n) ")
-                    if p == "n":
+                    p = input("Would you like to \033[35msell\033[0m something else or \033[35mleave\033[0m the auction house?").strip().lower()
+                    if p == "leave":
                         auctioning = False
                         break
-                    elif p == "y":
+                    elif p == "sell":
                         break
             else:
                 auctioning = False
-        print("You leave the auctionhouse.")
+            print("----")
+        print("You leave the auction house just a tad richer.")
     else:
-        print(f"You have no\033[33m artefacts\033[0m to sell.")
+        print(f"You have no artefacts to sell.")
 
 def shop():
     global money
@@ -184,55 +186,52 @@ def shop():
                     names.append(nimi)
 
     auctioning = True
-    print(f"\nYou arrive at the local auctionhouse...\n")
+    print(f"You arrive at the local auction house.")
 
+    for a in items:
+        l.append(items.index(a) + 1)
+
+    for p in items:
+        print(f"{items.index(p)}. artifact is {p.name}")
+
+    for e in l:
+        print(e)
+
+    print("----")
     while auctioning:
 
         b = False
-
-        for a in items:
-            l.append(items.index(a) + 1)
-
-        for p in items:
-            print(f"{items.index(p)}. artifact is {p.name}")
-
-        for e in l:
-            print(e)
 
 
         i = -1
         # looppaa kunnes pelaaja antaa pätevän vastausken tai häipyy
         while i not in l:
 
-            print(f"The shop has the following onsale:")
-            print(f"\033[33m----\033[00m")
+            print(f"You have\033[32m ${money}\033[0m. The following artefacts are on auction:")
             for art in items:
-                print(f"\033[35m{items.index(art)+1}\033[0m.\033[33m {art.name}, price:\033[32m ${art.value}")
-            print(f"\033[33m----\033[00m")
-            print(f"You have\033[32m ${money}\033[0m")
-            print(f"Which\033[33m artefact\033[0m would you like to buy? Leave empty to cancel")
-            i = input(f"number of\033[33m artefact\033[0m to to purchase: ").strip()
-
-
-            if i == "":
+                print(f"\033[35m{items.index(art)+1}\033[0m.\033[33m {art.name}\033[0m, \033[32m${art.value}\033[0m")
+            i = input(f"Choose which artefact you would like to buy or \033[35mcancel\033[0m the auction.").strip().lower()
+            print("----")
+            if i == "cancel":
                 if b:
-                    print("You exit the auctionhouse, new treasure in tow.")
+                    print("You leave the auction house, new treasure in tow.")
                     return
                 else:
-                    print("You awkwardly shuffle back out of the auctionhouse after doing nothing")
+                    print("You awkwardly shuffle out of the auction house after doing nothing.")
+                    print("----")
                     return
 
             i = int(i)
 
             if money < items[i-1].value:
-                print(f"You can't afford this item :/")
-                sleep(1.5)
+                print(f"You can't afford this artefact.")
                 print("----")
                 i = -1
         # poista indeksistä 1 koska näin ne listit toimii
         i -= 1
         money -= items[int(i)].value
-        print(f"Purchased the \033[33m{items[int(i)].name}\033[0m for\033[32m ${items[int(i)].value}\033[0m!")
+        print(f"You purchased the \033[33m{items[int(i)].name}\033[0m for\033[32m ${items[int(i)].value}\033[0m.")
+        print("----")
         # vähennä kaupan vero
         items[i].value -= 500
         artefacts.append(items[i])
@@ -244,13 +243,15 @@ def shop():
 
         if len(artefacts) > 0:
             while True:
-                p = input("Sell something else? (y/n) ")
-                if p == "n":
+                p = input("Would you like to \033[35mbuy\033[0m something else or \033[35mleave\033[0m the auction house?")
+                if p == "leave":
                     auctioning = False
                     break
-                elif p == "y":
+                elif p == "buy":
                     break
-    print("You leave the auctionhouse.")
+            print("----")
+    print("You leave the auction house, new treasure in tow.")
+    print("----")
 
 def remove_artefact(index):
     if len(artefacts) > 0:
@@ -261,12 +262,15 @@ def remove_artefact(index):
         else:
             artefacts.remove(index)
 
-def list_artefacts():
+def list_artefacts(selling):
     if len(artefacts) > 0:
         for a in artefacts:
-            print(f"{artefacts.index(a)+1}. \033[33m{a.name}\033[0m, valued at \033[32m${a.value}\033[0m, origin: \033[31m{a.continent}\033[0m")
+            if selling:
+                print(f"\033[35m{artefacts.index(a)+1}\033[0m: \033[33m{a.name}\033[0m from \033[31m{a.continent}\033[0m, \033[32m${a.value}\033[0m")
+            else:
+                print(f"{artefacts.index(a) + 1}: \033[33m{a.name}\033[0m from \033[31m{a.continent}\033[0m, \033[32m${a.value}\033[0m")
     else:
-        print(f"None")
+        print(f"You don't have any artefacts.")
 
 #Hoitaa eventit
 def event():
@@ -323,25 +327,25 @@ def trivia(continent):
     answer = kysymykset[continent][question_number]["vastaus"]
 
     if input(question) == answer:
-        print("Right Answer!")
+        print("You answered correctly.")
         #lisäätään pelaajalle rahaa
     else:
-        print("Wrong Answer!")
+        print("You answered incorrectly. Tough luck.")
         #ei raahaa / pelaaja menettää rahaa
 
 def check_inventory():
+    temp = ["your water bottle", "some snacks", "your phone", "a picture of mommy", "an amulet", "a dreamcatcher", "your lucky rock collection"]
+    temp1 = random.choice(temp)
     while True:
-        if input("Check money, time, artifacts? (y/n) ") == "y":
-            print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[33m \nCurrent artefacts:\033[0m ")
-            list_artefacts()
-        print("----")
-        if len(artefacts) > 0:
-            inp = input("Would you like to \033[35mbuy \033[0mor \033[35msell\033[33m artefacts\033[0m?")
-            if inp.__contains__("sell"):
-                sell_artefacts()
-            elif inp.__contains__("buy"):
-                shop()
-        print("----")
+        temp = input(f"You open your backpack and reach for {temp1}. While you're at it, would you like to \033[35mcheck\033[0m your money, time and artefacts or \033[35mclose\033[0m the backpack?")
+        if  temp == "check":
+            print("----")
+            print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[0m.\nYou own the following artefacts:")
+            list_artefacts(False)
+            break
+        elif temp == "close":
+            break
+    print("----")
 
 def choose_continent():
     global cont
@@ -421,52 +425,61 @@ def choose_airport(new_cont):
         print("You don't have enough money for any airport.")
 
 def airport_actions():
+    global time
+    global money
+    global remaining_actions
     check_inventory()
-    first_action = input(
-        "Hey there explorer! It seems like you have landed at the (airport).\n"
-        "Remember, the Spirit Demon is after you, so your time here is limited.\n"
-        "What would you like to do here? (1. Work, 2. Explore, 3. Buy an artefact)\n"
-        ">"
-    )
+    first_action = ""
+    second_action = ""
 
-    while first_action not in ["1", "2", "3"]:
-        first_action = input(
-            "Invalid reply. Please answer with '1' for Working, '2' for Exploring or '3' for Buying an artefact.\n"
-            ">"
-        )
-    if first_action == "1":
-        print("You have chosen to work here. A safe choice indeed. You will be awarded 100 credits, but lose 20 days.")
-    elif first_action == "2":
+    print(f"You just arrived, and thus have {remaining_actions} actions remaining on this airport before the spirit catches you.")
+    while first_action not in ["work", "explore", "auction"]:
+        first_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, or visit the \033[35mauction\033[0m house?")
+    print("----")
+    if first_action == "work":
+        work = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher", "cucumber quality inspector", "tree doctor", "farmer's assistant", "professional supermarket greeter"]
+        print(f"You decide to work as a {random.choice(work)}. You earn \033[32m$200\033[0m, but lose \033[34m10 days\033[0m.")
+        money += 200
+        time -= 10
+        print("----")
+    elif first_action == "explore":
         event()
-    elif first_action == "3":
+    elif first_action == "auction":
         shop()
+    remaining_actions -= 1
 
-    second_action = input(
-        "Well, I sure hope you made the right decision, because the Spirit Demon will be here soon. You only have time for one more action at this airport. \n"
-        "Would you like to either 1. Work, 2. Explore or 3. Buy an artifact or 4. Travel to a new airport?\n"
-        ">"
-    )
-    while second_action not in ["1", "2", "3", "4"]:
-        second_action = input(
-            "Invalid reply. Please answer with '1' for Working, '2' for Exploring or '3' for Buying an artefact.\n"
-            ">"
-        )
-    if second_action == "1":
-        print("You have chosen to work here. A safe choice indeed. You will be awarded 100 credits, but lose 20 days.")
-    elif second_action == "2":
+    check_inventory()
+    print(f"You have {remaining_actions} action remaining on this airport before the spirit catches you.")
+    while second_action not in ["work", "explore", "auction", "leave"]:
+        second_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mleave\033[0m this airport?")
+    print("----")
+    if second_action == "work":
+        work = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher",
+                "cucumber quality inspector", "tree doctor", "farmer's assistant", "professional supermarket greeter"]
+        print(
+            f"You decide to work as a {random.choice(work)}. You earn \033[32m$200\033[0m, but lose \033[34m10 days\033[0m.")
+        money += 200
+        time -= 10
+        print("----")
+    elif second_action == "explore":
         event()
-    elif second_action == "3":
+    elif second_action == "auction":
         shop()
-    elif second_action == "4":
-        i = input("Do you wish to travel to a new continent? (Y/N)")
-
-    next_move = input("The Spirit Demon is here. To escape from it, you will have to leave as soon as possible. Do you wish to travel to a new continent? (Y/N)")
-
-    while second_action not in ["Y", "N"]:
-        second_action = input("Invalid reply. Please answer with either 'Y' to travel to a new continent or with 'N' to travel to a new airport in your current continent.")
-    if next_move == "Y":
+    elif second_action == "leave":
+        print("----")
         choose_continent()
-    elif next_move == "N":
-        print("1") #TODO maan sisänen lento
-    else:
-        print("Invalid reply. Please answer with either 'Y' to travel to a new continent or with 'N' to travel to a new airport in your current continent.")
+
+
+#    next_move = input("The Spirit Demon is here. To escape from it, you will have to leave as soon as possible. Do you wish to travel to a new continent? (Y/N)")
+
+#    while second_action not in ["Y", "N"]:
+#        second_action = input("Invalid reply. Please answer with either 'Y' to travel to a new continent or with 'N' to travel to a new airport in your current continent.")
+#    if next_move == "Y":
+#        choose_continent()
+#    elif next_move == "N":
+#        print("1") #TODO maan sisänen lento
+#   else:
+#        print("Invalid reply. Please answer with either 'Y' to travel to a new continent or with 'N' to travel to a new airport in your current continent.")
+
+add_artefact(2)
+airport_actions()

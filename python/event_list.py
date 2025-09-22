@@ -56,9 +56,9 @@ events = {
             "straight":{
                 "cost":{"money":0,"time":0,"artefacts":0},
                 "results":{
-                    1:{"money":50,"time":-10,"artefacts":0,"text":"That wasn't the right way and you lose \033[34m10 days\033[0m of your time. On a positive note, you find \033[32m$50\033[0m on the ground."},
-                    2:{"money":100,"time":-10,"artefacts":0,"text":"That wasn't the right way and you lose \033[34m10 days\033[0m of your time. On a positive note, you find \033[32m$100\033[0m on the ground."},
-                    3:{"money":200,"time":-10,"artefacts":0,"text":"That wasn't the right way and you lose \033[34m10 days\033[0m of your time. On a positive note, you find \033[32m$200\033[0m on the ground."}
+                    1:{"money":50,"time":-10,"artefacts":0,"text":"That wasn't the right way and you lose \033[34m10 days\033[0m. On a positive note, you find \033[32m$50\033[0m on the ground."},
+                    2:{"money":100,"time":-10,"artefacts":0,"text":"That wasn't the right way and you lose \033[34m10 days\033[0m. On a positive note, you find \033[32m$100\033[0m on the ground."},
+                    3:{"money":200,"time":-10,"artefacts":0,"text":"That wasn't the right way and you lose \033[34m10 days\033[0m. On a positive note, you find \033[32m$150\033[0m on the ground."}
                 }
             }
         }
