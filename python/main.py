@@ -2,6 +2,7 @@ import random
 from event_list import *
 from artefacts import *
 from trivia_list import *
+from time import sleep
 
 money = 1000
 time = 365
@@ -9,8 +10,6 @@ artefacts = list()
 
 # testausta varten
 cont = "EU"
-
-
 
 class Artefact:
     def __init__(self, nimi, arvo, manner):
@@ -41,7 +40,7 @@ def add_artefact(count):
         val = random.randint(600, 1000)
 
         # Montako mahdollista nimeä on?
-        for i in range(0,len(tup)-1):
+        for i in range(0,len(tup)):
             nimi = tup[i]
 
             # Pelaaja ei voi saada duplikaatteja artifakteista
@@ -51,7 +50,7 @@ def add_artefact(count):
                 # Poistu loopista jos löydettiin käyttämätön nimi
                 break
             else:
-                if i == len(tup)-2:
+                if i == len(tup)-1:
                     # Mikäli pelaajalla on jo JOKAINEN aarre mantereelta, valitse satunnaisesti duplikaatti
                     nimi = tup[random.randint(0,len(tup)-1)]
                     artefacts.append(Artefact(nimi, val, cont))
@@ -65,6 +64,8 @@ def sell_artefacts():
 
         auctioning = True
         print(f"\nYou arrive at the local auctionhouse...\n")
+        # has sold
+        b = False
 
         while auctioning:
             i = -1
@@ -80,18 +81,26 @@ def sell_artefacts():
                 list_artefacts()
                 print(f"\033[33m----\033[00m")
                 print(f"Which\033[33m artefact\033[0m would you like to sell? Leave empty to cancel")
-                i = int(input(f"number of \033[33martefact\033[0m to sell: ").strip())
 
-
+                i = input(f"number of \033[33martefact\033[0m to sell: ").strip()
                 if i == "":
-                    print("You awkwardly shuffle back out of the auctionhouse after doing nothing")
+                    if b:
+                        print(f"You leave the auctionhouse.")
+                        return
+                    else:
+                        print("You awkwardly shuffle back out of the auctionhouse after doing nothing")
                     return
+
+                #muuta numeroksi
+                i = int(i)
+
             # poista indeksistä 1 koska näin ne listit toimii
 
             # TODO: VAROITA PELAAJAA JOS MYY AINOAN JOSTAKIN MANTEREELTA OLEVAN AARTEEN - ehkä ainoastaan jos hän ei ole kyseisellä mantereella sillä hetkellä :-)
 
             i -= 1
             money += artefacts[int(i)].value
+            b = True
             print(f"Sold the \033[33m{artefacts[int(i)].name}\033[0m for\033[32m ${artefacts[int(i)].value}\033[0m!")
             artefacts.remove(artefacts[i])
 
@@ -105,6 +114,110 @@ def sell_artefacts():
         print("You leave the auctionhouse.")
     else:
         print(f"You have no\033[33m artefacts\033[0m to sell.")
+
+
+def shop():
+    global money
+    l = list()
+
+    # Tee uusi lista jossa on pelkästään artefaktien numerot :p
+    items = list()
+    tup = list(artefact_names[cont])
+    # Sekoita artefaktien lista jotta pelaaja ei saa jokaisella pelikerralla samoja aarteita ekana
+    random.shuffle(tup)
+
+    # Lista nykyisistä pelaajan artefakteista
+    names = list()
+    for nm in artefacts:
+        names.append(nm.name)
+    # Montako artefaktia kaupassa
+    for i in range(0, random.randint(3, 6)):
+        val = random.randint(600, 1000)
+        # kaupan vero
+        val += 500
+        # Montako mahdollista nimeä on?
+        for n in range(0, len(tup) - 1):
+            nimi = tup[n]
+
+            # Pelaaja ei voi saada duplikaatteja artifakteista
+            if nimi not in names:
+                items.append(Artefact(nimi, val, cont))
+                names.append(nimi)
+                # Poistu loopista jos löydettiin käyttämätön nimi
+                break
+            else:
+                if n == len(tup) - 1:
+                    # Mikäli pelaajalla on jo JOKAINEN aarre mantereelta, valitse satunnaisesti duplikaatti
+                    nimi = tup[random.randint(0, len(tup))]
+                    artefacts.append(Artefact(nimi, val, cont))
+                    names.append(nimi)
+
+    auctioning = True
+    print(f"\nYou arrive at the local auctionhouse...\n")
+
+    while auctioning:
+
+        b = False
+
+        for a in items:
+            l.append(items.index(a) + 1)
+
+        for p in items:
+            print(f"{items.index(p)}. artifact is {p.name}")
+
+        for e in l:
+            print(e)
+
+
+        i = -1
+        # looppaa kunnes pelaaja antaa pätevän vastausken tai häipyy
+        while i not in l:
+
+            print(f"The shop has the following onsale:")
+            print(f"\033[33m----\033[00m")
+            for art in items:
+                print(f"\033[35m{items.index(art)+1}\033[0m.\033[33m {art.name}, price:\033[32m ${art.value}")
+            print(f"\033[33m----\033[00m")
+            print(f"You have\033[32m ${money}\033[0m")
+            print(f"Which\033[33m artefact\033[0m would you like to buy? Leave empty to cancel")
+            i = input(f"number of\033[33m artefact\033[0m to to purchase: ").strip()
+
+
+            if i == "":
+                if b:
+                    print("You exit the auctionhouse, new treasure in tow.")
+                    return
+                else:
+                    print("You awkwardly shuffle back out of the auctionhouse after doing nothing")
+                    return
+
+            i = int(i)
+
+            if money < items[i-1].value:
+                print(f"You can't afford this item :/")
+                sleep(1.5)
+                print("----")
+                i = -1
+        # poista indeksistä 1 koska näin ne listit toimii
+        i -= 1
+        money -= items[int(i)].value
+        print(f"Purchased the \033[33m{items[int(i)].name}\033[0m for\033[32m ${items[int(i)].value}\033[0m!")
+        # vähennä kaupan vero
+        items[i].value -= 500
+        artefacts.append(items[i])
+        # poista kaupasta !!!
+        items.remove(items[i])
+        b = True
+
+        l.clear()
+
+        if len(artefacts) > 0:
+            if input("Buy something else? (y/n) ") != "y":
+                auctioning = False
+        else:
+            auctioning = False
+    print("You leave the auctionhouse.")
+
 
 
 
@@ -187,92 +300,6 @@ def trivia(continent):
         print("Wrong Answer!")
         #ei raahaa / pelaaja menettää rahaa
 
-def choose_continent():
-    global cont
-    cont_temp = ""
-    new_cont = False
-    while cont_temp != "stay" or cont_temp not in conts:
-        print(f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m. Other available continents are", end=" ")
-        for i in range(len(conts)):
-            if cont != conts[i]:
-                if i < len(conts)-1:
-                    print(f"\033[35m{conts[i]}\033[0m", end=", ")
-                else:
-                    print(f"\033[35m{conts[i]}\033[0m.")
-        cont_temp = input(f"You can either \033[35mstay\033[0m in \033[31m{cont}\033[0m or choose a new continent from the list above.").strip().upper()
-        if cont_temp == "STAY":
-            cont = cont
-            new_cont = False
-            break
-        else:
-            if cont_temp in conts:
-                cont = cont_temp
-                new_cont = True
-                break
-    print("----")
-    choose_airport(new_cont)
-
-def choose_airport(new_cont):
-    global airport
-    global size
-    global country
-    global money
-    global time
-    airport_names_temp = []
-    airport_sizes_temp = []
-    airport_country_temp = []
-    available_airports_temp = 0
-    costs = [100, 200, 300]
-    answer_temp = 0
-    sql = f'((SELECT airport.name, type, country.name AS country FROM airport, country WHERE type="small_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name, type, country.name AS country FROM airport, country WHERE type="medium_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name, type, country.name AS country FROM airport, country WHERE type="large_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1));'
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute(sql)
-    airport_results = cursor.fetchall()
-    print(f'Available airports in \033[31m{cont}\033[0m:')
-    for i in range(len(airport_results)):
-        if new_cont:
-            if money >= int(costs[i] * 1.5):
-                print(f'\033[35m{i+1}\033[0m: \033[31m{airport_results[i]["name"]}\033[0m, a {airport_results[i]["type"].replace("_"," ")} in \033[31m{airport_results[i]["country"]}\033[0m - \033[32m${int(costs[i] * 1.5)}\033[0m, \033[34m10 days\033[0m')
-                airport_names_temp.append(airport_results[i]["name"])
-                airport_sizes_temp.append(airport_results[i]["type"])
-                airport_country_temp.append(airport_results[i]["country"])
-                available_airports_temp += 1
-        else:
-            print(f'\033[35m{i + 1}\033[0m: \033[31m{airport_results[i]["name"]}\033[0m, a {airport_results[i]["type"].replace("_", " ")} in \033[31m{airport_results[i]["country"]}\033[0m - \033[32m${int(costs[i])}\033[0m, \033[34m5 days\033[0m')
-            airport_names_temp.append(airport_results[i]["name"])
-            airport_sizes_temp.append(airport_results[i]["type"])
-            airport_country_temp.append(airport_results[i]["country"])
-            available_airports_temp += 1
-    if available_airports_temp != 0:
-        while answer_temp not in range(1, len(airport_results)+1):
-            try:
-                answer_temp = int(input("Which airport would you like to travel to?"))
-            except ValueError:
-                print("Which airport would you like to travel to?")
-        airport = airport_names_temp[answer_temp-1]
-        size = airport_sizes_temp[answer_temp-1]
-        country = airport_country_temp[answer_temp-1]
-        if new_cont:
-            money -= int(costs[answer_temp-1] * 1.5)
-            time -= 10
-        else:
-            money -= int(costs[answer_temp-1])
-            time -= 5
-        print("----")
-        print(f"You arrive in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m.")
-        print("----")
-    else:
-        print("You don't have enough money for any airport.")
-
-
-add_artefact(1)
-while True:
-    choose_continent()
-    event()
-    if input("Check money, time, artifacts? (y/n) ") == "y":
-        print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[33m \nCurrent artefacts:\033[0m ")
-        list_artefacts()
-    print("----")
 
 add_artefact(3)
 
