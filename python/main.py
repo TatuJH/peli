@@ -199,12 +199,6 @@ def shop():
     for a in items:
         l.append(items.index(a) + 1)
 
-    for p in items:
-        print(f"{items.index(p)}. artifact is {p.name}")
-
-    for e in l:
-        print(e)
-
     print("----")
     while auctioning:
 
@@ -473,7 +467,6 @@ def airport_actions():
     elif second_action == "auction":
         shop()
     elif second_action == "leave":
-        print("----")
         choose_continent()
 
 
@@ -490,3 +483,5 @@ def airport_actions():
 
 intro()
 airport_actions()
+shop()
+check_inventory()
