@@ -270,12 +270,12 @@ def event():
     global money
     global time
     global artefacts
-    event_id = random.randint(1,len(events))
+    event_id = len(events)
     print(events[event_id]["event"])
     choice = ""
     while choice not in events[event_id]["choices"] or money < events[event_id]["choices"][choice]["cost"][
         "money"] or time < events[event_id]["choices"][choice]["cost"]["time"] or len(artefacts) < events[event_id]["choices"][choice]["cost"]["artefacts"]:
-        choice = input(events[event_id]["input"]).strip().lower()
+        choice = input(f'{events[event_id]["input"]}\n> ').strip().lower()
 
         if choice in events[event_id]["choices"]:
             if money < events[event_id]["choices"][choice]["cost"]["money"] and time < events[event_id]["choices"][choice]["cost"]["time"] and len(artefacts) < events[event_id]["choices"][choice]["cost"]["artefacts"]:
@@ -332,15 +332,17 @@ def choose_continent():
     global cont
     cont_temp = ""
     new_cont = False
+    print(
+        f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m. Other available continents are",
+        end=" ")
+    for i in range(len(conts)):
+        if cont != conts[i]:
+            if i < len(conts) - 1:
+                print(f"\033[35m{conts[i]}\033[0m", end=", ")
+            else:
+                print(f"\033[35m{conts[i]}\033[0m.")
     while cont_temp != "stay" or cont_temp not in conts:
-        print(f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m. Other available continents are", end=" ")
-        for i in range(len(conts)):
-            if cont != conts[i]:
-                if i < len(conts)-1:
-                    print(f"\033[35m{conts[i]}\033[0m", end=", ")
-                else:
-                    print(f"\033[35m{conts[i]}\033[0m.")
-        cont_temp = input(f"You can either \033[35mstay\033[0m in \033[31m{cont}\033[0m or choose a new continent from the list above.\n> ").strip().upper()
+        cont_temp = input(f"You can either \033[35mstay\033[0m in \033[31m{cont}\033[0m or choose a new continent.\n> ").strip().upper()
         if cont_temp == "STAY":
             cont = cont
             new_cont = False
@@ -389,7 +391,7 @@ def choose_airport(new_cont):
             try:
                 answer_temp = int(input("Which airport would you like to travel to?\n> "))
             except ValueError:
-                print("Which airport would you like to travel to?")
+                pass
         airport = airport_names_temp[answer_temp-1]
         size = airport_sizes_temp[answer_temp-1]
         country = airport_country_temp[answer_temp-1]
@@ -411,25 +413,32 @@ def trivia(continent):
     question = kysymykset[continent][question_number]["kysymys"]
     answer = kysymykset[continent][question_number]["vastaus"]
     print(question)
-    print("(Psst. Remember capital letters!)")
-    if input("> ") == answer:
-        print("Yes! You got it right. The man hands you the \033[32m100€\033[0m and tells you to subscribe to his YouTube-channel.")
+    if input("> ").lower() == answer:
+        print("----")
+        print("The man's face lights up. You answered correctly. He hands you \033[32m100€\033[0m and tells you to subscribe to his channel, whatever that means.")
         money += 100
+    else:
+        print("----")
+        print("The man frowns slightly. It doesn't seem like your answer was correct. He thanks you for your time and starts looking for a new contestant. You think the game was rigged.")
+    print("----")
 
 def quiz(continent):
     i = random.randint(1,9)
     if i >= 2:
+        print("A young man approaches you at the airport, informing you that he's hosting a game show. The man tells you that if you answer his question correctly, you win \033[32m100€\033[0m.")
         while True:
             a = input(
-                "Quick! A man approaches you at the airport, informing you that he's an YouTube-influencer.\n"
-                "The man tells you that if you answer his question correctly, you will win \033[32m100€\033[0m. Do you want to \033[35mplay\033[0m or \033[35mwalk\033[0m away?\n"
+                "Do you want to \033[35mplay\033[0m or \033[35mwalk\033[0m away?\n"
                 "> "
             )
             if a == "play":
+                print("----")
                 trivia(continent)
                 break
             elif a == "walk":
-                print("Well then, no one is forcing you to play.")
+                print("----")
+                print("You can't be bothered to partake in stupid trends and decline the offer.")
+                print("----")
                 break
 
 def airport_actions():
@@ -478,6 +487,5 @@ def airport_actions():
         choose_continent()
 
 add_artefact(2)
-airport_actions()
-shop()
-check_inventory()
+choose_continent()
+print_all()

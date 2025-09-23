@@ -1,9 +1,9 @@
 events = {
     1:{
         "event":"You are given an investment opportunity on the street by a man in a trench coat. He says that by giving him \033[32m$100\033[0m you could make \033[32m$300\033[0m." ,
-        "input":"Do you \033[35maccept\033[0m or \033[35mdecline\033[0m?\n> ",
+        "input":"Do you want to \033[35minvest\033[0m or \033[35mdecline\033[0m the opportunity?",
         "choices":{
-            "accept":{
+            "invest":{
                 "cost":{"money":100,"time":0,"artefacts":0},
                 "results":{
                     1:{"money":300,"time":0,"artefacts":0,"text":"The opportunity actually paid out. You earned \033[32m$300.\033[0m"},
@@ -21,7 +21,7 @@ events = {
     },
     2:{
         "event":"You meet a witch, who says she can buy you time. Literally. She offers you \033[34m15 days\033[0m in exchange for \033[32m$100\033[0m.",
-        "input":"Do you \033[35maccept\033[0m or \033[35mdecline\033[0m?\n> ",
+        "input":"Do you \033[35maccept\033[0m or \033[35mdecline\033[0m the offer?",
         "choices":{
             "accept":{
                 "cost":{"money":100,"time":0,"artefacts":0},
@@ -32,14 +32,14 @@ events = {
             "decline":{
                 "cost":{"money":0,"time":0,"artefacts":0},
                 "results":{
-                    1:{"money":0,"time":-5,"artefacts":0,"text":"You decline the witch's offer. She gets mad and curses you, draining you of \033[34m5 days\033[0m."}
+                    1:{"money":0,"time":-5,"artefacts":0,"text":"The witch gets mad at you declining her offer. She curses you, draining you of \033[34m5 days\033[0m."}
                 }
             }
         }
     },
     3:{
         "event":"You get lost, somehow.",
-        "input":"Would you like to turn \033[35mleft\033[0m, \033[35mright\033[0m or continue \033[35mstraight\033[0m?\n> ",
+        "input":"Would you like to turn \033[35mleft\033[0m, \033[35mright\033[0m or continue \033[35mstraight\033[0m?",
         "choices":{
             "left":{
                 "cost":{"money":0,"time":0,"artefacts":0},
@@ -65,7 +65,7 @@ events = {
     },
     4:{
         "event":"You stumble upon some sort of monument. There is a sign asking you to pray.",
-        "input":"Do you pray on your \033[35mknees\033[0m, \033[35mstanding\033[0m up or do you \033[35mleave\033[0m?\n> ",
+        "input":"Do you pray on your \033[35mknees\033[0m, \033[35mstanding\033[0m up or do you \033[35mleave\033[0m?",
         "choices":{
             "knees":{
                 "cost":{"money":0,"time":0,"artefacts":0},
@@ -82,15 +82,15 @@ events = {
             "leave":{
                 "cost":{"money":0,"time":0,"artefacts":0},
                 "results":{
-                    1:{"money":0,"time":0,"artefacts":0,"text":"You decide to leave. Better not accidentally disrespect the gods."},
-                    2:{"money":0,"time":-5,"artefacts":0,"text":"You decide to leave, but feel the earth starting to tremble. The gods weren't happy about you not honoring them. You black out and lose \033[34m5 days\033[0m."}
+                    1:{"money":0,"time":0,"artefacts":0,"text":"You decide to not accidentally disrespect the gods."},
+                    2:{"money":0,"time":-5,"artefacts":0,"text":"Gearing to leave, you feel the earth starting to tremble. The gods weren't happy about you not honoring them. You black out and lose \033[34m5 days\033[0m."}
                 }
             }
         }
     },
     5:{
         "event":"You see a man in a suit strolling on the street. He seems to be giving money to everyone kind enough to greet him.",
-        "input":'Do you greet him with a "\033[35mhello\033[0m", a "\033[35mgood evening\033[0m sir" or do you do \033[35mnothing\033[0m?\n> ',
+        "input":'Do you greet him with a "\033[35mhello\033[0m", a "\033[35mgood evening\033[0m sir" or do you do \033[35mnothing\033[0m?',
         "choices":{
             "hello":{
                 "cost":{"money":0,"time":0,"artefacts":0},
@@ -115,7 +115,7 @@ events = {
     },
     6:{
         "event":'You accidentally bump into a towering man on the street. You try to apologize, but the man seeks \033[32m$200\033[0m in compensation for "physical pain". Like he felt anything.',
-        "input":"Do you pay him the \033[32m$\033[0m\033[35m200\033[0m he asks for, try to settle for \033[32m$\033[0m\033[35m100\033[0m or \033[35mrefuse\033[0m to pay?\n> ",
+        "input":"Do you pay him the \033[32m$\033[0m\033[35m200\033[0m he asks for, try to settle for \033[32m$\033[0m\033[35m100\033[0m or \033[35mrefuse\033[0m to pay?",
         "choices":{
             "200":{
                 "cost":{"money":200,"time":0,"artefacts":0},
@@ -140,7 +140,7 @@ events = {
     },
     7:{
         "event":'You notice a small well. A woman stands next to it, holding a cardboard sign. On it, she has written: "One coin = \033[32m$300\033[0m." Must be a wishing well.',
-        "input":"Do you want to \033[35mbuy\033[0m a coin for \033[32m$300\033[0m or \033[35mpass\033[0m on the opportunity?\n> ",
+        "input":"Do you want to \033[35mbuy\033[0m a coin for \033[32m$300\033[0m or \033[35mpass\033[0m on the opportunity?",
         "choices":{
             "buy":{
                 "cost":{"money":300,"time":0,"artefacts":0},
@@ -162,8 +162,8 @@ events = {
         }
     },
     8:{
-        "event":"You hear sounds of metal hitting rock. Upon further inspection, you find a dig site, where a dozen men are swinging their pickaxes.",
-        "input":"One of the men offers you their position for \033[34m20 days\033[0m. Do you \033[35maccept\033[0m it, \033[35mpay\033[0m the man \033[32m$200\033[0m to dig for you or \033[35mrefuse\033[0m?\n> ",
+        "event":"You hear sounds of metal hitting rock. Upon further inspection, you find a dig site, where a dozen men are swinging their pickaxes. One of the men offers you their position for \033[34m20 days\033[0m.",
+        "input":"Do you \033[35maccept\033[0m it, \033[35mpay\033[0m the man \033[32m$200\033[0m to dig for you or \033[35mrefuse\033[0m?",
         "choices":{
             "accept":{
                 "cost":{"money":0,"time":20,"artefacts":0},
@@ -176,15 +176,35 @@ events = {
                 "cost":{"money":200,"time":0,"artefacts":0},
                 "results":{
                     1:{"money":0,"time":0,"artefacts":1,"text":"The man digs and digs. Finally, his pickaxe strikes something softer. You rush to the scene, frantically wipe away some dirt and reveal a slightly battered \033[33martefact\033[0m."},
-                    2:{"money":50,"time":0,"artefacts":1,"text":"The man digs and digs. Finally, his pickaxe strikes something softer. Unfortunately, it's just a small gold nugget. Might be worth around \033[32m$50\033[0m."},
-                    3:{"money":100,"time":0,"artefacts":1,"text":"The man digs and digs. Finally, his pickaxe strikes something softer. Unfortunately, it's just a small gold nugget. Might be worth around \033[32m$100\033[0m."},
-                    4:{"money":150,"time":0,"artefacts":1,"text":"The man digs and digs. Finally, his pickaxe strikes something softer. Unfortunately, it's just a small gold nugget. Might be worth around \033[32m$150\033[0m."}
+                    2:{"money":50,"time":0,"artefacts":0,"text":"The man digs and digs. Finally, his pickaxe strikes something softer. Unfortunately, it's just a small gold nugget. Might be worth around \033[32m$50\033[0m."},
+                    3:{"money":100,"time":0,"artefacts":0,"text":"The man digs and digs. Finally, his pickaxe strikes something softer. Unfortunately, it's just a small gold nugget. Might be worth around \033[32m$100\033[0m."},
+                    4:{"money":150,"time":0,"artefacts":0,"text":"The man digs and digs. Finally, his pickaxe strikes something softer. Unfortunately, it's just a small gold nugget. Might be worth around \033[32m$150\033[0m."}
                 }
             },
             "refuse":{
                 "cost":{"money":0,"time":0,"artefacts":0},
                 "results":{
                     1:{"money":0,"time":0,"artefacts":0,"text":"You don't have the energy nor the money for this. What were they even digging for, stones?"}
+                }
+            }
+        }
+    },
+    9:{
+        "event":"You hear a thunderstorm starting to build up. This wasn't in the weather forecasts. The only building you see nearby is some sort of motel.",
+        "input":"Do you \033[35mrent\033[0m a room for the night for \033[32m$50\033[0m or try finding some makeshift \033[35mshelter\033[0m?",
+        "choices":{
+            "rent":{
+                "cost":{"money":50,"time":0,"artefacts":0},
+                "results":{
+                    1:{"money":0,"time":-10,"artefacts":0,"text":"You wait out the storm, losing \033[34m10 days\033[0m. At least you leave the motel unscathed."}
+                }
+            },
+            "shelter":{
+                "cost":{"money":0,"time":0,"artefacts":0},
+                "results":{
+                    1:{"money":-100,"time":-15,"artefacts":0,"text":"You find a small crevice and hole up inside. You're left unharmed by the storm, but lose \033[34m10 days\033[0m. You also develop a nasty arthritis and get hospitalized for \033[34m5 days\033[0m, costing \033[32m$100\033[0m."},
+                    2:{"money":0,"time":-20,"artefacts":0,"text":"You wander for a while and find an old, run-down cabin and hide there. Unfortunately, lightning strikes the unprotected shack, shocking you of \033[34m20 days\033[0m."},
+                    3:{"money":0,"time":-15,"artefacts":0,"text":"You decide to lay low in an open area, covering yourself with leaves to keep the rain out. You wake up unscathed but freezing and lose \033[34m15 days\033[0m."}
                 }
             }
         }
