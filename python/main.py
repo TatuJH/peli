@@ -451,12 +451,7 @@ def airport_actions():
         time -= 10
         print("----")
     elif first_action == "explore":
-        kumpi = random.randint(1,2)
-        if kumpi == 1:
-            event()
-        elif kumpi == 2:
-            trivia("EU")
-
+        event()
     elif first_action == "auction":
         shop()
     remaining_actions -= 1
@@ -475,11 +470,7 @@ def airport_actions():
         time -= 10
         print("----")
     elif second_action == "explore":
-        kumpi = random.randint(1, 2)
-        if kumpi == 1:
-            event()
-        elif kumpi == 2:
-            trivia("EU")
+        event()
     elif second_action == "auction":
         shop()
     elif second_action == "leave":
