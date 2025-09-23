@@ -17,7 +17,7 @@ remaining_actions = 2
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demogame',
+    database='demokanta',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -314,18 +314,6 @@ def event():
     if events[event_id]["choices"][choice]["results"][outcome]["artefacts"] > 0:
         add_artefact(events[event_id]["choices"][choice]["results"][outcome]["artefacts"])
 
-def trivia(continent):
-    question_number = random.randint(1, 5)
-    question = kysymykset[continent][question_number]["kysymys"]
-    answer = kysymykset[continent][question_number]["vastaus"]
-
-    if input(question) == answer:
-        print("You answered correctly.")
-        #lisäätään pelaajalle rahaa
-    else:
-        print("You answered incorrectly. Tough luck.")
-        #ei raahaa / pelaaja menettää rahaa
-
 def check_inventory():
     temp = ["your water bottle", "some snacks", "your phone", "a picture of mommy", "an amulet", "a dreamcatcher", "your lucky rock collection"]
     temp1 = random.choice(temp)
@@ -417,6 +405,32 @@ def choose_airport(new_cont):
     else:
         print("You don't have enough money for any airport.")
 
+def trivia(continent):
+    global money
+    question_number = random.randint(1,5)
+    question = kysymykset[continent][question_number]["kysymys"]
+    answer = kysymykset[continent][question_number]["vastaus"]
+    print(question)
+    if input("> ") == answer:
+        print("Yes! You got it right. The man hands you the 100€ and tells you to subscribe to his YouTube-channel.")
+        money += 100
+
+def quiz(continent):
+    i = random.randint(1,9)
+    if i <= 2:
+        while True:
+            a = input(
+                "Quick! A man approaches you at the airport, informing you that he's an YouTube-influencer.\n"
+                "The man tells you that if you answer his question correctly, you will win 100€. Do you want to \033[35mplay\033[0m or \033[35mwalk\033[0m away?\n"
+                "> "
+            )
+            if a == "play":
+                trivia(continent)
+                break
+            elif a == "walk":
+                print("Well then, no one is forcing you to play.")
+                break
+
 def airport_actions():
     global time
     global money
@@ -425,6 +439,7 @@ def airport_actions():
     first_action = ""
     second_action = ""
 
+    quiz(cont)
     print(f"You just arrived, and thus have {remaining_actions} actions remaining on this airport before the spirit catches you.")
     while first_action not in ["work", "explore", "auction"]:
         first_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, or visit the \033[35mauction\033[0m house?\n> ")
@@ -436,7 +451,12 @@ def airport_actions():
         time -= 10
         print("----")
     elif first_action == "explore":
-        event()
+        kumpi = random.randint(1,2)
+        if kumpi == 1:
+            event()
+        elif kumpi == 2:
+            trivia("EU")
+
     elif first_action == "auction":
         shop()
     remaining_actions -= 1
@@ -455,7 +475,11 @@ def airport_actions():
         time -= 10
         print("----")
     elif second_action == "explore":
-        event()
+        kumpi = random.randint(1, 2)
+        if kumpi == 1:
+            event()
+        elif kumpi == 2:
+            trivia("EU")
     elif second_action == "auction":
         shop()
     elif second_action == "leave":

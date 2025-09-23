@@ -169,7 +169,7 @@ events = {
                 "cost":{"money":0,"time":20,"artefacts":0},
                 "results":{
                     1:{"money":0,"time":0,"artefacts":1,"text":"You dig and dig. Finally, your pickaxe strikes something softer. You frantically wipe away some dirt, revealing a slightly battered \033[33martefact\033[0m."},
-                    2:{"money":50,"time":0,"artefacts":1,"text":"You dig and dig. Finally, your pickaxe strikes something softer. Unfortunately, it's just a small gold nugget. Might be worth around \033[32m$50\033[0m."}
+                    2:{"money":50,"time":0,"artefacts":0,"text":"You dig and dig. Finally, your pickaxe strikes something softer. Unfortunately, it's just a small gold nugget. Might be worth around \033[32m$50\033[0m."}
                 }
             },
             "pay":{
