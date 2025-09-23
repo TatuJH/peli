@@ -411,13 +411,14 @@ def trivia(continent):
     question = kysymykset[continent][question_number]["kysymys"]
     answer = kysymykset[continent][question_number]["vastaus"]
     print(question)
+    print("(Psst. Remember capital letters!)")
     if input("> ") == answer:
         print("Yes! You got it right. The man hands you the \033[32m100€\033[0m and tells you to subscribe to his YouTube-channel.")
         money += 100
 
 def quiz(continent):
     i = random.randint(1,9)
-    if i <= 2:
+    if i >= 2:
         while True:
             a = input(
                 "Quick! A man approaches you at the airport, informing you that he's an YouTube-influencer.\n"
@@ -439,8 +440,8 @@ def airport_actions():
     first_action = ""
     second_action = ""
 
-    quiz(cont)
     print(f"You just arrived, and thus have {remaining_actions} actions remaining on this airport before the spirit catches you.")
+    quiz(cont)
     while first_action not in ["work", "explore", "auction"]:
         first_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, or visit the \033[35mauction\033[0m house?\n> ")
     print("----")
@@ -475,18 +476,6 @@ def airport_actions():
         shop()
     elif second_action == "leave":
         choose_continent()
-
-
-#    next_move = input("The Spirit Demon is here. To escape from it, you will have to leave as soon as possible. Do you wish to travel to a new continent? (Y/N)")
-
-#    while second_action not in ["Y", "N"]:
-#        second_action = input("Invalid reply. Please answer with either 'Y' to travel to a new continent or with 'N' to travel to a new airport in your current continent.")
-#    if next_move == "Y":
-#        choose_continent()
-#    elif next_move == "N":
-#        print("1") #TODO maan sisänen lento
-#   else:
-#        print("Invalid reply. Please answer with either 'Y' to travel to a new continent or with 'N' to travel to a new airport in your current continent.")
 
 add_artefact(2)
 airport_actions()
