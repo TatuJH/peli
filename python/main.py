@@ -412,7 +412,7 @@ def trivia(continent):
     answer = kysymykset[continent][question_number]["vastaus"]
     print(question)
     if input("> ") == answer:
-        print("Yes! You got it right. The man hands you the 100€ and tells you to subscribe to his YouTube-channel.")
+        print("Yes! You got it right. The man hands you the \033[32m100€\033[0m and tells you to subscribe to his YouTube-channel.")
         money += 100
 
 def quiz(continent):
@@ -421,7 +421,7 @@ def quiz(continent):
         while True:
             a = input(
                 "Quick! A man approaches you at the airport, informing you that he's an YouTube-influencer.\n"
-                "The man tells you that if you answer his question correctly, you will win 100€. Do you want to \033[35mplay\033[0m or \033[35mwalk\033[0m away?\n"
+                "The man tells you that if you answer his question correctly, you will win \033[32m100€\033[0m. Do you want to \033[35mplay\033[0m or \033[35mwalk\033[0m away?\n"
                 "> "
             )
             if a == "play":
