@@ -529,6 +529,8 @@ def airport_actions():
         shop()
     elif second_action == "leave":
         choose_continent()
+
+    check_inventory()
     print(f"You have {remaining_actions - 1} action remaining on this airport before the spirit catches you.")
     while third_action not in ["work", "explore", "auction", "leave"]:
         third_action = input(
