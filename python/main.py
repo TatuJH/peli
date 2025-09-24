@@ -18,7 +18,7 @@ game_over = False
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demogame',
+    database='demokanta',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -302,6 +302,7 @@ def event():
     global time
     global artefacts
     event_id = random.randint(1,len(events))
+    event_id= 10
     print(events[event_id]["event"])
     choice = ""
     while choice not in events[event_id]["choices"] or money < events[event_id]["choices"][choice]["cost"][
