@@ -1,4 +1,6 @@
 import random
+from logging.config import stopListening
+
 import mysql.connector
 from event_list import *
 from artefacts import *
@@ -489,6 +491,7 @@ def airport_actions():
     check_inventory()
     first_action = ""
     second_action = ""
+    third_action = ""
 
     print(f"You've just arrived, and thus have {remaining_actions-1} actions remaining on this airport before the spirit catches you.")
     while first_action not in ["work", "explore", "auction"]:
@@ -527,6 +530,31 @@ def airport_actions():
         remaining_actions -= 1
         shop()
     elif second_action == "leave":
+        choose_continent()
+    print(f"You have {remaining_actions - 1} action remaining on this airport before the spirit catches you.")
+    while third_action not in ["work", "explore", "auction", "leave"]:
+        third_action = input(
+            "Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mleave\033[0m this airport?\n> ")
+    print("----")
+    if third_action == "work":
+        remaining_actions -= 1
+        work = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher",
+                "cucumber quality inspector", "tree doctor", "farmer's assistant", "professional supermarket greeter"]
+        print(
+            f"You decide to work as a {random.choice(work)}. You earn \033[32m$200\033[0m, but lose \033[34m10 days\033[0m.")
+        money += 200
+        time -= 10
+        print("----")
+        check_gameover()
+    elif third_action == "explore":
+        remaining_actions -= 1
+        event()
+        check_gameover()
+    elif third_action == "auction":
+        remaining_actions -= 1
+        shop()
+        check_gameover()
+    elif third_action == "leave":
         choose_continent()
 
 def check_gameover():
