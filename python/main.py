@@ -13,6 +13,7 @@ airport = "Helsinki Vantaa Airport"
 country = "Finland"
 size = "large_airport"
 remaining_actions = 2
+game_over = False
 
 conn = mysql.connector.connect(
     host='localhost',
@@ -28,6 +29,37 @@ class Artefact:
         self.name = nimi
         self.value = arvo
         self.continent = manner
+
+def intro():
+    global money
+    global time
+    global artefacts
+    global cont
+    global conts
+    global airport
+    global country
+    global size
+    global remaining_actions
+    global game_over
+
+    money = 5000
+    time = 365
+    artefacts = list()
+    cont = "EU"
+    conts = ["AF", "AN", "AS", "EU", "NA", "OC", "SA"]
+    airport = "Helsinki Vantaa Airport"
+    country = "Finland"
+    size = "large_airport"
+    remaining_actions = 2
+    game_over = False
+
+    temp = ""
+    print("This game is color-coded. Every time you're presented with a choice, your typeable actions are marked with \033[35mmagenta\033[0m.")
+    while temp != "understood":
+        temp = input("\033[35mUnderstood\033[0m?\n> ").strip().lower()
+    print("----")
+    #Tarina tähän????+
+    print(f"You arrive in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m. Good luck!\n----")
 
 def print_all():
     print(money, time, cont, country, size, airport, artefacts)
@@ -263,14 +295,13 @@ def list_artefacts(selling):
             else:
                 print(f"{artefacts.index(a) + 1}: \033[33m{a.name}\033[0m from \033[31m{a.continent}\033[0m, \033[32m${a.value}\033[0m")
     else:
-        print(f"You don't have any artefacts.")
+        pass
 
-#Hoitaa eventit
 def event():
     global money
     global time
     global artefacts
-    event_id = len(events)
+    event_id = random.randint(1,len(events))
     print(events[event_id]["event"])
     choice = ""
     while choice not in events[event_id]["choices"] or money < events[event_id]["choices"][choice]["cost"][
@@ -318,11 +349,17 @@ def check_inventory():
     temp = ["your water bottle", "some snacks", "your phone", "a picture of mommy", "an amulet", "a dreamcatcher", "your lucky rock collection"]
     temp1 = random.choice(temp)
     while True:
-        temp = input(f"You open your backpack and reach for {temp1}. While you're at it, would you like to \033[35mcheck\033[0m your money, time and artefacts or \033[35mclose\033[0m the backpack?\n> ")
+        print(f"You open your backpack and reach for {temp1}.")
+        temp = input(f"After that, would you like to \033[35mcheck\033[0m your statistics or \033[35mclose\033[0m the backpack?\n> ")
         if  temp == "check":
             print("----")
-            print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[0m.\nYou own the following artefacts:")
-            list_artefacts(False)
+            print(f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m.")
+            print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[0m.")
+            if len(artefacts) > 0:
+                print("You own the following artefacts:")
+                list_artefacts(False)
+            else:
+                print("You don't have any artefacts.")
             break
         elif temp == "close":
             break
@@ -343,7 +380,7 @@ def choose_continent():
                 print(f"\033[35m{conts[i]}\033[0m.")
     while cont_temp != "stay" or cont_temp not in conts:
         cont_temp = input(f"You can either \033[35mstay\033[0m in \033[31m{cont}\033[0m or choose a new continent.\n> ").strip().upper()
-        if cont_temp == "STAY":
+        if cont_temp == "STAY" or cont_temp == cont:
             cont = cont
             new_cont = False
             break
@@ -361,6 +398,7 @@ def choose_airport(new_cont):
     global country
     global money
     global time
+    global remaining_actions
     airport_names_temp = []
     airport_sizes_temp = []
     airport_country_temp = []
@@ -404,6 +442,7 @@ def choose_airport(new_cont):
         print("----")
         print(f"You arrive in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m.")
         print("----")
+        remaining_actions = 2
     else:
         print("You don't have enough money for any airport.")
 
@@ -413,7 +452,7 @@ def trivia(continent):
     question = kysymykset[continent][question_number]["kysymys"]
     answer = kysymykset[continent][question_number]["vastaus"]
     print(question)
-    if input("> ").lower() == answer:
+    if input("> ").lower().strip() == answer:
         print("----")
         print("The man's face lights up. You answered correctly. He hands you \033[32m100€\033[0m and tells you to subscribe to his channel, whatever that means.")
         money += 100
@@ -423,34 +462,35 @@ def trivia(continent):
     print("----")
 
 def quiz(continent):
-    i = random.randint(1,9)
-    if i >= 2:
-        print("A young man approaches you at the airport, informing you that he's hosting a game show. The man tells you that if you answer his question correctly, you win \033[32m100€\033[0m.")
-        while True:
-            a = input(
-                "Do you want to \033[35mplay\033[0m or \033[35mwalk\033[0m away?\n"
-                "> "
-            )
-            if a == "play":
-                print("----")
-                trivia(continent)
-                break
-            elif a == "walk":
-                print("----")
-                print("You can't be bothered to partake in stupid trends and decline the offer.")
-                print("----")
-                break
+    print("Upon your arrival, a young man approaches you. He informs you that he hosts a game show. By answering a question correctly, you win \033[32m100€\033[0m.")
+    while True:
+        a = input(
+            "Do you want to \033[35mplay\033[0m or \033[35mwalk\033[0m away?\n"
+            "> "
+        )
+        if a == "play":
+            print("----")
+            trivia(continent)
+            break
+        elif a == "walk":
+            print("----")
+            print("You can't be bothered to partake in stupid trends and decline the offer.")
+            print("----")
+            break
 
 def airport_actions():
     global time
     global money
     global remaining_actions
+
+    if remaining_actions == 2:
+        quiz(cont)
+
     check_inventory()
     first_action = ""
     second_action = ""
 
-    print(f"You just arrived, and thus have {remaining_actions} actions remaining on this airport before the spirit catches you.")
-    quiz(cont)
+    print(f"You've just arrived, and thus have {remaining_actions} actions remaining on this airport before the spirit catches you.")
     while first_action not in ["work", "explore", "auction"]:
         first_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, or visit the \033[35mauction\033[0m house?\n> ")
     print("----")
@@ -478,14 +518,47 @@ def airport_actions():
             f"You decide to work as a {random.choice(work)}. You earn \033[32m$200\033[0m, but lose \033[34m10 days\033[0m.")
         money += 200
         time -= 10
+        remaining_actions -= 1
         print("----")
     elif second_action == "explore":
+        remaining_actions -= 1
         event()
     elif second_action == "auction":
+        remaining_actions -= 1
         shop()
     elif second_action == "leave":
         choose_continent()
 
-add_artefact(2)
-choose_continent()
-print_all()
+def check_gameover():
+    global time
+    global remaining_actions
+    global game_over
+    temp = ""
+
+    if remaining_actions <= 0 or time <= 0:
+        game_over = True
+        if remaining_actions <= 0:
+            print(
+                "The spirit catches you. You have failed to fulfill your god's wishes and are banished from this realm.")
+        elif time <= 0:
+            print("You ran out of time. You have failed to fulfill your god's wishes and are banished from this realm.")
+        print("----")
+        while temp != "accept" or "decline":
+            print("You are given the chance to begin anew.")
+            temp = input("Do you \033[35maccept\033[0m or \033[35mdecline\033[0m the offer?\n> ")
+            if temp == "accept":
+                print("----")
+                game_loop()
+            elif temp == "decline":
+                print("----\nGame over.")
+                break
+            break
+
+def game_loop():
+    global game_over
+    intro()
+    while not game_over:
+        check_gameover()
+        airport_actions()
+
+game_loop()

@@ -30,8 +30,8 @@ kysymykset = {
            "vastaus":"vatican city"},
         3:{"kysymys":"What is the longest river in Europe? The \033[35m_____  _____\033[0m",
            "vastaus":"volga river"},
-        4:{"kysymys":"What mountain range separates Europe and Asia? The \033[35m___  ____  ________\033[0m",
-           "vastaus":"the ural mountains"},
+        4:{"kysymys":"What mountain range separates Europe and Asia? The \033[35m____  ________\033[0m",
+           "vastaus":"ural mountains"},
         5:{"kysymys":"Which year did the Soviet Union collapse? \033[35m____\033[0m",
            "vastaus":"1991"}
     },

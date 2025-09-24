@@ -89,7 +89,7 @@ events = {
         }
     },
     5:{
-        "event":"You see a man in a suit strolling on the street. He seems to be giving money to everyone kind enough to greet him.",
+        "event":"You see a man in a suit strolling on the street. He seems to be giving money to some people he meets.",
         "input":'Do you greet him with a "\033[35mhello\033[0m", a "\033[35mgood evening\033[0m sir" or do you do \033[35mnothing\033[0m?',
         "choices":{
             "hello":{
@@ -202,7 +202,7 @@ events = {
             "shelter":{
                 "cost":{"money":0,"time":0,"artefacts":0},
                 "results":{
-                    1:{"money":-100,"time":-15,"artefacts":0,"text":"You find a small crevice and hole up inside. You're left unharmed by the storm, but lose \033[34m10 days\033[0m. You also develop a nasty arthritis and get hospitalized for \033[34m5 days\033[0m, costing \033[32m$100\033[0m."},
+                    1:{"money":-100,"time":-15,"artefacts":0,"text":"You find a small crevice and hole up inside. You're left unharmed by the storm, but lose \033[34m15 days\033[0m and \033[32m$100\033[0m for the arthritis you develop."},
                     2:{"money":0,"time":-20,"artefacts":0,"text":"You wander for a while and find an old, run-down cabin and hide there. Unfortunately, lightning strikes the unprotected shack, shocking you of \033[34m20 days\033[0m."},
                     3:{"money":0,"time":-15,"artefacts":0,"text":"You decide to lay low in an open area, covering yourself with leaves to keep the rain out. You wake up unscathed but freezing and lose \033[34m15 days\033[0m."}
                 }
