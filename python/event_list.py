@@ -208,6 +208,33 @@ events = {
                 }
             }
         }
+    },
+    10:{
+        "event":"You see an old building in the distance. Walking closer to it, you become pretty sure its abandoned.",
+        "input":"Do you go \033[35minside\033[0m the house, walk \033[35maround\033[m it, or walk \033[35away\033[0m?",
+        "choices":{
+            "inside":{
+                "costs":{"money":0,"time":0,"artefacts":0},
+                "results":{
+                    1:{"money":0,"time":0,"artefacts":1,"text":"Inside the house is very dark, but you use your phone as a flashlight. On the ground, you spot something. Its an \033[33martefact\033[0m!"},
+                    2:{"money":0,"time":-10,"artefacts":1,"text":"You open the door and walk in, but suddenly something opens under your feet and you fall down. You wake up after some time, losing \033[34m10 days\033[0m. You spot an \033[33martefact\033[0m on the ground and manage to escape."},
+                    3:{"money":0,"time":0,"artefacts":0,"text":"You walk around the house, but find nothing inside."}
+                }
+            },
+            "around":{
+                "costs":{"money":0,"time":0,"artefacts":0},
+                "results":{
+                    1:{"money":0,"time":0,"artefacts":1,"text":"You walk around the house, and see some fresh dirt on the ground and a shovel besides it. You decide to dig in the fresh dirt and after some time, your shoel hits something hard. An \033[33martefact\033[0m!"},
+                    2:{"money":0,"time":0,"artefacts":0,"text":"After looking around the house, you dont really see anything. You decide to just leave it be."}
+                }
+            },
+            "away":{
+                "costs":{"money":0,"time":0,"artefacts":0},
+                "results":{
+                    1:{"money":0,"time":0,"artefacts":0,"text":"You walk way from the abandoned house. There was probably nothing good in that place anyway."}
+                }
+            }
+        }
     }
 }
 
