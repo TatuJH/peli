@@ -149,7 +149,7 @@ def sell_artefacts():
                 if len(sm) < 2:
                     # looppaa kunnes tulee korrekti vastaus y/n
                     while True:
-                        p = input(f"That's your only artefact from \033[31m{ct}\033[0m. Are you sure you want to \033[35msell\033[0m it, or would you rather \033[35mback\033[0m out?\n> ").strip().lower()
+                        p = input(f"That's your only artefact from \033[31m{ct}\033[0m. Are you sure you want to \033[35msell\033[0m it, or would you rather \033[35mback\033[0m out of the deal?\n> ").strip().lower()
                         if p == "sell":
                             break
                         elif p == "back":
