@@ -1,6 +1,4 @@
 import random
-from logging.config import stopListening
-
 import mysql.connector
 from event_list import *
 from artefacts import *
@@ -20,7 +18,7 @@ game_over = False
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demokanta',
+    database='demogame',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
