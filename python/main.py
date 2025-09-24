@@ -12,7 +12,7 @@ conts = ["AF", "AN", "AS", "EU", "NA", "OC", "SA"]
 airport = "Helsinki Vantaa Airport"
 country = "Finland"
 size = "large_airport"
-remaining_actions = 2
+remaining_actions = 3
 game_over = False
 
 conn = mysql.connector.connect(
@@ -50,7 +50,7 @@ def intro():
     airport = "Helsinki Vantaa Airport"
     country = "Finland"
     size = "large_airport"
-    remaining_actions = 2
+    remaining_actions = 3
     game_over = False
 
     temp = ""
@@ -442,7 +442,7 @@ def choose_airport(new_cont):
         print("----")
         print(f"You arrive in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m.")
         print("----")
-        remaining_actions = 2
+        remaining_actions = 3
     else:
         print("You don't have enough money for any airport.")
 
@@ -483,14 +483,14 @@ def airport_actions():
     global money
     global remaining_actions
 
-    if remaining_actions == 2:
+    if remaining_actions == 3:
         quiz(cont)
 
     check_inventory()
     first_action = ""
     second_action = ""
 
-    print(f"You've just arrived, and thus have {remaining_actions} actions remaining on this airport before the spirit catches you.")
+    print(f"You've just arrived, and thus have {remaining_actions-1} actions remaining on this airport before the spirit catches you.")
     while first_action not in ["work", "explore", "auction"]:
         first_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, or visit the \033[35mauction\033[0m house?\n> ")
     print("----")
@@ -507,7 +507,7 @@ def airport_actions():
     remaining_actions -= 1
 
     check_inventory()
-    print(f"You have {remaining_actions} action remaining on this airport before the spirit catches you.")
+    print(f"You have {remaining_actions-1} action remaining on this airport before the spirit catches you.")
     while second_action not in ["work", "explore", "auction", "leave"]:
         second_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mleave\033[0m this airport?\n> ")
     print("----")
