@@ -18,7 +18,8 @@ game_over = False
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demokanta',
+    # minä itken aina kun tämä muuttuu
+    database='demogame',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -64,8 +65,10 @@ def intro():
 def print_all():
     print(money, time, cont, country, size, airport, artefacts)
 
+
 def add_artefact(count):
     global cont
+
 
     # Hanki kaikki mahd. aarteiden nimet mantereen perusteella
     tup = list(artefact_names[cont])
@@ -103,86 +106,16 @@ def add_artefact(count):
                     artefacts.append(Artefact(nimi, val, cont))
                     names.append(nimi)
 
-def sell_artefacts():
-    global money
-    if len(artefacts) > 0:
-        l = list()
-
-        auctioning = True
-        print(f"You arrive at the local auction house.")
-        print("----")
-        # has sold
-        b = False
-
-        while auctioning:
-            i = -1
-            # Tee uusi lista jossa on pelkästään artefaktien numerot :p
-            for a in artefacts:
-                l.append(artefacts.index(a) + 1)
-
-            # looppaa kunnes pelaaja antaa pätevän vastausken tai häipyy
-            while i not in l:
-
-                print(f"You own the following artefacts:")
-                list_artefacts(True)
-                i = input(f"Choose which artefact you would like to sell or \033[35mcancel\033[0m the auction.\n> ").strip().lower()
-                print("----")
-                if i == "cancel":
-                    if b:
-                        print(f"You leave the auction house just a tad richer.")
-                        return
-                    else:
-                        print("You awkwardly shuffle out of the auction house after doing nothing.")
-                        print("----")
-                    return
-
-                #muuta numeroksi
-                i = int(i)
-
-                sm = list()
-                ct = artefacts[i-1].continent
-
-                for ar in artefacts:
-                    if ar.continent == ct:
-                        sm.append(ar)
-
-                if len(sm) < 2:
-                    # looppaa kunnes tulee korrekti vastaus y/n
-                    while True:
-                        p = input(f"That's your only artefact from \033[31m{ct}\033[0m. Are you sure you want to \033[35msell\033[0m it, or would you rather \033[35mback\033[0m out of the deal?\n> ").strip().lower()
-                        if p == "sell":
-                            break
-                        elif p == "back":
-                            break
-                    print("----")
-            # poista indeksistä 1 koska näin ne listit toimii
-            i -= 1
-            money += artefacts[int(i)].value
-            b = True
-            print(f"You sold the \033[33m{artefacts[int(i)].name}\033[0m for\033[32m ${artefacts[int(i)].value}\033[0m.")
-            artefacts.remove(artefacts[i])
-            print("----")
-
-            l.clear()
-
-            if len(artefacts) > 0:
-                while True:
-                    p = input("Would you like to \033[35msell\033[0m something else or \033[35mleave\033[0m the auction house?\n> ").strip().lower()
-                    if p == "leave":
-                        auctioning = False
-                        break
-                    elif p == "sell":
-                        break
-            else:
-                auctioning = False
-            print("----")
-        print("You leave the auction house just a tad richer.")
-    else:
-        print(f"You have no artefacts to sell.")
 
 def shop():
     global money
+    global remaining_actions
     l = list()
+    num = list()
+    # onko pelaaja ostanut
+    b = False
+    # onko pelaaja myynyt (molemmat vaan muuttavat tekstiä hiukan)
+    s = False
 
     # Tee uusi lista jossa on pelkästään artefaktien numerot :p
     items = list()
@@ -190,7 +123,7 @@ def shop():
     # Sekoita artefaktien lista jotta pelaaja ei saa jokaisella pelikerralla samoja aarteita ekana
     random.shuffle(tup)
 
-    # Lista nykyisistä pelaajan artefakteista
+    # Tämä tekee listan artefakteja kauppaan.
     names = list()
     for nm in artefacts:
         names.append(nm.name)
@@ -216,66 +149,175 @@ def shop():
                     artefacts.append(Artefact(nimi, val, cont))
                     names.append(nimi)
 
+
     auctioning = True
-    print(f"You arrive at the local auction house.")
 
-    for a in items:
-        l.append(items.index(a) + 1)
 
-    print("----")
+    # Looppi, joka toistuu niin kauan kunnes pelaaja lähtee kaupasta
+    # Tähän sisältyy while buying ja while selling
+    # buying ja selling- looppien loppuun sisältyy kysymys haluaako jatkaa sitä toimintoa tai tehdä jotain muuta
+    # koodin lopussa on pelaajan lähtö kaupasta
     while auctioning:
+        print("You arrive at the lobby of the auction house.")
+        buying = False
+        selling = False
 
-        b = False
+        while True:
+            inp = input(
+                "Would you like to \033[35mbuy\033[0m, \033[35msell\033[0m or\033[35m leave?\033[0m\n> ").strip().lower()
+            if inp == "buy":
+                buying = True
+                break
+            if inp == "sell":
+                selling = True
+                break
+            if inp == "leave":
+                auctioning = False
+                break
+        print("----")
 
+        # pelaajan lähtö on koodin lopussa - älä returnaa
+        if not auctioning:
+            break
 
-        i = -1
-        # looppaa kunnes pelaaja antaa pätevän vastausken tai häipyy
-        while i not in l:
+        # Pelaaja ostamassa aarteita
+        while buying:
+            for a in items:
+                l.append(str(items.index(a) + 1))
+            i = ""
+            if len(l) == 0:
+                print("You bought out the entire store!")
+                print("----")
+                break
+            while i not in l:
+                print(f"You have\033[32m ${money}\033[0m. The following artefacts are on auction:")
+                for art in items:
+                    print(f"\033[35m{items.index(art)+1}\033[0m.\033[33m {art.name}\033[0m, \033[32m${art.value}\033[0m")
 
-            print(f"You have\033[32m ${money}\033[0m. The following artefacts are on auction:")
-            for art in items:
-                print(f"\033[35m{items.index(art)+1}\033[0m.\033[33m {art.name}\033[0m, \033[32m${art.value}\033[0m")
-            i = input(f"Choose which artefact you would like to buy or \033[35mcancel\033[0m the auction.\n> ").strip().lower()
-            print("----")
-            if i == "cancel":
-                if b:
-                    print("You leave the auction house, new treasure in tow.")
-                    return
-                else:
-                    print("You awkwardly shuffle out of the auction house after doing nothing.")
+                i = input(f"Choose \033[35mthe number of the artefact\033[0m you would like to buy or \033[35mcancel\033[0m the purchase.\n> ").strip().lower()
+                print("----")
+
+                if i == "cancel":
+                    if b:
+                        print(f"You decide to not buy anything else.")
+                    else:
+                        print("You awkwardly shuffle back into the lobby after buying nothing.")
                     print("----")
-                    return
+                    break
 
+            # TÄMÄ pitää tehdä kahdesti, kun on kaksi whileä päällekkäin
+            if i == "cancel":
+                break
             i = int(i)
+            # poista indeksistä 1 koska näin ne listit toimii
+            i -= 1
 
-            if money < items[i-1].value:
+            #lähetä pelaaja takaisin ostosreissun alkuun jos liian köyhä
+            if money < items[i].value:
                 print(f"You can't afford this artefact.")
                 print("----")
-                i = -1
-        # poista indeksistä 1 koska näin ne listit toimii
-        i -= 1
-        money -= items[int(i)].value
-        print(f"You purchased the \033[33m{items[int(i)].name}\033[0m for\033[32m ${items[int(i)].value}\033[0m.")
-        print("----")
-        # vähennä kaupan vero
-        items[i].value -= 500
-        artefacts.append(items[i])
-        # poista kaupasta !!!
-        items.remove(items[i])
-        b = True
+                continue
 
-        l.clear()
 
-        if len(artefacts) > 0:
-            while True:
-                p = input("Would you like to \033[35mbuy\033[0m something else or \033[35mleave\033[0m the auction house?\n> ")
-                if p == "leave":
-                    auctioning = False
-                    break
-                elif p == "buy":
-                    break
+            money -= items[i].value
+            print(f"You purchased the \033[33m{items[i].name}\033[0m for\033[32m ${items[i].value}\033[0m.")
             print("----")
-    print("You leave the auction house, new treasure in tow.")
+            # vähennä kaupan vero
+            items[i].value -= 500
+            artefacts.append(items[i])
+            # poista kaupasta !!!
+            items.remove(items[i])
+            b = True
+
+            l.clear()
+
+        # MYYMÄSSÄ!!!
+        while selling:
+            i = -1
+
+            if len(artefacts) == 0:
+                if s:
+                    print("Having strategically sold every last artefact, you leave satisfied, confident in this masterful gambit.")
+                else:
+                    print(f"Before heading to sell your treasures, you realize you have nothing to sell.")
+                print("----")
+                selling = False
+                break
+            # Tee uusi lista jossa on pelkästään artefaktien numerot :p
+            for a in artefacts:
+                str(num.append(str(artefacts.index(a) + 1)))
+
+            # looppaa kunnes pelaaja antaa pätevän vastausken tai häipyy
+            while i not in num:
+
+                print(f"You own the following artefacts:")
+                list_artefacts(True)
+                i = input(
+                    f"Choose the \033[35mnumber of the artefact\033[0m you would like to sell or \033[35mcancel\033[0m the auction.\n> ").strip().lower()
+                print("----")
+                if i == "cancel":
+                    # onko myynyt jo jotain?
+                    # pilkkaa vähän pelaajaa jos ei
+                    if s:
+                        print("You decide to not sell anything else.")
+                        break
+                    else:
+                        print("After showing your treasures to interested buyers you hastily collect them and leave, leaving your customers dumbfounded.")
+                        break
+
+            if i == "cancel":
+                print("----")
+                break
+            # muuta numeroksi
+            i = int(i)
+            # artefaktit samalta mantereelta kuin valittu
+            sm = list()
+            # valitun artefaktin manner
+            ct = artefacts[i - 1].continent
+
+            for ar in artefacts:
+                if ar.continent == ct:
+                    sm.append(ar)
+            coward = False
+            # Onko pelaajalla vain 1 valitun mantereen aarre?
+            if len(sm) < 2:
+                while True:
+                    p = input(
+                        f"That's your only artefact from \033[31m{ct}\033[0m. Are you sure you want to \033[35msell\033[0m it, or would you rather \033[35mback\033[0m out?\n> ").strip().lower()
+                    if p == "sell":
+                        break
+                    elif p == "back":
+                        coward = True
+                        break
+                print("----")
+
+            # poista indeksistä 1 koska näin ne listit toimii
+            i -= 1
+            if coward:
+                print(f"Recalling the \033[33m{artefacts[i].name}\033[0m's importance, you snatch it from the buyer and run away.")
+            else:
+
+                money += artefacts[i].value
+                s = True
+                print(
+                    f"You sold the \033[33m{artefacts[i].name}\033[0m for\033[32m ${artefacts[i].value}\033[0m!")
+                artefacts.remove(artefacts[i])
+            print("----")
+
+            # poista numerot artefaktilistasta
+            num.clear()
+
+    # FUNKTION LOPPU
+    # pelaaja on ostanut
+    if b:
+        print("You leave the auction house, new treasure in tow")
+    # pelaaja on myynyt ja ei ostanut
+    elif s:
+        print(f"You leave the auction house just a tad richer.")
+    # ei kumpaakaan
+    else:
+        print("You hastily retreat back out of the front door mere moments after entering. \nAtleast little time was wasted.")
+        remaining_actions += 1
     print("----")
 
 def remove_artefact(index):
@@ -484,84 +526,134 @@ def airport_actions():
     global money
     global remaining_actions
 
-    if remaining_actions == 3:
-        quiz(cont)
+    quiz(cont)
+    # muokattava lista
+    all_actions = ["work", "explore", "auction"]
+    while remaining_actions > 0:
+        check_inventory()
+        # Nollaa joka kierroksen alussa
+        action = ""
+        # Eka vuoro
+        if remaining_actions == 3:
+            print(
+                f"You've just arrived, and thus have {remaining_actions-1} actions remaining on this airport before the spirit catches you.")
+        # toka ja kolmas
+        else:
+            # 1 action :-)
+            if remaining_actions == 2:
+                print(f"You have {remaining_actions-1} action remaining on this airport before the spirit catches you.")
+                all_actions.append("leave")
+            # useampi kuin 1 tai 0 o_o
+            else:
+                print(f"You have {remaining_actions-1} actions remaining on this airport before the spirit catches you.")
 
-    check_inventory()
-    first_action = ""
-    second_action = ""
-    third_action = ""
+        while action not in all_actions:
+            if remaining_actions > 2:
+                action = input(
+                    "Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, or visit the \033[35mauction\033[0m house?\n> ")
+            else:
+                action = input(
+                    "Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mleave\033[0m?\n> ")
 
-    print(f"You've just arrived, and thus have {remaining_actions-1} actions remaining on this airport before the spirit catches you.")
-    while first_action not in ["work", "explore", "auction"]:
-        first_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, or visit the \033[35mauction\033[0m house?\n> ")
-    print("----")
-    if first_action == "work":
-        work = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher", "cucumber quality inspector", "tree doctor", "farmer's assistant", "professional supermarket greeter"]
-        print(f"You decide to work as a {random.choice(work)}. You earn \033[32m$200\033[0m, but lose \033[34m10 days\033[0m.")
-        money += 200
-        time -= 10
         print("----")
-    elif first_action == "explore":
-        event()
-    elif first_action == "auction":
-        shop()
-    remaining_actions -= 1
+        if action == "work":
+            work = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher",
+                    "cucumber quality inspector", "tree doctor", "farmer's assistant",
+                    "professional supermarket greeter"]
+            print(
+                f"You decide to work as a {random.choice(work)}. You earn \033[32m$200\033[0m, but lose \033[34m10 days\033[0m.")
+            money += 200
+            time -= 10
+            print("----")
+        elif action == "explore":
+            event()
+        elif action == "auction":
+            shop()
 
-    check_inventory()
-    print(f"You have {remaining_actions-1} action remaining on this airport before the spirit catches you.")
-    while second_action not in ["work", "explore", "auction", "leave"]:
-        second_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mleave\033[0m this airport?\n> ")
-    print("----")
-    if second_action == "work":
-        work = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher",
-                "cucumber quality inspector", "tree doctor", "farmer's assistant", "professional supermarket greeter"]
-        print(
-            f"You decide to work as a {random.choice(work)}. You earn \033[32m$200\033[0m, but lose \033[34m10 days\033[0m.")
-        money += 200
-        time -= 10
-        remaining_actions -= 1
-        print("----")
-    elif second_action == "explore":
-        remaining_actions -= 1
-        event()
-    elif second_action == "auction":
-        remaining_actions -= 1
-        shop()
-    elif second_action == "leave":
-        choose_continent()
+        elif action == "leave":
+            choose_continent()
+            check_gameover()
+            return
 
-    check_inventory()
-    print(f"You have {remaining_actions - 1} action remaining on this airport before the spirit catches you.")
-    while third_action not in ["work", "explore", "auction", "leave"]:
-        third_action = input(
-            "Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mleave\033[0m this airport?\n> ")
-    print("----")
-    if third_action == "work":
+        # Onko pelaaja tulhannut kaiken ajan?
         remaining_actions -= 1
-        work = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher",
-                "cucumber quality inspector", "tree doctor", "farmer's assistant", "professional supermarket greeter"]
-        print(
-            f"You decide to work as a {random.choice(work)}. You earn \033[32m$200\033[0m, but lose \033[34m10 days\033[0m.")
-        money += 200
-        time -= 10
-        print("----")
         check_gameover()
-    elif third_action == "explore":
-        remaining_actions -= 1
-        event()
-        check_gameover()
-    elif third_action == "auction":
-        remaining_actions -= 1
-        shop()
-        check_gameover()
-    elif third_action == "leave":
-        choose_continent()
+
+
+
+    # ctrl k + ctrl u poistaa kommentoinnin
+
+    # print(f"You've just arrived, and thus have {remaining_actions-1} actions remaining on this airport before the spirit catches you.")
+    # while first_action not in ["work", "explore", "auction"]:
+    #     first_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, or visit the \033[35mauction\033[0m house?\n> ")
+    # print("----")
+    # if first_action == "work":
+    #     work = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher", "cucumber quality inspector", "tree doctor", "farmer's assistant", "professional supermarket greeter"]
+    #     print(f"You decide to work as a {random.choice(work)}. You earn \033[32m$200\033[0m, but lose \033[34m10 days\033[0m.")
+    #     money += 200
+    #     time -= 10
+    #     print("----")
+    # elif first_action == "explore":
+    #     event()
+    # elif first_action == "auction":
+    #     shop()
+    # remaining_actions -= 1
+    #
+    # check_inventory()
+    # print(f"You have {remaining_actions-1} action remaining on this airport before the spirit catches you.")
+    # while second_action not in ["work", "explore", "auction", "leave"]:
+    #     second_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mleave\033[0m this airport?\n> ")
+    # print("----")
+    # if second_action == "work":
+    #     work = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher",
+    #             "cucumber quality inspector", "tree doctor", "farmer's assistant", "professional supermarket greeter"]
+    #     print(
+    #         f"You decide to work as a {random.choice(work)}. You earn \033[32m$200\033[0m, but lose \033[34m10 days\033[0m.")
+    #     money += 200
+    #     time -= 10
+    #     remaining_actions -= 1
+    #     print("----")
+    # elif second_action == "explore":
+    #     remaining_actions -= 1
+    #     event()
+    # elif second_action == "auction":
+    #     remaining_actions -= 1
+    #     shop()
+    # elif second_action == "leave":
+    #     choose_continent()
+    #
+    # check_inventory()
+    # print(f"You have {remaining_actions - 1} action remaining on this airport before the spirit catches you.")
+    # while third_action not in ["work", "explore", "auction", "leave"]:
+    #     third_action = input(
+    #         "Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mleave\033[0m this airport?\n> ")
+    # print("----")
+    # if third_action == "work":
+    #     remaining_actions -= 1
+    #     work = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher",
+    #             "cucumber quality inspector", "tree doctor", "farmer's assistant", "professional supermarket greeter"]
+    #     print(
+    #         f"You decide to work as a {random.choice(work)}. You earn \033[32m$200\033[0m, but lose \033[34m10 days\033[0m.")
+    #     money += 200
+    #     time -= 10
+    #     print("----")
+    #     check_gameover()
+    # elif third_action == "explore":
+    #     remaining_actions -= 1
+    #     event()
+    #     check_gameover()
+    # elif third_action == "auction":
+    #     remaining_actions -= 1
+    #     shop()
+    #     check_gameover()
+    # elif third_action == "leave":
+    #     choose_continent()
 
 def check_gameover():
     global time
     global remaining_actions
     global game_over
+    global money
     temp = ""
 
     if remaining_actions <= 0 or time <= 0:
@@ -571,12 +663,15 @@ def check_gameover():
                 "The spirit catches you. You have failed to fulfill your god's wishes and are banished from this realm.")
         elif time <= 0:
             print("You ran out of time. You have failed to fulfill your god's wishes and are banished from this realm.")
+        elif money < 100:
+            print("Lacking money to escape the spirit, you have failed to fulfill your god's wishes and are banished from this realm.")
         print("----")
         while temp != "accept" or "decline":
             print("You are given the chance to begin anew.")
             temp = input("Do you \033[35maccept\033[0m or \033[35mdecline\033[0m the offer?\n> ")
             if temp == "accept":
                 print("----")
+                game_over = False
                 game_loop()
             elif temp == "decline":
                 print("----\nGame over.")
@@ -586,8 +681,8 @@ def check_gameover():
 def game_loop():
     global game_over
     intro()
+    add_artefact(3)
     while not game_over:
         check_gameover()
         airport_actions()
-
 game_loop()
