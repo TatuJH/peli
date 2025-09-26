@@ -3,6 +3,7 @@ import mysql.connector
 from event_list import *
 from artefacts import *
 from trivia_list import *
+from geopy import distance
 
 money = 5000
 time = 365
@@ -14,8 +15,13 @@ country = "Finland"
 size = "large_airport"
 remaining_actions = 3
 game_over = False
-# Lista jossa on jokaisen käyttämättömän eventin indeksi
-new_events = list()
+#Ei mitää hajuu mikä on "completed" vastakohta lol
+uncompleted_events = []
+for i in events:
+    uncompleted_events.append(i)
+total_distance = 0
+visited_countries = []
+visited_countries.append(country)
 
 conn = mysql.connector.connect(
     host='localhost',
@@ -26,6 +32,12 @@ conn = mysql.connector.connect(
     password='Tietokannat1',
     autocommit=True
 )
+
+sql = f'SELECT latitude_deg AS latitude, longitude_deg AS longitude FROM airport WHERE name="{airport}";'
+cursor = conn.cursor()
+cursor.execute(sql)
+latlong = cursor.fetchall()
+
 
 class Artefact:
     def __init__(self, nimi, arvo, manner):
@@ -44,6 +56,9 @@ def intro():
     global size
     global remaining_actions
     global game_over
+    global uncompleted_events
+    global total_distance
+    global latlong
 
     money = 5000
     time = 365
@@ -55,6 +70,14 @@ def intro():
     size = "large_airport"
     remaining_actions = 3
     game_over = False
+    uncompleted_events = []
+    for i in events:
+        uncompleted_events.append(i)
+    total_distance = 0
+    sql = f'SELECT latitude_deg AS latitude, longitude_deg AS longitude FROM airport WHERE name="{airport}";'
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    latlong = cursor.fetchall()
 
     temp = ""
     print("This game is color-coded. Every time you're presented with a choice, your typeable actions are marked with \033[35mmagenta\033[0m.")
@@ -65,8 +88,7 @@ def intro():
     print(f"You arrive in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m. Good luck!\n----")
 
 def print_all():
-    print(money, time, cont, country, size, airport, artefacts)
-
+    print(money, time, cont, country, size, airport, artefacts, uncompleted_events, latlong, total_distance, visited_countries)
 
 def add_artefact(count):
     global cont
@@ -188,7 +210,7 @@ def shop():
                 l.append(str(items.index(a) + 1))
             i = ""
             if len(l) == 0:
-                print("You bought out the entire store!")
+                print("You bought out the entire stock!")
                 print("----")
                 break
             while i not in l:
@@ -196,7 +218,7 @@ def shop():
                 for art in items:
                     print(f"\033[35m{items.index(art)+1}\033[0m.\033[33m {art.name}\033[0m, \033[32m${art.value}\033[0m")
 
-                i = input(f"Choose \033[35mthe number of the artefact\033[0m you would like to buy or \033[35mcancel\033[0m the purchase.\n> ").strip().lower()
+                i = input(f"Choose which artefact you would like to buy or \033[35mcancel\033[0m the auction.\n> ").strip().lower()
                 print("----")
 
                 if i == "cancel":
@@ -241,7 +263,7 @@ def shop():
                 if s:
                     print("Having strategically sold every last artefact, you leave satisfied, confident in this masterful gambit.")
                 else:
-                    print(f"Before heading to sell your treasures, you realize you have nothing to sell.")
+                    print(f"Before heading to cash in, you realize you have nothing to sell.")
                 print("----")
                 selling = False
                 break
@@ -255,7 +277,7 @@ def shop():
                 print(f"You own the following artefacts:")
                 list_artefacts(True)
                 i = input(
-                    f"Choose the \033[35mnumber of the artefact\033[0m you would like to sell or \033[35mcancel\033[0m the auction.\n> ").strip().lower()
+                    f"Choose which artefact you would like to sell or \033[35mcancel\033[0m the auction.\n> ").strip().lower()
                 print("----")
                 if i == "cancel":
                     # onko myynyt jo jotain?
@@ -264,7 +286,7 @@ def shop():
                         print("You decide to not sell anything else.")
                         break
                     else:
-                        print("After showing your treasures to interested buyers you hastily collect them and leave, leaving your customers dumbfounded.")
+                        print("After showing your stock to interested buyers you hastily collect them and leave, leaving your customers dumbfounded.")
                         break
 
             if i == "cancel":
@@ -296,7 +318,7 @@ def shop():
             # poista indeksistä 1 koska näin ne listit toimii
             i -= 1
             if coward:
-                print(f"Recalling the \033[33m{artefacts[i].name}\033[0m's importance, you snatch it from the buyer and run away.")
+                print(f"Recalling the \033[33m{artefacts[i].name}\033[0m's importance, you snatch it from the buyer's hands and run away.")
             else:
 
                 money += artefacts[i].value
@@ -312,13 +334,13 @@ def shop():
     # FUNKTION LOPPU
     # pelaaja on ostanut
     if b:
-        print("You leave the auction house, new treasure in tow")
+        print("You leave the auction house, new treasure in tow.")
     # pelaaja on myynyt ja ei ostanut
     elif s:
         print(f"You leave the auction house just a tad richer.")
     # ei kumpaakaan
     else:
-        print("You hastily retreat back out of the front door mere moments after entering. \nAtleast little time was wasted.")
+        print("You hastily retreat back out of the front door mere moments after entering. At least you killed some time.")
         remaining_actions += 1
     print("----")
 
@@ -341,26 +363,14 @@ def list_artefacts(selling):
     else:
         pass
 
-def shuffle_events():
-    global new_events
-    new_events.clear()
-    new_events = list(events.keys())
-    random.shuffle(new_events)
-
-def get_event():
-    try:
-        new_events[0]
-    except IndexError:
-        shuffle_events()
-    ev = new_events[0]
-    new_events.remove(new_events[0])
-    return ev
-
 def event():
     global money
     global time
     global artefacts
-    event_id = get_event()
+    global uncompleted_events
+    event_id = random.choice(uncompleted_events)
+    uncompleted_events.remove(event_id)
+
     print(events[event_id]["event"])
     choice = ""
     while choice not in events[event_id]["choices"] or money < events[event_id]["choices"][choice]["cost"][
@@ -407,12 +417,19 @@ def event():
 def check_inventory():
     temp = ["your water bottle", "some snacks", "your phone", "a picture of mommy", "an amulet", "a dreamcatcher", "your lucky rock collection"]
     temp1 = random.choice(temp)
+    global visited_countries
     while True:
         print(f"You open your backpack and reach for {temp1}.")
         temp = input(f"After that, would you like to \033[35mcheck\033[0m your statistics or \033[35mclose\033[0m the backpack?\n> ")
         if  temp == "check":
             print("----")
             print(f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m.")
+            color_temp = [f"\033[31m{c}\033[0m" for c in visited_countries]
+            if len(color_temp) > 1:
+                text = ", ".join(color_temp[:-1]) + " and " + color_temp[-1]
+            else:
+                text = color_temp[0]
+            print("You have been to " + text + f", and travelled \033[36m{total_distance} km\033[0m.")
             print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[0m.")
             if len(artefacts) > 0:
                 print("You own the following artefacts:")
@@ -458,13 +475,17 @@ def choose_airport(new_cont):
     global money
     global time
     global remaining_actions
+    global uncompleted_events
+    global latlong
+    global visited_countries
+    global total_distance
     airport_names_temp = []
     airport_sizes_temp = []
     airport_country_temp = []
     available_airports_temp = 0
     costs = [100, 200, 300]
     answer_temp = 0
-    sql = f'((SELECT airport.name, type, country.name AS country FROM airport, country WHERE type="small_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name, type, country.name AS country FROM airport, country WHERE type="medium_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name, type, country.name AS country FROM airport, country WHERE type="large_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1));'
+    sql = f'((SELECT airport.name, type, country.name AS country, latitude_deg AS latitude, longitude_deg AS longitude FROM airport, country WHERE type="small_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name, type, country.name AS country, latitude_deg AS latitude, longitude_deg AS longitude FROM airport, country WHERE type="medium_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name, type, country.name AS country, latitude_deg AS latitude, longitude_deg AS longitude FROM airport, country WHERE type="large_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1));'
     cursor = conn.cursor(dictionary=True)
     cursor.execute(sql)
     airport_results = cursor.fetchall()
@@ -472,13 +493,15 @@ def choose_airport(new_cont):
     for i in range(len(airport_results)):
         if new_cont:
             if money >= int(costs[i] * 1.5):
-                print(f'\033[35m{i+1}\033[0m: \033[31m{airport_results[i]["name"]}\033[0m, a {airport_results[i]["type"].replace("_"," ")} in \033[31m{airport_results[i]["country"]}\033[0m - \033[32m${int(costs[i] * 1.5)}\033[0m, \033[34m10 days\033[0m')
+                latlong_temp = (airport_results[i]["latitude"], airport_results[i]["longitude"])
+                print(f'\033[35m{i+1}\033[0m: \033[31m{airport_results[i]["name"]}\033[0m, a {airport_results[i]["type"].replace("_"," ")} in \033[31m{airport_results[i]["country"]}\033[0m - \033[36m{int(round(distance.distance(latlong,latlong_temp).km))} km\033[0m - \033[32m${int(costs[i] * 1.5)}\033[0m, \033[34m10 days\033[0m')
                 airport_names_temp.append(airport_results[i]["name"])
                 airport_sizes_temp.append(airport_results[i]["type"])
                 airport_country_temp.append(airport_results[i]["country"])
                 available_airports_temp += 1
         else:
-            print(f'\033[35m{i + 1}\033[0m: \033[31m{airport_results[i]["name"]}\033[0m, a {airport_results[i]["type"].replace("_", " ")} in \033[31m{airport_results[i]["country"]}\033[0m - \033[32m${int(costs[i])}\033[0m, \033[34m5 days\033[0m')
+            latlong_temp = (airport_results[i]["latitude"], airport_results[i]["longitude"])
+            print(f'\033[35m{i + 1}\033[0m: \033[31m{airport_results[i]["name"]}\033[0m, a {airport_results[i]["type"].replace("_", " ")} in \033[31m{airport_results[i]["country"]}\033[0m - \033[36m{int(round(distance.distance(latlong,latlong_temp).km))} km\033[0m - \033[32m${int(costs[i])}\033[0m, \033[34m5 days\033[0m')
             airport_names_temp.append(airport_results[i]["name"])
             airport_sizes_temp.append(airport_results[i]["type"])
             airport_country_temp.append(airport_results[i]["country"])
@@ -492,6 +515,14 @@ def choose_airport(new_cont):
         airport = airport_names_temp[answer_temp-1]
         size = airport_sizes_temp[answer_temp-1]
         country = airport_country_temp[answer_temp-1]
+
+        sql = f'SELECT latitude_deg AS latitude, longitude_deg AS longitude FROM airport WHERE name="{airport}";'
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        total_distance += int(round(distance.distance(latlong,cursor.fetchall()).km))
+        cursor.execute(sql)
+        latlong = cursor.fetchall()
+
         if new_cont:
             money -= int(costs[answer_temp-1] * 1.5)
             time -= 10
@@ -500,6 +531,11 @@ def choose_airport(new_cont):
             time -= 5
         print("----")
         print(f"You arrive in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m.")
+        uncompleted_events = []
+        for i in events:
+            uncompleted_events.append(i)
+        if country not in visited_countries:
+            visited_countries.append(country)
         print("----")
         remaining_actions = 3
     else:
@@ -558,7 +594,7 @@ def airport_actions():
             # 1 action :-)
             if remaining_actions == 2:
                 print(f"You have {remaining_actions-1} action remaining on this airport before the spirit catches you.")
-                all_actions.append("leave")
+                all_actions.append("depart")
             # useampi kuin 1 tai 0 o_o
             else:
                 print(f"You have {remaining_actions-1} actions remaining on this airport before the spirit catches you.")
@@ -569,7 +605,7 @@ def airport_actions():
                     "Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, or visit the \033[35mauction\033[0m house?\n> ")
             else:
                 action = input(
-                    "Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mleave\033[0m?\n> ")
+                    "Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mdepart\033[0m?\n> ")
 
         print("----")
         if action == "work":
@@ -586,7 +622,7 @@ def airport_actions():
         elif action == "auction":
             shop()
 
-        elif action == "leave":
+        elif action == "depart":
             choose_continent()
             check_gameover()
             return
