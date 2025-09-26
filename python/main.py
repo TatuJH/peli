@@ -14,6 +14,8 @@ country = "Finland"
 size = "large_airport"
 remaining_actions = 3
 game_over = False
+# Lista jossa on jokaisen käyttämättömän eventin indeksi
+new_events = list()
 
 conn = mysql.connector.connect(
     host='localhost',
@@ -339,12 +341,26 @@ def list_artefacts(selling):
     else:
         pass
 
+def shuffle_events():
+    global new_events
+    new_events.clear()
+    new_events = list(events.keys())
+    random.shuffle(new_events)
+
+def get_event():
+    try:
+        new_events[0]
+    except IndexError:
+        shuffle_events()
+    ev = new_events[0]
+    new_events.remove(new_events[0])
+    return ev
+
 def event():
     global money
     global time
     global artefacts
-    event_id = random.randint(1,len(events))
-    event_id= 10
+    event_id = get_event()
     print(events[event_id]["event"])
     choice = ""
     while choice not in events[event_id]["choices"] or money < events[event_id]["choices"][choice]["cost"][
@@ -580,75 +596,6 @@ def airport_actions():
         check_gameover()
 
 
-
-    # ctrl k + ctrl u poistaa kommentoinnin
-
-    # print(f"You've just arrived, and thus have {remaining_actions-1} actions remaining on this airport before the spirit catches you.")
-    # while first_action not in ["work", "explore", "auction"]:
-    #     first_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, or visit the \033[35mauction\033[0m house?\n> ")
-    # print("----")
-    # if first_action == "work":
-    #     work = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher", "cucumber quality inspector", "tree doctor", "farmer's assistant", "professional supermarket greeter"]
-    #     print(f"You decide to work as a {random.choice(work)}. You earn \033[32m$200\033[0m, but lose \033[34m10 days\033[0m.")
-    #     money += 200
-    #     time -= 10
-    #     print("----")
-    # elif first_action == "explore":
-    #     event()
-    # elif first_action == "auction":
-    #     shop()
-    # remaining_actions -= 1
-    #
-    # check_inventory()
-    # print(f"You have {remaining_actions-1} action remaining on this airport before the spirit catches you.")
-    # while second_action not in ["work", "explore", "auction", "leave"]:
-    #     second_action = input("Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mleave\033[0m this airport?\n> ")
-    # print("----")
-    # if second_action == "work":
-    #     work = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher",
-    #             "cucumber quality inspector", "tree doctor", "farmer's assistant", "professional supermarket greeter"]
-    #     print(
-    #         f"You decide to work as a {random.choice(work)}. You earn \033[32m$200\033[0m, but lose \033[34m10 days\033[0m.")
-    #     money += 200
-    #     time -= 10
-    #     remaining_actions -= 1
-    #     print("----")
-    # elif second_action == "explore":
-    #     remaining_actions -= 1
-    #     event()
-    # elif second_action == "auction":
-    #     remaining_actions -= 1
-    #     shop()
-    # elif second_action == "leave":
-    #     choose_continent()
-    #
-    # check_inventory()
-    # print(f"You have {remaining_actions - 1} action remaining on this airport before the spirit catches you.")
-    # while third_action not in ["work", "explore", "auction", "leave"]:
-    #     third_action = input(
-    #         "Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mleave\033[0m this airport?\n> ")
-    # print("----")
-    # if third_action == "work":
-    #     remaining_actions -= 1
-    #     work = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher",
-    #             "cucumber quality inspector", "tree doctor", "farmer's assistant", "professional supermarket greeter"]
-    #     print(
-    #         f"You decide to work as a {random.choice(work)}. You earn \033[32m$200\033[0m, but lose \033[34m10 days\033[0m.")
-    #     money += 200
-    #     time -= 10
-    #     print("----")
-    #     check_gameover()
-    # elif third_action == "explore":
-    #     remaining_actions -= 1
-    #     event()
-    #     check_gameover()
-    # elif third_action == "auction":
-    #     remaining_actions -= 1
-    #     shop()
-    #     check_gameover()
-    # elif third_action == "leave":
-    #     choose_continent()
-
 def check_gameover():
     global time
     global remaining_actions
@@ -685,4 +632,5 @@ def game_loop():
     while not game_over:
         check_gameover()
         airport_actions()
+
 game_loop()
