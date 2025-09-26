@@ -418,8 +418,8 @@ def check_inventory():
     temp = ["your water bottle", "some snacks", "your phone", "a picture of mommy", "an amulet", "a dreamcatcher", "your lucky rock collection"]
     temp1 = random.choice(temp)
     global visited_countries
+    print(f"You open your backpack and reach for {temp1}.")
     while True:
-        print(f"You open your backpack and reach for {temp1}.")
         temp = input(f"After that, would you like to \033[35mcheck\033[0m your statistics or \033[35mclose\033[0m the backpack?\n> ")
         if  temp == "check":
             print("----")
