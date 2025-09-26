@@ -235,7 +235,62 @@ events = {
                 }
             }
         }
-    }
+    },
+    11: {
+        "event": "You explore the nearby wildlife sanctuary. Midway through your trail, you notice a campsite full of people in indigenous clothing. \nPerhaps they have an \033[33martefact\033[0m you could take?",
+        "input": "Do you continue your relaxing \033[35mwalk\033[0m or \033[35mgreet\033[0m the tribesmen.. Or try \033[35msteal\033[0ming from them?",
+        "choices": {
+            "walk": {
+                "cost": {"money": 0, "time": 0, "artefacts": 0},
+                "results": {
+                    1: {"money": 0, "time": 20, "artefacts": 0,
+                        "text": "You walk the rest of the trail and feel completely at peace. As if you have \033[34mno rush at all.\033[0m"},
+                    2: {"money": 0, "time": -5, "artefacts": 0,
+                        "text": "You forgot to read the length of the trail and walk a ridiculous distance.\nYou spend \033[34m5\033[0m days in various lodges along the trail until you finally get to the end."},
+                    3: {"money": 0, "time": 0, "artefacts": 0,
+                        "text": "You find the quickest way out of the trail and get back on your journey."},
+                }
+            },
+            "greet": {
+                "cost": {"money": 0, "time": 0, "artefacts": 0},
+                "results": {
+                    1: {"money": 0, "time": -5, "artefacts": 1,
+                        "text": "You spend \033[34m5 days\033[0m living with the tribesmen, who tell you that they're living like their ancestors once did in this area.\nHappy with your stay, they send you off with a \033[33msouvenir\033[0m."},
+                    2: {"money": 0, "time": 0, "artefacts": 0,
+                        "text": "You greet the tribesmen and are treated to seemingly endless tales about the people who used to live in these lands.\nYou fall asleep out of boredom and get kicked out of the campsite for this."},
+                    3: {"money": 0, "time": 15, "artefacts": 0,
+                        "text": "You find the tribesmen worshipping a false idol and hastily do right by attacking their totem."
+                                "\nThe police are called on you but your righteous actions earn you the favour of your god. You get away and are granted \033[34m15 days\033[0m time."
+                        }
+                }
+            },
+            "steal": {
+                "cost": {"money": 0, "time": 0, "artefacts": 0},
+                "results": {
+                    1: {"money": 0, "time": 0, "artefacts": 0,
+                        "text": "You put on a friendly facade and when the moment is right, you sneakily take something without anyone seeing it.\nAfter leaving you realize it was just a worthless plastic replica."},
+                    2: {"money": 0, "time": -10, "artefacts": 0,
+                        "text": "You greet the campers and immediately are caught trying to steal a historic artefact. You explain your righteous mission, but to no avail.\n"
+                                "You spend \033[34m10 days\033[0m in jail for attempted thievery."
+                        },
+                    3: {"money": 200, "time": 0, "artefacts": 0,
+                        "text": "You put on a friendly facade and when the moment is right, you sneakily take something without anyone seeing it."
+                                "\nAfter examining your new treasure, you find it to be too paltry of an offering and pawn it off for \033[32m$200\033[0m."},
+                    4: {"money": 0, "time": 0, "artefacts": -1,
+                        "text": "You put on a friendly facade and when the moment is right, you attempt to steal something from the campers but get caught. \n"
+                                "They end up taking one of your \033[33martefacts\033[0m as punishment and exile you."},
+                }
+            }
+        }
+    },
+
+
+
+
+
+
+
+
 }
 
 #Eventin lisäys pohja:

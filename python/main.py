@@ -361,6 +361,7 @@ def event():
     global time
     global artefacts
     event_id = get_event()
+    #event_id = 11
     print(events[event_id]["event"])
     choice = ""
     while choice not in events[event_id]["choices"] or money < events[event_id]["choices"][choice]["cost"][
