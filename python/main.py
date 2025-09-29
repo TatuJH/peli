@@ -87,7 +87,29 @@ def intro():
     while temp != "understood":
         temp = input("\033[35mUnderstood\033[0m?\n> ").strip().lower()
     print("----")
-    #Tarina tähän????+
+    temp = ""
+    print("Reading the introduction is recommended for a first-time playthrough.")
+    while temp != "read" and temp != "play":
+        temp = input("Would you like to \033[35mread\033[0m the introduction or start \033[35mplay\033[0ming?\n> ").strip().lower()
+    print("----")
+    if temp == "read":
+        print(f"You belong in a cult dead-set on waking up an ancient god.\n"
+              "After centuries of hard work, the moment is finally at hand.\n"
+              "You arrive in an ancient chamber. The chamber smells of sulfur and debris on the ground seems to move on its own.\n"
+              "In the middle of the chamber lies a circle made of lit candles. You step in, and start performing a ritual.\n"
+              "You feel the air rising as a fading projection of your god appears in front of you. You hear a deep voice.\n"
+              "The voice commands you to bring him seven artefacts - one from each continent - to finish the ritual.\n"
+              f"You are given \033[34m{int(time)}\033[0m days\033[0m to complete your quest - otherwise the ritual fails.\n"
+              "In addition, to ensure your obedience, a spirit is sent after you. You feel like you don't want to make contact with it.\n"
+              "You leave the chamber as a waning voice behind you asks you to hurry.\n----")
+        print("Important things to note:\n"
+              "- You only have a limited number of actions on each airport.\n"          
+              "- Working gives you money, but costs you time.\n"
+              "- Exploring consists of randomized events, which can both cost and reward money, time or artefacts.\n"
+              "- In the auction house you can either buy or sell artefacts.\n"
+              "- Traveling to another continent costs more.\n"
+              "- Airport size determines the cost of travel and affects rewards gained from exploring.\n"    
+              "----")
     print(f"You arrive in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m. Good luck!\n----")
 
 def print_all():
@@ -724,4 +746,3 @@ def game_loop():
         airport_actions()
 
 game_loop()
-
