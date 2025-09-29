@@ -355,6 +355,9 @@ def remove_artefact(index):
                 artefacts.remove(i)
         else:
             artefacts.remove(index)
+    # todo jotain jos pelaajalla ei ole artefakteja?
+    else:
+        print("Good thing you had no artefacts to lose!")
 
 def list_artefacts(selling):
     if len(artefacts) > 0:
@@ -422,26 +425,21 @@ def check_inventory():
     temp1 = random.choice(temp)
     global visited_countries
     print(f"You open your backpack and reach for {temp1}.")
-    while True:
-        temp = input(f"After that, would you like to \033[35mcheck\033[0m your statistics or \033[35mclose\033[0m the backpack?\n> ")
-        if  temp == "check":
-            print("----")
-            print(f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m.")
-            color_temp = [f"\033[31m{c}\033[0m" for c in visited_countries]
-            if len(color_temp) > 1:
-                text = ", ".join(color_temp[:-1]) + " and " + color_temp[-1]
-            else:
-                text = color_temp[0]
-            print("You have been to " + text + f", and travelled \033[36m{total_distance} km\033[0m.")
-            print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[0m.")
-            if len(artefacts) > 0:
-                print("You own the following artefacts:")
-                list_artefacts(False)
-            else:
-                print("You don't have any artefacts.")
-            break
-        elif temp == "close":
-            break
+    print("----")
+    print(f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m.")
+    color_temp = [f"\033[31m{c}\033[0m" for c in visited_countries]
+    if len(color_temp) > 1:
+        text = ", ".join(color_temp[:-1]) + " and " + color_temp[-1]
+    else:
+        text = color_temp[0]
+    print("You have been to " + text + f", and travelled \033[36m{total_distance} km\033[0m.")
+    print(f"You have \033[32m${money}\033[0m and \033[34m{time} days\033[0m.")
+    if len(artefacts) > 0:
+        print("You own the following artefacts:")
+        list_artefacts(False)
+    else:
+        print("You don't have any artefacts.")
+
     print("----")
 
 def choose_continent():
@@ -492,7 +490,9 @@ def choose_airport(new_cont):
     cursor = conn.cursor(dictionary=True)
     cursor.execute(sql)
     airport_results = cursor.fetchall()
+
     print(f'Available airports in \033[31m{cont}\033[0m:')
+
     for i in range(len(airport_results)):
         if new_cont:
             if money >= int(costs[i] * 1.5):
@@ -593,32 +593,31 @@ def airport_actions():
         quiz(cont)
 
     # muokattava lista
-    all_actions = ["work", "explore", "auction"]
+    all_actions = ["work", "explore", "auction", "check"]
     while remaining_actions > 0:
-        check_inventory()
         # Nollaa joka kierroksen alussa
         action = ""
         # Eka vuoro
         if remaining_actions == 3:
             print(
-                f"You've just arrived, and thus have {remaining_actions-1} actions remaining on this airport before the spirit catches you.")
+                f"You've just arrived, and thus have {remaining_actions} actions remaining on this airport before the spirit catches you.")
         # toka ja kolmas
         else:
             # 1 action :-)
             if remaining_actions == 2:
-                print(f"You have {remaining_actions-1} action remaining on this airport before the spirit catches you.")
+                print(f"You have {remaining_actions} action remaining on this airport before the spirit catches you.")
                 all_actions.append("depart")
             # useampi kuin 1 tai 0 o_o
             else:
-                print(f"You have {remaining_actions-1} actions remaining on this airport before the spirit catches you.")
+                print(f"You have {remaining_actions} actions remaining on this airport before the spirit catches you.")
 
         while action not in all_actions:
             if remaining_actions > 2:
                 action = input(
-                    "Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, or visit the \033[35mauction\033[0m house?\n> ")
+                    "Would you like to either \033[35mcheck\033[0m your stats, \033[35mwork\033[0m, \033[35mexplore\033[0m or visit the \033[35mauction\033[0m house?\n> ")
             else:
                 action = input(
-                    "Would you like to either \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mdepart\033[0m?\n> ")
+                    "Would you like to either \033[35mcheck\033[0m your stats, \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mdepart\033[0m?\n> ")
 
         print("----")
         if action == "work":
@@ -634,8 +633,36 @@ def airport_actions():
             event()
         elif action == "auction":
             shop()
+        elif action == "check":
+            check_inventory()
+            # reppuun katsominen ei vie paljon aikaa
+            remaining_actions += 1
 
         elif action == "depart":
+            # ei rahea jolla lentöö
+            if money < 100:
+                # ei rahaa eikä aikaa tehdä duunia
+                if remaining_actions <= 1:
+                    # pelaajalla artefakti
+                    if len(artefacts) > 0:
+                        a = artefacts[random.randint(0, len(artefacts))]
+                        # todo ehkä vaihtoehtoa pelaajalle tähän - nyt vaan myy aarteen suoraan ilman inputtia
+                        print(
+                            f"Realizing you have no time or money, you desperately peddle off one of your treasures for travel money.\n"
+                            f"You sell off your \033[33m{a.name}\033[0m for \033[32m${random.randint(140, 240)}\033[0m!")
+                        print("----")
+                    # ei rahaa ei aikaa ei artefaktia - GG
+                    else:
+                        print(f"Backed into a corner, you find yourself with no way to escape the spirit.")
+                        print("----")
+                        check_gameover(True)
+                # on aikaa - lähde lentokentältä
+                else:
+                    print(
+                        f"Realizing you have no money for a ticket, you sprint out of the airport and reconsider your course of action.")
+                    print("----")
+                    # takas loopin alkuun
+                    continue
             choose_continent()
             check_gameover(False)
             return
