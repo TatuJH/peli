@@ -644,7 +644,7 @@ def airport_actions():
     global remaining_actions
 
     i = random.randint(1,9)
-    if i < 3:
+    if i < 5:
         quiz(cont)
 
     # muokattava lista
