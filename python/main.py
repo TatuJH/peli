@@ -591,6 +591,7 @@ def airport_actions():
     i = random.randint(1,9)
     if i < 3:
         quiz(cont)
+
     # muokattava lista
     all_actions = ["work", "explore", "auction"]
     while remaining_actions > 0:
