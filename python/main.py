@@ -21,7 +21,7 @@ for i in events:
     uncompleted_events.append(i)
 total_distance = 0
 visited_countries = []
-visited_countries.append(country)
+
 
 conn = mysql.connector.connect(
     host='localhost',
@@ -59,6 +59,7 @@ def intro():
     global uncompleted_events
     global total_distance
     global latlong
+    global visited_countries
 
     money = 5000
     time = 365
@@ -81,6 +82,7 @@ def intro():
     if row is None:
         raise RuntimeError(f"No coordinates found for airport {airport!r}")
     latlong = (row[0], row[1])
+    visited_countries.append(country)
 
     temp = ""
     print("This game is color-coded. Every time you're presented with a choice, your typeable actions are marked with \033[35mmagenta\033[0m.")
