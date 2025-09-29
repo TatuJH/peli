@@ -60,7 +60,7 @@ def intro():
     global total_distance
     global latlong
 
-    money = 5000
+    money = 0
     time = 365
     artefacts = list()
     cont = "EU"
@@ -500,12 +500,13 @@ def choose_airport(new_cont):
                 airport_country_temp.append(airport_results[i]["country"])
                 available_airports_temp += 1
         else:
-            latlong_temp = (airport_results[i]["latitude"], airport_results[i]["longitude"])
-            print(f'\033[35m{i + 1}\033[0m: \033[31m{airport_results[i]["name"]}\033[0m, a {airport_results[i]["type"].replace("_", " ")} in \033[31m{airport_results[i]["country"]}\033[0m - \033[36m{int(round(distance.distance(latlong,latlong_temp).km))} km\033[0m - \033[32m${int(costs[i])}\033[0m, \033[34m5 days\033[0m')
-            airport_names_temp.append(airport_results[i]["name"])
-            airport_sizes_temp.append(airport_results[i]["type"])
-            airport_country_temp.append(airport_results[i]["country"])
-            available_airports_temp += 1
+            if money >= int(costs[i]):
+                latlong_temp = (airport_results[i]["latitude"], airport_results[i]["longitude"])
+                print(f'\033[35m{i + 1}\033[0m: \033[31m{airport_results[i]["name"]}\033[0m, a {airport_results[i]["type"].replace("_", " ")} in \033[31m{airport_results[i]["country"]}\033[0m - \033[36m{int(round(distance.distance(latlong,latlong_temp).km))} km\033[0m - \033[32m${int(costs[i])}\033[0m, \033[34m5 days\033[0m')
+                airport_names_temp.append(airport_results[i]["name"])
+                airport_sizes_temp.append(airport_results[i]["type"])
+                airport_country_temp.append(airport_results[i]["country"])
+                available_airports_temp += 1
     if available_airports_temp != 0:
         while answer_temp not in range(1, len(airport_results)+1):
             try:
@@ -540,6 +541,8 @@ def choose_airport(new_cont):
         remaining_actions = 3
     else:
         print("You don't have enough money for any airport.")
+        print("----")
+        check_gameover(True)
 
 def trivia(continent):
     global money
@@ -624,22 +627,22 @@ def airport_actions():
 
         elif action == "depart":
             choose_continent()
-            check_gameover()
+            check_gameover(False)
             return
 
         # Onko pelaaja tulhannut kaiken ajan?
         remaining_actions -= 1
-        check_gameover()
+        check_gameover(False)
 
 
-def check_gameover():
+def check_gameover(nomoneyforairport):
     global time
     global remaining_actions
     global game_over
     global money
     temp = ""
 
-    if remaining_actions <= 0 or time <= 0:
+    if remaining_actions <= 0 or time <= 0 or nomoneyforairport:
         game_over = True
         if remaining_actions <= 0:
             print(
@@ -666,7 +669,7 @@ def game_loop():
     intro()
     add_artefact(3)
     while not game_over:
-        check_gameover()
+        check_gameover(False)
         airport_actions()
 
 game_loop()
