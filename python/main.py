@@ -104,7 +104,7 @@ def intro():
               "In addition, to ensure your obedience, a spirit is sent after you. You feel like you don't want to make contact with it.\n"
               "You leave the chamber as a waning voice behind you asks you to hurry.\n----")
         print("Important things to note:\n"
-              "- You only have a limited number of actions on each airport.\n"          
+              "- You only have a limited number of actions on each airport (3), and if you dont depart as your last action, the spirit will catch you.\n"          
               "- Working gives you money, but costs you time.\n"
               "- Exploring consists of randomized events, which can both cost and reward money, time or artefacts.\n"
               "- In the auction house you can either buy or sell artefacts.\n"
