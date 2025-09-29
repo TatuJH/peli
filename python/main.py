@@ -27,7 +27,7 @@ conn = mysql.connector.connect(
     host='localhost',
     port=3306,
     # minä itken aina kun tämä muuttuu
-    database='demokanta',
+    database='demogame',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -468,16 +468,16 @@ def choose_continent():
     global cont
     cont_temp = ""
     new_cont = False
-    print(
-        f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m. Other available continents are",
-        end=" ")
-    for i in range(len(conts)):
-        if cont != conts[i]:
-            if i < len(conts) - 1:
-                print(f"\033[35m{conts[i]}\033[0m", end=", ")
-            else:
-                print(f"\033[35m{conts[i]}\033[0m.")
     while cont_temp != "stay" or cont_temp not in conts:
+        print(
+            f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m. Other available continents are",
+            end=" ")
+        for i in range(len(conts)):
+            if cont != conts[i]:
+                if i < len(conts) - 1:
+                    print(f"\033[35m{conts[i]}\033[0m", end=", ")
+                else:
+                    print(f"\033[35m{conts[i]}\033[0m.")
         cont_temp = input(f"You can either \033[35mstay\033[0m in \033[31m{cont}\033[0m or choose a new continent.\n> ").strip().upper()
         if cont_temp == "STAY" or cont_temp == cont:
             cont = cont
@@ -485,11 +485,46 @@ def choose_continent():
             break
         else:
             if cont_temp in conts:
+                # JOS etelänapa
+                if cont_temp == "AN":
+                    # Jos pelaaja ei pääse
+                    if not BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
+                        continue
                 cont = cont_temp
                 new_cont = True
                 break
     print("----")
     choose_airport(new_cont)
+
+
+# ei PÄÄSTÄ pelaajaa loppupisteeseen jos hänellä ei ole jokaista artefaktia
+def BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
+    # kaikki mantereet
+    continents = list(conts)
+    # poista omistettujen aarteiden mantereet
+    for a in artefacts:
+        if continents.__contains__(a.continent):
+            continents.remove(a.continent)
+
+    # jos on yhtäkään puuttuvaa mannerta, pelimies ei pääse etelänavalle
+    if len(continents) > 0:
+        lanka = ""
+        print("----")
+        print(f"You're missing \033[33martefacts\033[0m from the following continents !!!!")
+        for c in continents:
+            lanka += f"\033[31m{c}\033[0m "
+        print(lanka)
+        print("----")
+        print(f"You need \033[33martefacts\033[0m from these continents, so you reconsider your options.")
+        print("----")
+        return False
+    else:
+        print("----")
+        print(f"Having collected the necessary \033[33martefacts\033[0m, you prepare to head to the \033[31mritual site\033[0m.")
+        print("----")
+        return True
+
+
 
 def choose_airport(new_cont):
     global airport
@@ -568,10 +603,7 @@ def choose_airport(new_cont):
             visited_countries.append(country)
         print("----")
         remaining_actions = 3
-    else:
-        print("You don't have enough money for any airport.")
-        print("----")
-        check_gameover(True)
+
 
 def trivia(continent):
     global money
