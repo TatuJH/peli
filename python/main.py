@@ -63,11 +63,11 @@ def intro():
     money = 5000
     time = 365
     artefacts = list()
-    cont = "EU"
+    cont = "AN"
     conts = ["AF", "AN", "AS", "EU", "NA", "OC", "SA"]
-    airport = "Helsinki Vantaa Airport"
-    country = "Finland"
-    size = "large_airport"
+    airport = "Ancient Chamber"
+    country = "Antarctica"
+    size = "ritual_site"
     remaining_actions = 3
     game_over = False
     uncompleted_events = []
@@ -468,17 +468,18 @@ def check_inventory():
 def choose_continent():
     global cont
     cont_temp = ""
+    ant_temp = False
     new_cont = False
+    print(
+        f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m. Other available continents are",
+        end=" ")
+    for i in range(len(conts)):
+        if cont != conts[i]:
+            if i < len(conts) - 1:
+                print(f"\033[35m{conts[i]}\033[0m", end=", ")
+            else:
+                print(f"\033[35m{conts[i]}\033[0m.")
     while cont_temp != "stay" or cont_temp not in conts:
-        print(
-            f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m. Other available continents are",
-            end=" ")
-        for i in range(len(conts)):
-            if cont != conts[i]:
-                if i < len(conts) - 1:
-                    print(f"\033[35m{conts[i]}\033[0m", end=", ")
-                else:
-                    print(f"\033[35m{conts[i]}\033[0m.")
         cont_temp = input(f"You can either \033[35mstay\033[0m in \033[31m{cont}\033[0m or choose a new continent.\n> ").strip().upper()
         if cont_temp == "STAY" or cont_temp == cont:
             cont = cont
@@ -488,14 +489,15 @@ def choose_continent():
             if cont_temp in conts:
                 # JOS etelänapa
                 if cont_temp == "AN":
-                    # Jos pelaaja ei pääse
-                    if not BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
-                        continue
+                    ant_temp = True
+                #   # Jos pelaaja ei pääse
+                #    if not BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
+                #        continue
                 cont = cont_temp
                 new_cont = True
                 break
     print("----")
-    choose_airport(new_cont)
+    choose_airport(new_cont, ant_temp)
 
 
 # ei PÄÄSTÄ pelaajaa loppupisteeseen jos hänellä ei ole jokaista artefaktia
@@ -508,26 +510,26 @@ def BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
             continents.remove(a.continent)
 
     # jos on yhtäkään puuttuvaa mannerta, pelimies ei pääse etelänavalle
-    if len(continents) > 0:
-        lanka = ""
-        print("----")
-        print(f"You're missing \033[33martefacts\033[0m from the following continents !!!!")
-        for c in continents:
-            lanka += f"\033[31m{c}\033[0m "
-        print(lanka)
-        print("----")
-        print(f"You need \033[33martefacts\033[0m from these continents, so you reconsider your options.")
-        print("----")
-        return False
-    else:
-        print("----")
-        print(f"Having collected the necessary \033[33martefacts\033[0m, you prepare to head to the \033[31mritual site\033[0m.")
-        print("----")
-        return True
+    #if len(continents) > 0:
+    #    lanka = ""
+    #    print("----")
+    #    print(f"You're missing \033[33martefacts\033[0m from the following continents !!!!")
+    #    for c in continents:
+    #        lanka += f"\033[31m{c}\033[0m "
+    #    print(lanka)
+    #    print("----")
+    #    print(f"You need \033[33martefacts\033[0m from these continents, so you reconsider your options.")
+    #    print("----")
+    #    return False
+    #else:
+    #    print("----")
+    #    print(f"Having collected the necessary \033[33martefacts\033[0m, you prepare to head to the \033[31mritual site\033[0m.")
+    #    print("----")
+    #    return True
 
 
 
-def choose_airport(new_cont):
+def choose_airport(new_cont, an):
     global airport
     global size
     global country
@@ -544,7 +546,10 @@ def choose_airport(new_cont):
     available_airports_temp = 0
     costs = [100, 200, 300]
     answer_temp = 0
-    sql = f'((SELECT airport.name, type, country.name AS country, latitude_deg AS latitude, longitude_deg AS longitude FROM airport, country WHERE type="small_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name, type, country.name AS country, latitude_deg AS latitude, longitude_deg AS longitude FROM airport, country WHERE type="medium_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name, type, country.name AS country, latitude_deg AS latitude, longitude_deg AS longitude FROM airport, country WHERE type="large_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1));'
+    if an:
+        sql = f'SELECT airport.name, type, country.name AS country, latitude_deg AS latitude, longitude_deg AS longitude FROM airport, country WHERE type="ritual_site" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1;'
+    else:
+        sql = f'((SELECT airport.name, type, country.name AS country, latitude_deg AS latitude, longitude_deg AS longitude FROM airport, country WHERE type="small_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name, type, country.name AS country, latitude_deg AS latitude, longitude_deg AS longitude FROM airport, country WHERE type="medium_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name, type, country.name AS country, latitude_deg AS latitude, longitude_deg AS longitude FROM airport, country WHERE type="large_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1));'
     cursor = conn.cursor(dictionary=True)
     cursor.execute(sql)
     airport_results = cursor.fetchall()
