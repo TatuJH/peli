@@ -670,7 +670,21 @@ def check_gameover(nomoneyforairport):
                 game_over = False
                 game_loop()
             elif temp == "decline":
-                print("----\nGame over.")
+                print(f"----\nGame over.\n----")
+                print(
+                    f"Your journey ended in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m.")
+                color_temp = [f"\033[31m{c}\033[0m" for c in visited_countries]
+                if len(color_temp) > 1:
+                    text = ", ".join(color_temp[:-1]) + " and " + color_temp[-1]
+                else:
+                    text = color_temp[0]
+                print("You visited " + text + f", and travelled a total of \033[36m{total_distance} km\033[0m.")
+                print(f"You had \033[32m${money}\033[0m and \033[34m{time} days\033[0m.")
+                if len(artefacts) > 0:
+                    print("You owned the following artefacts:")
+                    list_artefacts(False)
+                else:
+                    print("You didn't have any artefacts.")
                 break
             break
 
