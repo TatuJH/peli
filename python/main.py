@@ -27,7 +27,7 @@ conn = mysql.connector.connect(
     host='localhost',
     port=3306,
     # minä itken aina kun tämä muuttuu
-    database='demogame',
+    database='demokanta',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -60,7 +60,7 @@ def intro():
     global total_distance
     global latlong
 
-    money = 0
+    money = 5000
     time = 365
     artefacts = list()
     cont = "EU"
@@ -77,7 +77,10 @@ def intro():
     sql = f'SELECT latitude_deg AS latitude, longitude_deg AS longitude FROM airport WHERE name="{airport}";'
     cursor = conn.cursor()
     cursor.execute(sql)
-    latlong = cursor.fetchall()
+    row = cursor.fetchone()
+    if row is None:
+        raise RuntimeError(f"No coordinates found for airport {airport!r}")
+    latlong = (row[0], row[1])
 
     temp = ""
     print("This game is color-coded. Every time you're presented with a choice, your typeable actions are marked with \033[35mmagenta\033[0m.")
@@ -517,12 +520,16 @@ def choose_airport(new_cont):
         size = airport_sizes_temp[answer_temp-1]
         country = airport_country_temp[answer_temp-1]
 
-        sql = f'SELECT latitude_deg AS latitude, longitude_deg AS longitude FROM airport WHERE name="{airport}";'
+        sql = f'SELECT latitude_deg AS latitude, longitude_deg AS longitude FROM airport WHERE name=%s;'
         cursor = conn.cursor()
-        cursor.execute(sql)
-        total_distance += int(round(distance.distance(latlong,cursor.fetchall()).km))
-        cursor.execute(sql)
-        latlong = cursor.fetchall()
+        cursor.execute(sql, (airport,))
+        row = cursor.fetchone()
+        if row is None:
+            print(f"Warning: coordinates for {airport!r} not found; distance not updated.")
+        else:
+            dest = (row[0], row[1])  # (lat, lon)
+            total_distance += int(round(distance.distance(latlong, dest).km))
+            latlong = dest
 
         if new_cont:
             money -= int(costs[answer_temp-1] * 1.5)
@@ -581,7 +588,9 @@ def airport_actions():
     global money
     global remaining_actions
 
-    quiz(cont)
+    i = random.randint(1,9)
+    if i < 3:
+        quiz(cont)
     # muokattava lista
     all_actions = ["work", "explore", "auction"]
     while remaining_actions > 0:
