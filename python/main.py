@@ -669,7 +669,8 @@ def airport_actions():
     global money
     global remaining_actions
 
-    quiz(cont)
+    if cont != "AN":
+        quiz(cont)
 
     # muokattava lista
     all_actions = ["work", "explore", "auction", "check"]
