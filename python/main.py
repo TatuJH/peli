@@ -669,9 +669,7 @@ def airport_actions():
     global money
     global remaining_actions
 
-    i = random.randint(1,9)
-    if i < 5:
-        quiz(cont)
+    quiz(cont)
 
     # muokattava lista
     all_actions = ["work", "explore", "auction", "check"]
