@@ -113,7 +113,6 @@ def intro():
               "- Traveling to another continent costs more.\n"
               "- Airport size determines the cost of travel and affects rewards gained from exploring.\n"    
               "----")
-    print(f"You arrive in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m. Good luck!\n----")
 
 def print_all():
     print(money, time, cont, country, size, airport, artefacts, uncompleted_events, latlong, total_distance, visited_countries)
@@ -798,7 +797,7 @@ def check_gameover(nomoneyforairport):
 def game_loop():
     global game_over
     intro()
-    add_artefact(3)
+    choose_continent()
     while not game_over:
         check_gameover(False)
         airport_actions()
