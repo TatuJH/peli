@@ -481,23 +481,42 @@ def choose_continent():
                 print(f"\033[35m{conts[i]}\033[0m", end=", ")
             else:
                 print(f"\033[35m{conts[i]}\033[0m.")
-    while cont_temp != "stay" or cont_temp not in conts:
-        cont_temp = input(f"You can either \033[35mstay\033[0m in \033[31m{cont}\033[0m or choose a new continent.\n> ").strip().upper()
-        if cont_temp == "STAY" or cont_temp == cont:
-            cont = cont
-            new_cont = False
-            break
-        else:
-            if cont_temp in conts:
-                # JOS etelänapa
-                if cont_temp == "AN":
-                    ant_temp = True
-                #   # Jos pelaaja ei pääse
-                #    if not BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
-                #        continue
-                cont = cont_temp
-                new_cont = True
+    if cont != "AN":
+        while cont_temp != "stay" or cont_temp not in conts:
+            cont_temp = input(f"You can either \033[35mstay\033[0m in \033[31m{cont}\033[0m or choose a new continent.\n> ").strip().upper()
+            if cont_temp == "STAY" or cont_temp == cont:
+                cont = cont
+                new_cont = False
                 break
+            else:
+                if cont_temp in conts:
+                    # JOS etelänapa
+                    if cont_temp == "AN":
+                    #   # Jos pelaaja ei pääse
+                        if not BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
+                            continue
+                        else:
+                            ant_temp = True
+                    cont = cont_temp
+                    new_cont = True
+                    break
+    else:
+        while cont_temp not in conts:
+            cont_temp = input(f"Choose a new continent to travel to.\n> ").strip().upper()
+            if cont_temp == "STAY" or cont_temp == cont:
+                cont_temp = ""
+            else:
+                if cont_temp in conts:
+                    # JOS etelänapa
+                    if cont_temp == "AN":
+                    #   # Jos pelaaja ei pääse
+                        if not BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
+                            continue
+                        else:
+                            ant_temp = True
+                    cont = cont_temp
+                    new_cont = True
+                    break
     print("----")
     choose_airport(new_cont, ant_temp)
 
@@ -512,22 +531,22 @@ def BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
             continents.remove(a.continent)
 
     # jos on yhtäkään puuttuvaa mannerta, pelimies ei pääse etelänavalle
-    #if len(continents) > 0:
-    #    lanka = ""
-    #    print("----")
-    #    print(f"You're missing \033[33martefacts\033[0m from the following continents !!!!")
-    #    for c in continents:
-    #        lanka += f"\033[31m{c}\033[0m "
-    #    print(lanka)
-    #    print("----")
-    #    print(f"You need \033[33martefacts\033[0m from these continents, so you reconsider your options.")
-    #    print("----")
-    #    return False
-    #else:
-    #    print("----")
-    #    print(f"Having collected the necessary \033[33martefacts\033[0m, you prepare to head to the \033[31mritual site\033[0m.")
-    #    print("----")
-    #    return True
+    if len(continents) > 0:
+        print("----")
+        print(f"You're missing artefacts from the following continents: ",end="")
+        lanka = [f"\033[31m{c}\033[0m" for c in continents]
+        if len(lanka) > 1:
+            text = ", ".join(lanka[:-1]) + ", " + lanka[-1]
+        else:
+            text = lanka[0]
+        print(text)
+        print("----")
+        return False
+    else:
+        print("----")
+        print(f"Having collected the necessary artefacts, you prepare to head to the \033[31mAncient Chamber\033[0m.")
+        print("----")
+        return True
 
 
 
