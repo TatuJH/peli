@@ -672,7 +672,7 @@ def airport_actions():
         quiz(cont)
 
     # muokattava lista
-    all_actions = ["work", "explore", "auction", "check"]
+    all_actions = ["work", "explore", "auction", "check", "depart"]
     while remaining_actions > 0:
         # Nollaa joka kierroksen alussa
         action = ""
@@ -682,21 +682,11 @@ def airport_actions():
                 f"You've just arrived, and thus have {remaining_actions} actions remaining on this airport before the spirit catches you.")
         # toka ja kolmas
         else:
-            # 1 action :-)
-            if remaining_actions == 2:
-                print(f"You have {remaining_actions} action remaining on this airport before the spirit catches you.")
-                all_actions.append("depart")
-            # useampi kuin 1 tai 0 o_o
-            else:
-                print(f"You have {remaining_actions} actions remaining on this airport before the spirit catches you.")
+            print(f"You have {remaining_actions} actions remaining on this airport before the spirit catches you.")
 
         while action not in all_actions:
-            if remaining_actions > 2:
-                action = input(
-                    "Would you like to either \033[35mcheck\033[0m your stats, \033[35mwork\033[0m, \033[35mexplore\033[0m or visit the \033[35mauction\033[0m house?\n> ")
-            else:
-                action = input(
-                    "Would you like to either \033[35mcheck\033[0m your stats, \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mdepart\033[0m?\n> ")
+            action = input(
+                "Would you like to either \033[35mcheck\033[0m your stats, \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mdepart\033[0m?\n> ")
 
         print("----")
         if action == "work":
@@ -727,7 +717,7 @@ def airport_actions():
                         a = artefacts[random.randint(0, len(artefacts))]
                         # todo ehkä vaihtoehtoa pelaajalle tähän - nyt vaan myy aarteen suoraan ilman inputtia
                         print(
-                            f"Realizing you have no time or money, you desperately peddle off one of your treasures for travel money.\n"
+                            f"Realizing you have no time or money, you desperately peddle off one of your treasures for travel money.\n----\n"
                             f"You sell off your \033[33m{a.name}\033[0m for \033[32m${random.randint(140, 240)}\033[0m!")
                         print("----")
                     # ei rahaa ei aikaa ei artefaktia - GG
