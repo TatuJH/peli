@@ -362,7 +362,7 @@ def shop():
 
     # FUNKTION LOPPU
     # pelaaja on ostanut
-    if b:
+    if b and len(artefacts) > 0:
         print("You leave the auction house, new treasure in tow.")
     # pelaaja on myynyt ja ei ostanut
     elif s:
@@ -409,8 +409,8 @@ def event():
     global artefacts
     global uncompleted_events
     event_id = random.choice(uncompleted_events)
-    #event_id = 12
-    uncompleted_events.remove(event_id)
+    event_id = 12
+    #uncompleted_events.remove(event_id)
 
     print(events[event_id]["event"])
     choice = ""
@@ -809,6 +809,7 @@ def game_loop():
     global game_over
     intro()
     choose_continent()
+    add_artefact(2)
     while not game_over:
         check_gameover(False)
         airport_actions()

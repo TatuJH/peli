@@ -314,10 +314,10 @@ events = {
                                 "\nThe birds are placed into the ring and the bell rings!!\n"
                                 "\nAfter a few minutes, your rooster waddles away from the opponent and sits down. It's declared the loser and you leave the ring disappointed."},
                     2: {"money": 800, "time": 0, "artefacts": 0,
-                        "text": "You bet \033[32m$400\033[0m on one of the roosters and join the crowd to watch the battle."
-                                "\nThe birds are placed into the ring and the bell rings!!\n"
-                                "\nThe referee tries egging on the roosters to engage in battle, but fails."
-                                "\nAfter a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation. You've gained \033[32m$800\033[0m!!"},
+                        "text": f"You bet \033[32m$400\033[0m on one of the roosters and join the crowd to watch the battle."
+                                f"\nThe birds are placed into the ring and the bell rings!!\n"
+                                f"\nThe referee tries egging on the roosters to engage in battle, but fails."
+                                f"\nAfter a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation. You've gained \033[32m\033[0m!!"},
                     3: {"money": 400, "time": 0, "artefacts": 0,
                                 "text": "You bet \033[32m$400\033[0m on one of the roosters and join the crowd to watch the battle."
                                 "\nThe birds are placed into the ring and the bell rings!!\n"
