@@ -867,19 +867,19 @@ def achievement():
         print("----")
         countries_index += 1
     if money_earned > achievements["money"][money_index][0]:
-        print("You've achieved", achievements["money"][money_index][1])
+        print("You've achieved",achievements["money"][money_index][1])
         print("----")
         money_index += 1
     if total_distance > achievements["distance"][distance_index][0]:
-        print("You've achieved", achievements["distance"][distance_index][1])
+        print("You've achieved",achievements["distance"][distance_index][1])
         print("----")
         distance_index += 1
     if artefacts_earned > achievements["artefacts"][artefacts_index][0]:
-        print("You've achieved ", achievements["artefacts"][artefacts_index][1])
+        print("You've achieved ",achievements["artefacts"][artefacts_index][1])
         print("----")
         artefacts_index += 1
     if events_completed > achievements["events"][events_index][0]:
-        print("You've achieved ", achievements["events"][events_index][1])
+        print("You've achieved ",achievements["events"][events_index][1])
         print("----")
         events_index += 1
 
