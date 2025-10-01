@@ -4,6 +4,7 @@ from event_list import *
 from artefacts import *
 from trivia_list import *
 from geopy import distance
+from achievements import *
 
 money = 5000
 time = 365
@@ -21,6 +22,14 @@ for ev in events:
     uncompleted_events.append(ev)
 total_distance = 0
 visited_countries = []
+money_earned = 0
+artefacts_earned = 0
+events_completed = 0
+countries_index = 0
+money_index = 0
+distance_index = 0
+artefacts_index = 0
+events_index = 0
 
 
 conn = mysql.connector.connect(
@@ -61,6 +70,14 @@ def intro():
     global total_distance
     global latlong
     global visited_countries
+    global money_earned
+    global artefacts_earned
+    global events_completed
+    global countries_index
+    global money_index
+    global artefacts_index
+    global distance_index
+    global events_index
 
     money = 100000
     time = 365
@@ -85,6 +102,14 @@ def intro():
         raise RuntimeError(f"No coordinates found for airport {airport!r}")
     latlong = (row[0], row[1])
     visited_countries.append(country)
+    money_earned = 0
+    artefacts_earned = 0
+    events_completed = 0
+    countries_index = 0
+    money_index = 0
+    distance_index = 0
+    artefacts_index = 0
+    events_index = 0
 
     temp = ""
     print("This game is color-coded. Every time you're presented with a choice, your typeable actions are marked with \033[35mmagenta\033[0m.")
@@ -121,6 +146,9 @@ def print_all():
 
 def add_artefact(count):
     global cont
+    global artefacts_earned
+
+    artefacts_earned += count
 
 
     # Hanki kaikki mahd. aarteiden nimet mantereen perusteella
@@ -408,10 +436,14 @@ def event():
     global time
     global artefacts
     global uncompleted_events
+    global money_earned
+    global artefacts_earned
+    global events_completed
     event_id = random.choice(uncompleted_events)
     #event_id = 12
     uncompleted_events.remove(event_id)
 
+    events_completed += 1
     print(events[event_id]["event"])
     choice = ""
     while choice not in events[event_id]["choices"] or money < events[event_id]["choices"][choice]["cost"][
@@ -446,6 +478,8 @@ def event():
     #Tapahtuman lopputulos
     print(events[event_id]["choices"][choice]["results"][outcome]["text"],f"\n----")
     money += events[event_id]["choices"][choice]["results"][outcome]["money"]
+    if events[event_id]["choices"][choice]["results"][outcome]["money"] > 0:
+        money_earned += events[event_id]["choices"][choice]["results"][outcome]["money"]
     if money < 0:
         money = 0
     time += events[event_id]["choices"][choice]["results"][outcome]["time"]
@@ -654,6 +688,7 @@ def choose_airport(new_cont, an):
 
 def trivia(continent):
     global money
+    global money_earned
     question_number = random.randint(1,5)
     question = kysymykset[continent][question_number]["kysymys"]
     answer = kysymykset[continent][question_number]["vastaus"]
@@ -662,6 +697,7 @@ def trivia(continent):
         print("----")
         print("The man's face lights up. You answered correctly. He hands you \033[32m100€\033[0m and tells you to subscribe to his channel, whatever that means.")
         money += 100
+        money_earned += 100
     else:
         print("----")
         print("The man frowns slightly. It doesn't seem like your answer was correct. He thanks you for your time and starts looking for a new contestant. You think the game was rigged.")
@@ -688,12 +724,15 @@ def airport_actions():
     global time
     global money
     global remaining_actions
+    global money_earned
 
+    achievement()
     if cont != "AN":
         quiz(cont)
 
     # muokattava lista
     all_actions = ["work", "explore", "auction", "check", "depart"]
+    achievement()
     while remaining_actions > 0:
         # Nollaa joka kierroksen alussa
         action = ""
@@ -717,16 +756,21 @@ def airport_actions():
             print(
                 f"You decide to work as a {random.choice(work)}. You earn \033[32m$200\033[0m, but lose \033[34m10 days\033[0m.")
             money += 200
+            money_earned += 200
             time -= 10
             print("----")
+            achievement()
         elif action == "explore":
             event()
+            achievement()
         elif action == "auction":
             shop()
+            achievement()
         elif action == "check":
             check_inventory()
             # reppuun katsominen ei vie paljon aikaa
             remaining_actions += 1
+            achievement()
 
         elif action == "depart":
             # ei rahea jolla lentöö
@@ -755,6 +799,7 @@ def airport_actions():
                     continue
             choose_continent()
             check_gameover(False)
+            achievement()
             return
 
         # Onko pelaaja tulhannut kaiken ajan?
@@ -805,6 +850,39 @@ def check_gameover(nomoneyforairport):
                 break
             break
 
+def achievement():
+    global visited_countries
+    global money_earned
+    global total_distance
+    global artefacts_earned
+    global events_completed
+    global countries_index
+    global money_index
+    global artefacts_index
+    global events_index
+    global distance_index
+
+    if len(visited_countries) > achievements["countries"][countries_index][0]:
+        print("You've achieved",achievements["countries"][countries_index][1])
+        print("----")
+        countries_index += 1
+    if money_earned > achievements["money"][money_index][0]:
+        print("You've achieved", achievements["money"][money_index][1])
+        print("----")
+        money_index += 1
+    if total_distance > achievements["distance"][distance_index][0]:
+        print("You've achieved", achievements["distance"][distance_index][1])
+        print("----")
+        distance_index += 1
+    if artefacts_earned > achievements["artefacts"][artefacts_index][0]:
+        print("You've achieved ", achievements["artefacts"][artefacts_index][1])
+        print("----")
+        artefacts_index += 1
+    if events_completed > achievements["events"][events_index][0]:
+        print("You've achieved ", achievements["events"][events_index][1])
+        print("----")
+        events_index += 1
+
 def game_loop():
     global game_over
     intro()
@@ -815,3 +893,4 @@ def game_loop():
         airport_actions()
 
 game_loop()
+
