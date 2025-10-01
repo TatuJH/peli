@@ -17,8 +17,8 @@ remaining_actions = 3
 game_over = False
 #Ei mitää hajuu mikä on "completed" vastakohta lol
 uncompleted_events = []
-for i in events:
-    uncompleted_events.append(i)
+for ev in events:
+    uncompleted_events.append(ev)
 total_distance = 0
 visited_countries = []
 
@@ -73,8 +73,8 @@ def intro():
     remaining_actions = 3
     game_over = False
     uncompleted_events = []
-    for i in events:
-        uncompleted_events.append(i)
+    for eve in events:
+        uncompleted_events.append(eve)
     total_distance = 0
     sql = f'SELECT latitude_deg AS latitude, longitude_deg AS longitude FROM airport WHERE name="{airport}";'
     cursor = conn.cursor()
@@ -375,12 +375,20 @@ def shop():
 
 def remove_artefact(index):
     if len(artefacts) > 0:
+
+        # Poista tältä mantereelta kotoisin artefakti ekana
+        priority = list()
+        for a in artefacts:
+            if a.continent == cont:
+                priority.append(a)
         # Tee randomilla jos ei anneta indeksiä (eli jos jokin event ottaa pelaajalta)
         if not index:
-                i = random.randint(0, len(artefacts)-1)
-                artefacts.remove(i)
+            if len(priority) > 0:
+                artefacts.remove(artefacts[random.randint(0, len(priority))])
+            else:
+                artefacts.remove(artefacts[random.randint(0, len(artefacts))])
         else:
-            artefacts.remove(index)
+            artefacts.remove(artefacts[index])
     # todo jotain jos pelaajalla ei ole artefakteja?
     else:
         print("Good thing you had no artefacts to lose!")
@@ -401,6 +409,7 @@ def event():
     global artefacts
     global uncompleted_events
     event_id = random.choice(uncompleted_events)
+    #event_id = 12
     uncompleted_events.remove(event_id)
 
     print(events[event_id]["event"])
@@ -521,7 +530,6 @@ def choose_continent():
                     break
     print("----")
     choose_airport(new_cont, ant_temp)
-
 
 # ei PÄÄSTÄ pelaajaa loppupisteeseen jos hänellä ei ole jokaista artefaktia
 def BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():

@@ -283,6 +283,72 @@ events = {
             }
         }
     },
+    12: {
+        "event": "You come across a cockfighting ring. The host is beckoning passersby to come and bet on one of the roosters.\n"
+                 "\033[36m'C'mon up and bet on one of them there fine game birds! Paying 2:1 on winning bets!'\033[0m",
+        "input": "Do you \033[35mleave\033[0m, bet $\033[35m200\033[0m, $\033[35m400\033[0m or try betting an \033[35martefact\033[0m?",
+        "choices": {
+            "200": {
+                "cost": {"money": 200, "time": 0, "artefacts": 0},
+                "results": {
+                    1: {"money": 0, "time": 0, "artefacts": 0,
+                        "text": "You bet \033[32m$200\033[0m on one of the roosters and join the crowd to watch the battle."
+                                "\nThe birds are placed into the ring and the bell rings!!\n"
+                                "\nAfter a few minutes, your rooster waddles away from the opponent and sits down. It's declared the loser and you leave the ring disappointed."},
+                    2: {"money": 400, "time": 0, "artefacts": 0,
+                        "text": "You bet \033[32m$200\033[0m on one of the roosters and join the crowd to watch the battle."
+                                "\nThe birds are placed into the ring and the bell rings!!\n"
+                                "\nThe referee tries egging on the roosters to engage in battle, but fails."
+                                "\nAfter a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation. You've gained \033[32m$400\033[0m!!"},
+                    3: {"money": 200, "time": 0, "artefacts": 0,
+                                "text": "You bet \033[32m$200\033[0m on one of the roosters and join the crowd to watch the battle."
+                                "\nThe birds are placed into the ring and the bell rings!!"
+                                "\nThe roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw. You're refunded \033[32m$200\033[0m."}
+                }
+            },
+            "400": {
+                "cost": {"money": 400, "time": 0, "artefacts": 0},
+                "results": {
+                    1: {"money": 0, "time": 0, "artefacts": 0,
+                        "text": "You bet \033[32m$400\033[0m on one of the roosters and join the crowd to watch the battle."
+                                "\nThe birds are placed into the ring and the bell rings!!\n"
+                                "\nAfter a few minutes, your rooster waddles away from the opponent and sits down. It's declared the loser and you leave the ring disappointed."},
+                    2: {"money": 800, "time": 0, "artefacts": 0,
+                        "text": "You bet \033[32m$400\033[0m on one of the roosters and join the crowd to watch the battle."
+                                "\nThe birds are placed into the ring and the bell rings!!\n"
+                                "\nThe referee tries egging on the roosters to engage in battle, but fails."
+                                "\nAfter a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation. You've gained \033[32m$800\033[0m!!"},
+                    3: {"money": 400, "time": 0, "artefacts": 0,
+                                "text": "You bet \033[32m$400\033[0m on one of the roosters and join the crowd to watch the battle."
+                                "\nThe birds are placed into the ring and the bell rings!!\n"
+                                "\nThe roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw. You're refunded \033[32m$400\033[0m."}
+                }
+            },
+            "artefact": {
+                "cost": {"money": 0, "time": 0, "artefacts": 1},
+                "results": {
+                    1: {"money": 0, "time": 0, "artefacts": 0,
+                        "text": "You try to convince the referee to accept \033[33man artefact\033[0m as a bet.\n"
+                                "He takes it and agrees to give two \033[33mnational treasures\033[0m from his collection, should you win.\n"
+                                "\nThe birds are placed into the ring and the bell rings!!\n"
+                                "After a few minutes, your rooster waddles away from the opponent and sits down. It's declared the loser and you leave the ring disappointed."},
+                    2: {"money": 0, "time": 0, "artefacts": 2,
+                        "text": "You try to convince the referee to accept \033[33man artefact\033[0m as a bet.\n"
+                                "He takes it and agrees to give two \033[33mnational treasures\033[0m from his collection, should you win."
+                                "\n\nThe birds are placed into the ring and the bell rings!!"
+                                "\nThe referee tries egging on the roosters to engage in battle, but fails."
+                                "\nAfter a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation.\n"
+                                "The referee concedes and gives you \033[33m2 artefacts\033[0m from his collection!!"},
+                    3: {"money": 0, "time": 0, "artefacts": 1,
+                        "text": "You try to convince the referee to accept \033[33man artefact\033[0m as a bet.\n"
+                                "He takes it and agrees to give two \033[33mnational treasures\033[0m from his collection, should you win.\n"
+                                "\nThe birds are placed into the ring and the bell rings!!\n"
+                                "\nThe roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw.\n"
+                                "You're refunded \033[33man artefact\033[0m from his collection."}
+                }
+            },
+        }
+    },
 
 
 
