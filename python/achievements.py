@@ -1,6 +1,6 @@
 achievements = {
     "distance":[
-        (5000,"\033[1mFirst Steps\033[0m for your first flight."),
+        (5000,"\033[1mFirst Steps\033[0m for completing your first flight."),
         (30000,"\033[1mBeginner Traveler\033[0m for travelling \033[36m30000 km\033[0m."),
         (60000,"\033[1mIntermediate Traveler\033[0m for travelling \033[36m60000 km\033[0m."),
         (100000,"\033[1mAdvanced Traveler\033[0m for travelling \033[36m100000 km\033[0m."),
