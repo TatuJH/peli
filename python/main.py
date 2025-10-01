@@ -590,6 +590,16 @@ def BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
 
 def winning():
     global game_over
+    global money
+    global time
+    global total_distance
+
+    score = 0
+
+    score += money
+    score += total_distance
+    score += time
+
     color_temp = [f"\033[31m{c}\033[0m" for c in visited_countries]
     text = ", ".join(color_temp[:-1]) + " and " + color_temp[-1]
     print(
@@ -601,9 +611,11 @@ def winning():
     )
     print("----")
     print(
-        "Along your jorney you visited " + text + f", and travelled a total of \033[36m{total_distance} km\033[0m.\n"
-        f"You had \033[32m${money}\033[0m and \033[34m{time} days\033[0m."
+        "Along your jorney you visited " + text + f", and travelled a total of \033[36m{total_distance} km\033[0m rewarding you", (total_distance // 60), "points\n"
+        f"You had \033[32m${money}\033[0m rewarding you", money, f"points and \033[34m{time} days\033[0m rewarding you", (time * 10), "points.\n"
+        "Your total score was", score
     )
+
     game_over = True
 
 def choose_airport(new_cont, an):
@@ -904,7 +916,7 @@ def all_artefacts_test():
 def game_loop():
     global game_over
     intro()
-    #all_artefacts_test()
+    all_artefacts_test()
     #jos haluu testaa kaikkien artefaktien kanssa, esim voittoa varten
     choose_continent()
     while not game_over:
