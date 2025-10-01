@@ -875,11 +875,11 @@ def achievement():
         print("----")
         distance_index += 1
     if artefacts_earned >= achievements["artefacts"][artefacts_index][0]:
-        print("You've achieved ",achievements["artefacts"][artefacts_index][1])
+        print("You've achieved",achievements["artefacts"][artefacts_index][1])
         print("----")
         artefacts_index += 1
     if events_completed >= achievements["events"][events_index][0]:
-        print("You've achieved ",achievements["events"][events_index][1])
+        print("You've achieved",achievements["events"][events_index][1])
         print("----")
         events_index += 1
 
