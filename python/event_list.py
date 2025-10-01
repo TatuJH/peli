@@ -329,22 +329,22 @@ events = {
                 "results": {
                     1: {"money": 0, "time": 0, "artefacts": 0,
                         "text": "You try to convince the referee to accept \033[33man artefact\033[0m as a bet.\n"
-                                "He takes it and agrees to give two \033[33mnational treasures\033[0m from his collection, should you win.\n"
+                                "\033[36m'Tell you what, I'll take this and give you \033[33mtwo treasures\033[36m from my collection if you win!\033[0m\n"
                                 "\nThe birds are placed into the ring and the bell rings!!\n"
                                 "After a few minutes, your rooster waddles away from the opponent and sits down. It's declared the loser and you leave the ring disappointed."},
                     2: {"money": 0, "time": 0, "artefacts": 2,
                         "text": "You try to convince the referee to accept \033[33man artefact\033[0m as a bet.\n"
-                                "He takes it and agrees to give two \033[33mnational treasures\033[0m from his collection, should you win."
+                                "\033[36m'Tell you what, I'll take this and give you \033[33mtwo treasures\033[36m from my collection if you win!\033[0m\n"
                                 "\n\nThe birds are placed into the ring and the bell rings!!"
                                 "\nThe referee tries egging on the roosters to engage in battle, but fails."
                                 "\nAfter a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation.\n"
                                 "The referee concedes and gives you \033[33m2 artefacts\033[0m from his collection!!"},
                     3: {"money": 0, "time": 0, "artefacts": 1,
                         "text": "You try to convince the referee to accept \033[33man artefact\033[0m as a bet.\n"
-                                "He takes it and agrees to give two \033[33mnational treasures\033[0m from his collection, should you win.\n"
+                                "\033[36m'Tell you what, I'll take this and give you \033[33mtwo treasures\033[36m from my collection if you win!\033[0m\n"
                                 "\nThe birds are placed into the ring and the bell rings!!\n"
                                 "\nThe roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw.\n"
-                                "You're refunded \033[33man artefact\033[0m from his collection."}
+                                "You're given \033[33man artefact\033[0m from his collection."}
                 }
             },
             "leave": {
@@ -352,16 +352,11 @@ events = {
                 "results": {
                     1: {"money": 0, "time": 0, "artefacts": 0,
                         "text": "You decide to not gamble on chickens fighting.\n"
+                        }
+                    }
+                },
             }
-        }
-    },
-
-
-
-
-
-
-
+        },
 
 }
 
