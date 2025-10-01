@@ -541,6 +541,7 @@ def choose_continent():
                             continue
                         else:
                             winning()
+                            return
                     cont = cont_temp
                     new_cont = True
                     break
@@ -558,7 +559,7 @@ def choose_continent():
                             continue
                         else:
                             winning()
-                            ant_temp = True
+                            return
                     cont = cont_temp
                     new_cont = True
                     break
@@ -594,13 +595,22 @@ def BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
         return True
 
 def winning():
+    global game_over
+    color_temp = [f"\033[31m{c}\033[0m" for c in visited_countries]
+    text = ", ".join(color_temp[:-1]) + " and " + color_temp[-1]
     print(
         "You have arrived at the Ancient Chamber in Antarctica before your time ran out. Well done!\n"
         "Now, it's finally time to complete the ritual, with the \033[33martefacts\033[0m you have collected.\n"
         "Placing the \033[33martefacts\033[0m on the ground in a circle, everything starts to shake.\n"
         "The chamber fills with fog, and you see something blurry in front of you, could it be? It must be!\n"
-        "You win!!!!! He he he haw"
+        "A figure steps through the fog and you recognize it, it's god himself. You have done it!!!"
     )
+    print("----")
+    print(
+        "Along your jorney you visited " + text + f", and travelled a total of \033[36m{total_distance} km\033[0m.\n"
+        f"You had \033[32m${money}\033[0m and \033[34m{time} days\033[0m."
+    )
+    game_over = True
 
 def choose_airport(new_cont, an):
     global airport
@@ -883,14 +893,30 @@ def achievement():
         print("----")
         events_index += 1
 
+def all_artefacts_test():
+    global cont
+    cont = "OC"
+    add_artefact(1)
+    cont = "NA"
+    add_artefact(1)
+    cont = "AF"
+    add_artefact(1)
+    cont = "SA"
+    add_artefact(1)
+    cont = "AS"
+    add_artefact(1)
+    cont = "EU"
+    add_artefact(1)
+    cont = "AN"
+
 def game_loop():
     global game_over
     intro()
+    #all_artefacts_test()
+    #jos haluu testaa kaikkien artefaktien kanssa, esim voittoa varten
     choose_continent()
-    add_artefact(2)
     while not game_over:
         check_gameover(False)
         airport_actions()
 
 game_loop()
-
