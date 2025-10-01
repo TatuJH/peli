@@ -409,8 +409,8 @@ def event():
     global artefacts
     global uncompleted_events
     event_id = random.choice(uncompleted_events)
-    event_id = 12
-    #uncompleted_events.remove(event_id)
+    #event_id = 12
+    uncompleted_events.remove(event_id)
 
     print(events[event_id]["event"])
     choice = ""
