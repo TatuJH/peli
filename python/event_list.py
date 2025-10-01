@@ -347,6 +347,12 @@ events = {
                                 "You're refunded \033[33man artefact\033[0m from his collection."}
                 }
             },
+            "leave": {
+                "cost": {"money": 0, "time": 0, "artefacts": 0},
+                "results": {
+                    1: {"money": 0, "time": 0, "artefacts": 0,
+                        "text": "You decide to not gamble on chickens fighting.\n"
+            }
         }
     },
 
