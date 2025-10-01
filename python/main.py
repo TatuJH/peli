@@ -513,8 +513,10 @@ def choose_continent():
         end=" ")
     for i in range(len(conts)):
         if cont != conts[i]:
-            if i < len(conts) - 1:
+            if i < len(conts) - 2:
                 print(f"\033[35m{conts[i]}\033[0m", end=", ")
+            elif i < len(conts) - 1:
+                print(f"\033[35m{conts[i]}\033[0m", end=" and ")
             else:
                 print(f"\033[35m{conts[i]}\033[0m.")
     if cont != "AN":
