@@ -37,6 +37,7 @@ sql = f'SELECT latitude_deg AS latitude, longitude_deg AS longitude FROM airport
 cursor = conn.cursor()
 cursor.execute(sql)
 latlong = cursor.fetchall()
+cursor.close()
 
 
 class Artefact:
@@ -61,7 +62,7 @@ def intro():
     global latlong
     global visited_countries
 
-    money = 5000
+    money = 100000
     time = 365
     artefacts = list()
     cont = "AN"
@@ -79,6 +80,7 @@ def intro():
     cursor = conn.cursor()
     cursor.execute(sql)
     row = cursor.fetchone()
+    cursor.close()
     if row is None:
         raise RuntimeError(f"No coordinates found for airport {airport!r}")
     latlong = (row[0], row[1])
@@ -495,7 +497,7 @@ def choose_continent():
                         if not BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
                             continue
                         else:
-                            ant_temp = True
+                            winning()
                     cont = cont_temp
                     new_cont = True
                     break
@@ -512,6 +514,7 @@ def choose_continent():
                         if not BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
                             continue
                         else:
+                            winning()
                             ant_temp = True
                     cont = cont_temp
                     new_cont = True
@@ -524,7 +527,8 @@ def choose_continent():
 def BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
     # kaikki mantereet
     continents = list(conts)
-    # poista omistettujen aarteiden mantereet
+    # poista omistettujen aarteiden mantereet ja AN koska sieltä ei ole artefaktia
+    continents.remove("AN")
     for a in artefacts:
         if continents.__contains__(a.continent):
             continents.remove(a.continent)
@@ -547,7 +551,14 @@ def BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
         print("----")
         return True
 
-
+def winning():
+    print(
+        "You have arrived at the Ancient Chamber in Antarctica before your time ran out. Well done!\n"
+        "Now, it's finally time to complete the ritual, with the \033[33martefacts\033[0m you have collected.\n"
+        "Placing the \033[33martefacts\033[0m on the ground in a circle, everything starts to shake.\n"
+        "The chamber fills with fog, and you see something blurry in front of you, could it be? It must be!\n"
+        "You win!!!!! He he he haw"
+    )
 
 def choose_airport(new_cont, an):
     global airport
@@ -573,6 +584,7 @@ def choose_airport(new_cont, an):
     cursor = conn.cursor(dictionary=True)
     cursor.execute(sql)
     airport_results = cursor.fetchall()
+    cursor.close()
 
     print(f'Available airports in \033[31m{cont}\033[0m:')
 
@@ -607,6 +619,7 @@ def choose_airport(new_cont, an):
         cursor = conn.cursor()
         cursor.execute(sql, (airport,))
         row = cursor.fetchone()
+        cursor.close()
         if row is None:
             print(f"Warning: coordinates for {airport!r} not found; distance not updated.")
         else:
