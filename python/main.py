@@ -36,7 +36,7 @@ conn = mysql.connector.connect(
     host='localhost',
     port=3306,
     # minä itken aina kun tämä muuttuu
-    database='demokanta',
+    database='demogame',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
