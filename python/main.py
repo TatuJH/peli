@@ -872,23 +872,23 @@ def achievement():
     global events_index
     global distance_index
 
-    if len(visited_countries) > achievements["countries"][countries_index][0]:
+    if len(visited_countries) >= achievements["countries"][countries_index][0]:
         print("You've achieved",achievements["countries"][countries_index][1])
         print("----")
         countries_index += 1
-    if money_earned > achievements["money"][money_index][0]:
+    if money_earned >= achievements["money"][money_index][0]:
         print("You've achieved",achievements["money"][money_index][1])
         print("----")
         money_index += 1
-    if total_distance > achievements["distance"][distance_index][0]:
+    if total_distance >= achievements["distance"][distance_index][0]:
         print("You've achieved",achievements["distance"][distance_index][1])
         print("----")
         distance_index += 1
-    if artefacts_earned > achievements["artefacts"][artefacts_index][0]:
+    if artefacts_earned >= achievements["artefacts"][artefacts_index][0]:
         print("You've achieved ",achievements["artefacts"][artefacts_index][1])
         print("----")
         artefacts_index += 1
-    if events_completed > achievements["events"][events_index][0]:
+    if events_completed >= achievements["events"][events_index][0]:
         print("You've achieved ",achievements["events"][events_index][1])
         print("----")
         events_index += 1
