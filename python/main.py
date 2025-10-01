@@ -9,12 +9,12 @@ from achievements import *
 money = 5000
 time = 365
 artefacts = list()
-cont = "EU"
-conts = ["AF", "AN", "AS", "EU", "NA", "OC", "SA"]
-airport = "Helsinki Vantaa Airport"
-country = "Finland"
-size = "large_airport"
-remaining_actions = 3
+cont = ""
+conts = []
+airport = ""
+country = ""
+size = ""
+remaining_actions = 0
 game_over = False
 #Ei mitää hajuu mikä on "completed" vastakohta lol
 uncompleted_events = []
@@ -36,7 +36,7 @@ conn = mysql.connector.connect(
     host='localhost',
     port=3306,
     # minä itken aina kun tämä muuttuu
-    database='demogame',
+    database='demokanta',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -47,7 +47,6 @@ cursor = conn.cursor()
 cursor.execute(sql)
 latlong = cursor.fetchall()
 cursor.close()
-
 
 class Artefact:
     def __init__(self, nimi, arvo, manner):
@@ -150,7 +149,6 @@ def add_artefact(count):
 
     artefacts_earned += count
 
-
     # Hanki kaikki mahd. aarteiden nimet mantereen perusteella
     tup = list(artefact_names[cont])
 
@@ -186,7 +184,6 @@ def add_artefact(count):
                     nimi = tup[random.randint(0,len(tup)-1)]
                     artefacts.append(Artefact(nimi, val, cont))
                     names.append(nimi)
-
 
 def shop():
     global money
@@ -230,9 +227,7 @@ def shop():
                     artefacts.append(Artefact(nimi, val, cont))
                     names.append(nimi)
 
-
     auctioning = True
-
 
     # Looppi, joka toistuu niin kauan kunnes pelaaja lähtee kaupasta
     # Tähän sisältyy while buying ja while selling
@@ -298,7 +293,6 @@ def shop():
                 print(f"You can't afford this artefact.")
                 print("----")
                 continue
-
 
             money -= items[i].value
             print(f"You purchased the \033[33m{items[i].name}\033[0m for\033[32m ${items[i].value}\033[0m.")
@@ -377,7 +371,6 @@ def shop():
             if coward:
                 print(f"Recalling the \033[33m{artefacts[i].name}\033[0m's importance, you snatch it from the buyer's hands and run away.")
             else:
-
                 money += artefacts[i].value
                 s = True
                 print(
@@ -508,7 +501,6 @@ def check_inventory():
         list_artefacts(False)
     else:
         print("You don't have any artefacts.")
-
     print("----")
 
 def choose_continent():
@@ -695,7 +687,6 @@ def choose_airport(new_cont, an):
         print("----")
         remaining_actions = 3
 
-
 def trivia(continent):
     global money
     global money_earned
@@ -815,7 +806,6 @@ def airport_actions():
         # Onko pelaaja tulhannut kaiken ajan?
         remaining_actions -= 1
         check_gameover(False)
-
 
 def check_gameover(nomoneyforairport):
     global time
