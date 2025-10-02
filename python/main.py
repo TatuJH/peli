@@ -3,6 +3,7 @@ import mysql.connector
 from artefacts import *
 from trivia_list import *
 from geopy import distance
+from achievements import *
 
 money_modifier = 1.0
 
@@ -379,20 +380,26 @@ get_all_events()
 money = 5000
 time = 365
 artefacts = list()
-cont = "EU"
-conts = ["AF", "AN", "AS", "EU", "NA", "OC", "SA"]
-airport = "Helsinki Vantaa Airport"
-country = "Finland"
-size = "large_airport"
-
-
-remaining_actions = 3
+cont = ""
+conts = []
+airport = ""
+country = ""
+size = ""
+remaining_actions = 0
 game_over = False
 #Ei mitää hajuu mikä on "completed" vastakohta lol
 uncompleted_events = []
 
 total_distance = 0
 visited_countries = []
+money_earned = 0
+artefacts_earned = 0
+events_completed = 0
+countries_index = 0
+money_index = 0
+distance_index = 0
+artefacts_index = 0
+events_index = 0
 
 for eve in events:
     uncompleted_events.append(eve)
@@ -437,6 +444,14 @@ def intro():
     global total_distance
     global latlong
     global visited_countries
+    global money_earned
+    global artefacts_earned
+    global events_completed
+    global countries_index
+    global money_index
+    global artefacts_index
+    global distance_index
+    global events_index
 
     money = 100000
     time = 365
@@ -461,6 +476,14 @@ def intro():
         raise RuntimeError(f"No coordinates found for airport {airport!r}")
     latlong = (row[0], row[1])
     visited_countries.append(country)
+    money_earned = 0
+    artefacts_earned = 0
+    events_completed = 0
+    countries_index = 0
+    money_index = 0
+    distance_index = 0
+    artefacts_index = 0
+    events_index = 0
 
     temp = ""
     print("This game is color-coded. Every time you're presented with a choice, your typeable actions are marked with \033[35mmagenta\033[0m.")
@@ -497,7 +520,9 @@ def print_all():
 
 def add_artefact(count):
     global cont
+    global artefacts_earned
 
+    artefacts_earned += count
 
     # Hanki kaikki mahd. aarteiden nimet mantereen perusteella
     tup = list(artefact_names[cont])
@@ -578,9 +603,7 @@ def shop():
                     artefacts.append(Artefact(nimi, val, cont))
                     names.append(nimi)
 
-
     auctioning = True
-
 
     # Looppi, joka toistuu niin kauan kunnes pelaaja lähtee kaupasta
     # Tähän sisältyy while buying ja while selling
@@ -646,7 +669,6 @@ def shop():
                 print(f"You can't afford this artefact.")
                 print("----")
                 continue
-
 
             money -= items[i].value
             print(f"You purchased the \033[33m{items[i].name}\033[0m for\033[32m ${items[i].value}\033[0m.")
@@ -725,7 +747,6 @@ def shop():
             if coward:
                 print(f"Recalling the \033[33m{artefacts[i].name}\033[0m's importance, you snatch it from the buyer's hands and run away.")
             else:
-
                 money += artefacts[i].value
                 s = True
                 print(
@@ -784,9 +805,13 @@ def event():
     global time
     global artefacts
     global uncompleted_events
+    global money_earned
+    global artefacts_earned
+    global events_completed
     event_id = random.choice(uncompleted_events)
     uncompleted_events.remove(event_id)
 
+    events_completed += 1
     print(events[event_id]["event"])
     choice = ""
     while choice not in events[event_id]["choices"] or money < events[event_id]["choices"][choice]["cost"][
@@ -821,6 +846,8 @@ def event():
     #Tapahtuman lopputulos
     print(events[event_id]["choices"][choice]["results"][outcome]["text"],f"\n----")
     money += events[event_id]["choices"][choice]["results"][outcome]["money"]
+    if events[event_id]["choices"][choice]["results"][outcome]["money"] > 0:
+        money_earned += events[event_id]["choices"][choice]["results"][outcome]["money"]
     if money < 0:
         money = 0
     time += events[event_id]["choices"][choice]["results"][outcome]["time"]
@@ -849,7 +876,6 @@ def check_inventory():
         list_artefacts(False)
     else:
         print("You don't have any artefacts.")
-
     print("----")
 
 def choose_continent():
@@ -862,8 +888,10 @@ def choose_continent():
         end=" ")
     for i in range(len(conts)):
         if cont != conts[i]:
-            if i < len(conts) - 1:
+            if i < len(conts) - 2:
                 print(f"\033[35m{conts[i]}\033[0m", end=", ")
+            elif i < len(conts) - 1:
+                print(f"\033[35m{conts[i]}\033[0m", end=" and ")
             else:
                 print(f"\033[35m{conts[i]}\033[0m.")
     if cont != "AN":
@@ -882,6 +910,7 @@ def choose_continent():
                             continue
                         else:
                             winning()
+                            return
                     cont = cont_temp
                     new_cont = True
                     break
@@ -899,7 +928,7 @@ def choose_continent():
                             continue
                         else:
                             winning()
-                            ant_temp = True
+                            return
                     cont = cont_temp
                     new_cont = True
                     break
@@ -935,13 +964,34 @@ def BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
         return True
 
 def winning():
+    global game_over
+    global money
+    global time
+    global total_distance
+
+    score = 0
+
+    score += money
+    score += total_distance
+    score += time
+
+    color_temp = [f"\033[31m{c}\033[0m" for c in visited_countries]
+    text = ", ".join(color_temp[:-1]) + " and " + color_temp[-1]
     print(
         "You have arrived at the Ancient Chamber in Antarctica before your time ran out. Well done!\n"
         "Now, it's finally time to complete the ritual, with the \033[33martefacts\033[0m you have collected.\n"
         "Placing the \033[33martefacts\033[0m on the ground in a circle, everything starts to shake.\n"
         "The chamber fills with fog, and you see something blurry in front of you, could it be? It must be!\n"
-        "You win!!!!! He he he haw"
+        "A figure steps through the fog and you recognize it, it's god himself. You have done it!!!"
     )
+    print("----")
+    print(
+        "Along your jorney you visited " + text + f", and travelled a total of \033[36m{total_distance} km\033[0m rewarding you", (total_distance // 60), "points\n"
+        f"You had \033[32m${money}\033[0m rewarding you", money, f"points and \033[34m{time} days\033[0m rewarding you", (time * 10), "points.\n"
+        "Your total score was", score
+    )
+
+    game_over = True
 
 def choose_airport(new_cont, an):
     global airport
@@ -962,8 +1012,6 @@ def choose_airport(new_cont, an):
     available_airports_temp = 0
     costs = [100, 200, 300]
     answer_temp = 0
-
-
     if an:
         sql = f'SELECT airport.name, type, country.name AS country, latitude_deg AS latitude, longitude_deg AS longitude FROM airport, country WHERE type="ritual_site" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1;'
     else:
@@ -1043,17 +1091,18 @@ def choose_airport(new_cont, an):
         print("----")
         remaining_actions = 3
 
-
 def trivia(continent):
     global money
+    global money_earned
     question_number = random.randint(1,5)
     question = kysymykset[continent][question_number]["kysymys"]
     answer = kysymykset[continent][question_number]["vastaus"]
     print(question)
     if input("> ").lower().strip() == answer:
         print("----")
-        print("The man's face lights up. You answered correctly. He hands you \033[32m100€\033[0m and tells you to subscribe to his channel, whatever that means.")
-        money += 100
+        print(f"The man's face lights up. You answered correctly. He hands you \033[32m${int(round(100 * money_modifier))}\033[0m and tells you to subscribe to his channel, whatever that means.")
+        money += int(round(100 * money_modifier))
+        money_earned += int(round(100 * money_modifier))
     else:
         print("----")
         print("The man frowns slightly. It doesn't seem like your answer was correct. He thanks you for your time and starts looking for a new contestant. You think the game was rigged.")
@@ -1080,13 +1129,15 @@ def airport_actions():
     global time
     global money
     global remaining_actions
+    global money_earned
 
-
+    achievement()
     if cont != "AN":
         quiz(cont)
 
     # muokattava lista
     all_actions = ["work", "explore", "auction", "check", "depart"]
+    achievement()
     while remaining_actions > 0:
         # Nollaa joka kierroksen alussa
         action = ""
@@ -1115,17 +1166,22 @@ def airport_actions():
             moneygain = random.randint(min_money, max_money)
             print(
                 f"You decide to work as a {random.choice(work)}. You earn \033[32m${moneygain}\033[0m, but lose \033[34m10 days\033[0m.")
-            money += {moneygain}
+            money += moneygain
+            money_earned += moneygain
             time -= 10
             print("----")
+            achievement()
         elif action == "explore":
             event()
+            achievement()
         elif action == "auction":
             shop()
+            achievement()
         elif action == "check":
             check_inventory()
             # reppuun katsominen ei vie paljon aikaa
             remaining_actions += 1
+            achievement()
 
         elif action == "depart":
             # ei rahea jolla lentöö
@@ -1154,12 +1210,12 @@ def airport_actions():
                     continue
             choose_continent()
             check_gameover(False)
+            achievement()
             return
 
         # Onko pelaaja tulhannut kaiken ajan?
         remaining_actions -= 1
         check_gameover(False)
-
 
 def check_gameover(nomoneyforairport):
     global time
@@ -1204,11 +1260,62 @@ def check_gameover(nomoneyforairport):
                 break
             break
 
+def achievement():
+    global visited_countries
+    global money_earned
+    global total_distance
+    global artefacts_earned
+    global events_completed
+    global countries_index
+    global money_index
+    global artefacts_index
+    global events_index
+    global distance_index
+
+    if len(visited_countries) >= achievements["countries"][countries_index][0]:
+        print("You've achieved",achievements["countries"][countries_index][1])
+        print("----")
+        countries_index += 1
+    if money_earned >= achievements["money"][money_index][0]:
+        print("You've achieved",achievements["money"][money_index][1])
+        print("----")
+        money_index += 1
+    if total_distance >= achievements["distance"][distance_index][0]:
+        print("You've achieved",achievements["distance"][distance_index][1])
+        print("----")
+        distance_index += 1
+    if artefacts_earned >= achievements["artefacts"][artefacts_index][0]:
+        print("You've achieved",achievements["artefacts"][artefacts_index][1])
+        print("----")
+        artefacts_index += 1
+    if events_completed >= achievements["events"][events_index][0]:
+        print("You've achieved",achievements["events"][events_index][1])
+        print("----")
+        events_index += 1
+
+def all_artefacts_test():
+    global cont
+    cont = "OC"
+    add_artefact(1)
+    cont = "NA"
+    add_artefact(1)
+    cont = "AF"
+    add_artefact(1)
+    cont = "SA"
+    add_artefact(1)
+    cont = "AS"
+    add_artefact(1)
+    cont = "EU"
+    add_artefact(1)
+    cont = "AN"
+
 def game_loop():
     global game_over
     intro()
+    all_artefacts_test()
+    #jos haluu testaa kaikkien artefaktien kanssa, esim voittoa varten
     choose_continent()
-    add_artefact(2)
+
     while not game_over:
         check_gameover(False)
         airport_actions()
