@@ -1,14 +1,16 @@
+money_modifier = 1
+
 events = {
     1:{
-        "event":"You are given an investment opportunity on the street by a man in a trench coat. He says that by giving him \033[32m$100\033[0m you could make \033[32m$300\033[0m." ,
+        "event":f"You are given an investment opportunity on the street by a man in a trench coat. He says that by giving him \033[32m${int(round(100*money_modifier))}\033[0m you could make \033[32m${300*money_modifier}\033[0m." ,
         "input":"Do you want to \033[35minvest\033[0m or \033[35mdecline\033[0m the opportunity?",
         "choices":{
             "invest":{
-                "cost":{"money":100,"time":0,"artefacts":0},
+                f"cost":{"money":int(round(100*money_modifier)),"time":0,"artefacts":0},
                 "results":{
-                    1:{"money":300,"time":0,"artefacts":0,"text":"The opportunity actually paid out. You earned \033[32m$300.\033[0m"},
+                    1:{f"money":int(round(300*money_modifier)),"time":0,"artefacts":0,"text":"The opportunity actually paid out. You earned \033[32m$300.\033[0m"},
                     2:{"money":0,"time":0,"artefacts":0,"text":"The opportunity was real... But you lost your \033[32m$100\033[0m."},
-                    3:{"money":200,"time":-5,"artefacts":0,"text":"The man takes off running! You chase him and get your \033[32m$100\033[0m back. You also manage to snatch \033[32m$100\033[0m extra from him, but lose \033[34m5 days\033[0m in the process."}
+                    3:{"money":int(round(200*money_modifier)),"time":-5,"artefacts":0,"text":f"The man takes off running! You chase him and get your \033[32m${int(round(100*money_modifier))}\033[0m back. You also manage to snatch \033[32m${int(round(100*money_modifier))}\033[0m extra from him, but lose \033[34m5 days\033[0m in the process."}
                 }
             },
             "decline":{
@@ -20,11 +22,11 @@ events = {
         }
     },
     2:{
-        "event":"You meet a witch, who says she can buy you time. Literally. She offers you \033[34m15 days\033[0m in exchange for \033[32m$100\033[0m.",
+        "event":f"You meet a witch, who says she can buy you time. Literally. She offers you \033[34m15 days\033[0m in exchange for \033[32m${int(round(100*money_modifier))}\033[0m.",
         "input":"Do you \033[35maccept\033[0m or \033[35mdecline\033[0m the offer?",
         "choices":{
             "accept":{
-                "cost":{"money":100,"time":0,"artefacts":0},
+                "cost":{f"money":int(round(100*money_modifier)),"time":0,"artefacts":0},
                 "results":{
                     1:{"money":0,"time":15,"artefacts":0,"text":"You bought yourself some time. \033[34m15 days\033[0m to be exact."}
                 }
@@ -56,9 +58,9 @@ events = {
             "straight":{
                 "cost":{"money":0,"time":0,"artefacts":0},
                 "results":{
-                    1:{"money":50,"time":-10,"artefacts":0,"text":"That wasn't the right way and you lose \033[34m10 days\033[0m. On a positive note, you find \033[32m$50\033[0m on the ground."},
-                    2:{"money":100,"time":-10,"artefacts":0,"text":"That wasn't the right way and you lose \033[34m10 days\033[0m. On a positive note, you find \033[32m$100\033[0m on the ground."},
-                    3:{"money":200,"time":-10,"artefacts":0,"text":"That wasn't the right way and you lose \033[34m10 days\033[0m. On a positive note, you find \033[32m$150\033[0m on the ground."}
+                    1:{"money":50,"time":-10,"artefacts":0,"text":f"That wasn't the right way and you lose \033[34m10 days\033[0m. On a positive note, you find \033[32m${int(round(50*money_modifier))}\033[0m on the ground."},
+                    2:{"money":100,"time":-10,"artefacts":0,"text":f"That wasn't the right way and you lose \033[34m10 days\033[0m. On a positive note, you find \033[32m${int(round(100*money_modifier))}\033[0m on the ground."},
+                    3:{"money":200,"time":-10,"artefacts":0,"text":f"That wasn't the right way and you lose \033[34m10 days\033[0m. On a positive note, you find \033[32m${int(round(150*money_modifier))}\033[0m on the ground."}
                 }
             }
         }
@@ -76,7 +78,7 @@ events = {
             "standing":{
                 "cost":{"money":0,"time":0,"artefacts":0},
                 "results":{
-                    1:{"money":-100,"time":-10,"artefacts":0,"text":"The monument starts glowing red. The gods didn't seem to like your praying. You feel a curse sweeping through you, draining you of \033[32m$100\033[0m and \033[34m10 days\033[0m."}
+                    1:{"money":int(round(-100*money_modifier)),"time":-10,"artefacts":0,"text":f"The monument starts glowing red. The gods didn't seem to like your praying. You feel a curse sweeping through you, draining you of \033[32m${100*money_modifier}\033[0m and \033[34m10 days\033[0m."}
                 }
             },
             "leave":{
@@ -95,14 +97,14 @@ events = {
             "hello":{
                 "cost":{"money":0,"time":0,"artefacts":0},
                 "results":{
-                    1:{"money":100,"time":0,"artefacts":0,"text":"The man replies and hands you \033[32m$100\033[0m."}
+                    1:{"money":int(round(100*money_modifier)),"time":0,"artefacts":0,"text":f"The man replies and hands you \033[32m${int(round(100*money_modifier))}\033[0m."}
                 }
             },
             "good evening":{
                 "cost":{"money":0,"time":0,"artefacts":0},
                 "results":{
-                    1:{"money":200,"time":0,"artefacts":0,"text":"The man seems happy and hands you \033[32m$200\033[0m."},
-                    2:{"money":300,"time":0,"artefacts":0,"text":"The man says how refreshing good manners are and hands you \033[32m$300\033[0m."}
+                    1:{"money":int(round(200*money_modifier)),"time":0,"artefacts":0,"text":f"The man seems happy and hands you \033[32m${int(round(200*money_modifier))}\033[0m."},
+                    2:{"money":int(round(300*money_modifier)),"time":0,"artefacts":0,"text":f"The man says how refreshing good manners are and hands you \033[32m${int(round(300*money_modifier))}\033[0m."}
                 }
             },
             "nothing":{
@@ -114,17 +116,17 @@ events = {
         }
     },
     6:{
-        "event":'You accidentally bump into a towering man on the street. You try to apologize, but the man seeks \033[32m$200\033[0m in compensation for "physical pain". Like he felt anything.',
+        "event":f'You accidentally bump into a towering man on the street. You try to apologize, but the man seeks \033[32m{int(round(200*money_modifier))}\033[0m in compensation for "physical pain". Like he felt anything.',
         "input":"Do you pay him the \033[32m$\033[0m\033[35m200\033[0m he asks for, try to settle for \033[32m$\033[0m\033[35m100\033[0m or \033[35mrefuse\033[0m to pay?",
         "choices":{
-            "200":{
-                "cost":{"money":200,"time":0,"artefacts":0},
+            f"{int(round(200*money_modifier))}":{
+                "cost":{"money":200*money_modifier,"time":0,"artefacts":0},
                 "results":{
                     1:{"money":0,"time":0,"artefacts":0,"text":"The man scoffs, relieving you of your \033[32m$200\033[0m. He gives you one last angry look and leaves."}
                 }
             },
-            "100":{
-                "cost":{"money":100,"time":0,"artefacts":0},
+            f"{int(round(100*money_modifier))}":{
+                "cost":{"money":100*money_modifier,"time":0,"artefacts":0},
                 "results":{
                     1:{"money":0,"time":-5,"artefacts":0,"text":"The man seems unimpressed. He looks you up and down, takes your \033[32m$100\033[0m and pushes you to the ground. You lose \033[34m 5 days\033[0m."}
                 }
