@@ -304,7 +304,7 @@ def get_all_events():
                      "\033[36m'C'mon up and bet on one of them there fine game birds! Paying 2:1 on winning bets!'\033[0m",
             "input": f"Do you \033[35mleave\033[0m, bet $\033[35m{int(round(200*money_modifier))}\033[0m, $\033[35m{int(round(400*money_modifier))}\033[0m or try betting an \033[35martefact\033[0m?",
             "choices": {
-                "200": {
+                f"{int(round(200*money_modifier))}": {
                     "cost": {"money": int(round(200*money_modifier)), "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
@@ -322,7 +322,7 @@ def get_all_events():
                                     f"\nThe roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw. You're refunded \033[32m${int(round(200*money_modifier))}\033[0m."}
                     }
                 },
-                "400": {
+                f"{int(round(400*money_modifier))}": {
                     "cost": {"money": int(round(400*money_modifier)), "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
@@ -374,7 +374,33 @@ def get_all_events():
                 }
             },
 
+
+
     }
+    # todo !!!Kun pelaajalle lisätään rahaa, käytä \033[32m${int(round(100*money_modifier))}\033[0m TEKSTIN SISÄLLÄ -> CHOICES, TEKSTISSÄ, TEE F STRINGEJÄ !!
+    # todo KÄYTÄ int(round(100*money_modifier)) (EI HAKASULKUJA, TULEE SETTI) TEKSTIN ULKOPUOLELLA -> RESULTS KOHDASSA RAHAN LISÄYS
+
+    # Eventin lisäys pohja:
+    # JÄRJESTYSLUKY:{
+    #        "event":, !!!EVENTIN TEKSTI
+    #        "input":, !!!MITÄ EVENTTI KYSYY (ESIM ACCEPT (A) OR DECLINE (D)
+    #        "choices":{
+    #            "VAIHTOEHTO (ESIM A TAI D)":{
+    #                "cost":{"money":,"time":,"artefacts":}, !!!MITÄ VAIHTOEHTO MAKSAA (AINA POSITIIVINEN)
+    #                "results":{
+    #                    JÄRJESTYSLUKU, ALKAA AINA 1:{"money":,"time":,"artefacts":,"text":}, !!!EKAT KOLME ANTAA PELAAJALLE RESURSSIA (NEG/POS), "TEXT" ON MITÄ PRINTATAAN
+    #               }
+    #            },
+    #        }
+    #    },
+
+    # HUOM! VÄRIKOODIT:
+    # Raha (vihreä): \033[32m$X\033[0m
+    # Aika (sininen): \033[34mX DAYS\033[0m
+    # Artefaktit (keltainen): \033[33mX ARTEFACT(S)\033[0m
+    # Vaihtoehdot (magenta): \033[35mTEKSTI\033[0m
+    # Paikat (punainen): \033[31mTEKSTI\033[0m
+    # Matka (syaani) \033[36mTEKSTI\033[0m
 
 get_all_events()
 money = 5000
@@ -1109,7 +1135,7 @@ def trivia(continent):
     print("----")
 
 def quiz(continent):
-    print("Upon your arrival, a young man approaches you. He informs you that he hosts a game show. By answering a question correctly, you win \033[32m100€\033[0m.")
+    print(f"Upon your arrival, a young man approaches you. He informs you that he hosts a game show. By answering a question correctly, you win \033[32m${int(round(100 * money_modifier))}\033[0m.")
     while True:
         a = input(
             "Do you want to \033[35mplay\033[0m or \033[35mwalk\033[0m away?\n"
