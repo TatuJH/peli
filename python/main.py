@@ -13,7 +13,6 @@ def get_all_events():
     global money_modifier
     global events
     events.clear()
-    print(f"money mod on nyt event jutussa {money_modifier}")
     events = {
         1:{
             "event":f"You are given an investment opportunity on the street by a man in a trench coat. He says that by giving him \033[32m${int(round(100*money_modifier))}\033[0m you could make \033[32m${int(round(300*money_modifier))}\033[0m." ,
@@ -130,7 +129,7 @@ def get_all_events():
             }
         },
         6:{
-            "event":f'You accidentally bump into a towering man on the street. You try to apologize, but the man seeks \033[32m{int(round(200*money_modifier))}\033[0m in compensation for "physical pain". Like he felt anything.',
+            "event":f'You accidentally bump into a towering man on the street. You try to apologize, but the man seeks \033[32m{int(round(200*money_modifier))}\033[0m for "physical pain". Like he felt anything.',
             "input":f"Do you pay him the \033[32m$\033[0m\033[35m{int(round(200*money_modifier))}\033[0m he asks for, try to settle for \033[32m$\033[0m\033[35m{int(round(100*money_modifier))}\033[0m or \033[35mrefuse\033[0m to pay?",
             "choices":{
                 f"{int(round(200*money_modifier))}":{
@@ -226,7 +225,7 @@ def get_all_events():
             }
         },
         10:{
-            "event":"You see an old building in the distance. Walking closer to it, you become pretty sure it's abandoned.",
+            "event":"You see an old building in the distance. Walking closer to it, you become quite sure it's abandoned.",
             "input":"Do you go \033[35minside\033[0m the building, check its \033[35msurroundings\033[0m it, or walk \033[35maway\033[0m?",
             "choices":{
                 "inside":{
@@ -253,16 +252,16 @@ def get_all_events():
             }
         },
         11: {
-            "event": "You explore the nearby wildlife sanctuary. Halfway through your trail, you notice a campsite full of people in indigenous clothing. \nPerhaps they have an \033[33martefact\033[0m you could take?",
-            "input": "Do you continue your relaxing \033[35mwalk\033[0m or \033[35mgreet\033[0m the tribesmen.. Or try \033[35msteal\033[0ming from them?",
+            "event": "You explore the nearby wildlife sanctuary. Halfway through your trail, you notice a campsite full of people in indigenous clothing.",
+            "input": "Do you continue your relaxing \033[35mwalk\033[0m or \033[35mgreet\033[0m the tribesmen or try \033[35msteal\033[0ming from them?",
             "choices": {
                 "walk": {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
-                        1: {"money": 0, "time": 20, "artefacts": 0,
-                            "text": "You walk the rest of the trail and feel completely at peace. As if you have \033[34mno rush at all.\033[0m"},
+                        1: {"money": 0, "time": 10, "artefacts": 0,
+                            "text": "You walk the rest of the trail and feel completely at peace, as if you have no rush at all. The sense of calmness extends your time by \033{34m10 days\033[0m."},
                         2: {"money": 0, "time": -5, "artefacts": 0,
-                            "text": "You forgot to read the length of the trail and walk a ridiculous distance.\nYou spend \033[34m5\033[0m days in various lodges along the trail until you finally get to the end."},
+                            "text": "You forgot to read the length of the trail and walk a ridiculous distance. You spend \033[34m5\033[0m days in various lodges along the trail until you finally get to the end."},
                         3: {"money": 0, "time": 0, "artefacts": 0,
                             "text": "You find the quickest way out of the trail and get back on your journey."},
                     }
@@ -271,112 +270,109 @@ def get_all_events():
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": -5, "artefacts": 1,
-                            "text": "You spend \033[34m5 days\033[0m living with the tribesmen, who tell you that they're living like their ancestors once did in this area.\nHappy with your stay, they send you off with a \033[33msouvenir\033[0m."},
+                            "text": "You spend \033[34m5 days\033[0m living with the tribesmen, who teach you their ways. Happy about your stay, they send you off with an \033[33martefact\033[0m."},
                         2: {"money": 0, "time": 0, "artefacts": 0,
-                            "text": "You greet the tribesmen and are treated to seemingly endless tales about the people who used to live in these lands.\nYou fall asleep out of boredom and get kicked out of the campsite for this."},
-                        3: {"money": 0, "time": 15, "artefacts": 0,
-                            "text": "You find the tribesmen worshipping a false idol and hastily do right by attacking their totem."
-                                    "\nThe police are called on you but your righteous actions earn you the favour of your god. You get away and are granted \033[34m15 days\033[0m time."
-                            }
+                            "text": "You greet the tribesmen and are treated to seemingly endless tales about the people who used to live in these lands. You fall asleep out of boredom and get kicked out of the camp for this."}
                     }
                 },
                 "steal": {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
-                            "text": "You put on a friendly facade and when the moment is right, you sneakily take something without anyone seeing it.\nAfter leaving you realize it was just a worthless plastic replica."},
+                            "text": "You put on a friendly facade and when the moment is right, you sneakily take something without anyone seeing it. After leaving you realize it was just a worthless plastic replica."},
                         2: {"money": 0, "time": -10, "artefacts": 0,
-                            "text": "You greet the campers and immediately are caught trying to steal a historic artefact. You explain your righteous mission, but to no avail.\n"
-                                    "You spend \033[34m10 days\033[0m in jail for attempted thievery."
+                            "text": "You greet the campers and immediately are caught trying to steal an artefact. You explain your righteous mission, but to no avail. You spend \033[34m10 days\033[0m in jail for thievery."
                             },
                         3: {"money": int(round(200*money_modifier)), "time": 0, "artefacts": 0,
-                            "text": "You put on a friendly facade and when the moment is right, you sneakily take something without anyone seeing it."
-                                    f"\nAfter examining your new treasure, you find it to be too paltry of an offering and pawn it off for \033[32m${int(round(200*money_modifier))}\033[0m."},
+                            "text": f"You put on a friendly facade and when the moment is right, you take something without anyone seeing it. Sadly, the item is quite paltry, and you pawn it off for \033[32m${int(round(200*money_modifier))}\033[0m."},
                         4: {"money": 0, "time": 0, "artefacts": -1,
-                            "text": "You put on a friendly facade and when the moment is right, you attempt to steal something from the campers but get caught. \n"
-                                    "They end up taking one of your \033[33martefacts\033[0m as punishment and exile you."},
+                            "text": "You put on a friendly facade and when the moment is right, you attempt to steal something from the campers but get caught. They end up taking an \033[33martefact\033[0m as punishment and exile you."},
                     }
                 }
             }
         },
         12: {
-            "event": "You come across a cockfighting ring. The host is beckoning passersby to come and bet on one of the roosters.\n"
-                     "\033[36m'C'mon up and bet on one of them there fine game birds! Paying 2:1 on winning bets!'\033[0m",
+            "event": "You come across a cockfighting ring. The host is beckoning passersby to come and bet on one of the roosters. The payout is apparently 2:1.",
             "input": f"Do you \033[35mleave\033[0m, bet $\033[35m{int(round(200*money_modifier))}\033[0m, $\033[35m{int(round(400*money_modifier))}\033[0m or try betting an \033[35martefact\033[0m?",
             "choices": {
                 f"{int(round(200*money_modifier))}": {
                     "cost": {"money": int(round(200*money_modifier)), "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
-                            "text": f"You bet \033[32m${int(round(200*money_modifier))}\033[0m on one of the roosters and join the crowd to watch the battle."
-                                    "\nThe birds are placed into the ring and the bell rings!!\n"
-                                    "\nAfter a few minutes, your rooster waddles away from the opponent and sits down. It's declared the loser and you leave the ring disappointed."},
+                            "text": f"You bet on one of the roosters and join the crowd to watch the battle. After a few minutes, your rooster is met with a striking defeat."},
                         2: {"money": int(round(400*money_modifier)), "time": 0, "artefacts": 0,
-                            "text": f"You bet \033[32m${int(round(200*money_modifier))}\033[0m on one of the roosters and join the crowd to watch the battle."
-                                    "\nThe birds are placed into the ring and the bell rings!!\n"
-                                    "\nThe referee tries egging on the roosters to engage in battle, but fails."
-                                    f"\nAfter a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation. You've gained \033[32m${int(round(400*money_modifier))}\033[0m!!"},
-                        3: {"money": int(round(200*money_modifier)), "time": 0, "artefacts": 0,
-                                    "text": f"You bet \033[32m${int(round(200*money_modifier))}\033[0m on one of the roosters and join the crowd to watch the battle."
-                                    "\nThe birds are placed into the ring and the bell rings!!"
-                                    f"\nThe roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw. You're refunded \033[32m${int(round(200*money_modifier))}\033[0m."}
+                            "text": f"You bet on one of the roosters. A few minutes go by, and the opposing rooster doesn't seem to feel like fighting. Your rooster wins by resignation, and you earn \033[32m${int(round(400*money_modifier))}\033[0m."},
+                        3: {"money": int(round(100*money_modifier)), "time": 0, "artefacts": 0,
+                                    "text": f"You bet on one of the roosters and join the crowd. Both roosters just peck at seeds for a while, and the bout is declared a draw. You're refunded \033[32m${int(round(100*money_modifier))}\033[0m."}
                     }
                 },
                 f"{int(round(400*money_modifier))}": {
                     "cost": {"money": int(round(400*money_modifier)), "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
-                            "text": f"You bet \033[32m${int(round(400*money_modifier))}\033[0m on one of the roosters and join the crowd to watch the battle."
-                                    "\nThe birds are placed into the ring and the bell rings!!\n"
-                                    "\nAfter a few minutes, your rooster waddles away from the opponent and sits down. It's declared the loser and you leave the ring disappointed."},
-                        2: {"money": int(round(800*money_modifier)), "time": 0, "artefacts": 0,
-                            "text": f"You bet \033[32m${int(round(400*money_modifier))}\033[0m on one of the roosters and join the crowd to watch the battle."
-                                    f"\nThe birds are placed into the ring and the bell rings!!\n"
-                                    f"\nThe referee tries egging on the roosters to engage in battle, but fails."
-                                    f"\nAfter a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation. You've gained \033[32m${int(round(800*money_modifier))}\033[0m!!"},
-                        3: {"money": int(round(400*money_modifier)), "time": 0, "artefacts": 0,
-                                    "text": f"You bet \033[32m${int(round(400*money_modifier))}\033[0m on one of the roosters and join the crowd to watch the battle."
-                                    "\nThe birds are placed into the ring and the bell rings!!\n"
-                                    f"\nThe roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw. You're refunded \033[32m${int(round(400*money_modifier))}\033[0m."}
+                            "text": f"You bet on one of the roosters and join the crowd to watch the battle. After a few minutes, your rooster is met with a striking defeat."},
+                        2: {"money": int(round(800 * money_modifier)), "time": 0, "artefacts": 0,
+                            "text": f"You bet on one of the roosters. A few minutes go by, and the opposing rooster doesn't seem to feel like fighting. Your rooster wins by resignation, and you earn \033[32m${int(round(800 * money_modifier))}\033[0m."},
+                        3: {"money": int(round(200 * money_modifier)), "time": 0, "artefacts": 0,
+                            "text": f"You bet on one of the roosters and join the crowd. Both roosters just peck at seeds for a while, and the bout is declared a draw. You're refunded \033[32m${int(round(200 * money_modifier))}\033[0m."}
                     }
                 },
                 "artefact": {
                     "cost": {"money": 0, "time": 0, "artefacts": 1},
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
-                            "text": "You try to convince the referee to accept \033[33man artefact\033[0m as a bet.\n"
-                                    "\033[36m'Tell you what, I'll take this and give you \033[33mtwo treasures\033[36m from my collection if you win!\033[0m\n"
-                                    "\nThe birds are placed into the ring and the bell rings!!\n"
-                                    "After a few minutes, your rooster waddles away from the opponent and sits down. It's declared the loser and you leave the ring disappointed."},
+                            "text": f"You bet on one of the roosters and join the crowd to watch the battle. After a few minutes, your rooster is met with a striking defeat."},
                         2: {"money": 0, "time": 0, "artefacts": 2,
-                            "text": "You try to convince the referee to accept \033[33man artefact\033[0m as a bet.\n"
-                                    "\033[36m'Tell you what, I'll take this and give you \033[33mtwo treasures\033[36m from my collection if you win!\033[0m\n"
-                                    "\n\nThe birds are placed into the ring and the bell rings!!"
-                                    "\nThe referee tries egging on the roosters to engage in battle, but fails."
-                                    "\nAfter a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation.\n"
-                                    "The referee concedes and gives you \033[33m2 artefacts\033[0m from his collection!!"},
+                            "text": f"You bet on one of the roosters. A few minutes go by, and the opposing rooster doesn't seem to feel like fighting. Your rooster wins by resignation, and you earn an \033[33martefact\033[0m."},
                         3: {"money": 0, "time": 0, "artefacts": 1,
-                            "text": "You try to convince the referee to accept \033[33man artefact\033[0m as a bet.\n"
-                                    "\033[36m'Tell you what, I'll take this and give you \033[33mtwo treasures\033[36m from my collection if you win!\033[0m\n"
-                                    "\nThe birds are placed into the ring and the bell rings!!\n"
-                                    "\nThe roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw.\n"
-                                    "You're given \033[33man artefact\033[0m from his collection."}
+                            "text": f"You bet on one of the roosters and join the crowd. Both roosters just peck at seeds for a while, and the bout is declared a draw. At least you get your artefact back."}
+                    }
                     }
                 },
                 "leave": {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
-                            "text": "You decide to not gamble on chickens fighting.\n"
+                            "text": "You decide to not gamble on chickens fighting."
                             }
                         }
-                    },
+                    }
+                },
+        13:{
+            "event":"You trek around for a while and decide to set up camp. You fall asleep, but suddenly hear ungodly noises outside your tent.",
+            "input":"Do you \033[35mcheck\033[0m on the noises, try \033[35msleep\033[0ming through them or \033[35mhide\033[0m?",
+            "choices":{
+                "check":{
+                    "cost": {"money": 0, "time": 0, "artefacts": 0},
+                    "results": {
+                        1: {"money": 0, "time": 0, "artefacts": 0,"text":"You crawl out of your tent, and see a faint figure of a bear rushing away. You notice you've only lost a trail mix bag."},
+                        2: {"money": 0, "time": 0, "artefacts": -1,"text":"You crawl out of your tent, and see strangers looting your backpack. Before you manage to react, you see them running off with an \033[33martefact\033[0m."},
+                        3: {"money":-int(round(100*money_modifier)),"time":0,"artefacts":0,"text":f"You crawl out of your tent, and see strangers looting your backpack. Before you manage to react, you see them running off with \033[32m${int(round(100*money_modifier))}\033[0m."}
+                    }
+                },
+                "sleep":{
+                    "cost": {"money": 0, "time": 0, "artefacts": 0},
+                    "results": {
+                        1: {"money": 0, "time": 0, "artefacts": 0,
+                            "text": "You come to the conclusion that it's just the wind. When you wake up, you notice that nothing has changed."},
+                        2: {"money": 0, "time": 0, "artefacts": -1,
+                            "text": "As you go back to sleep, a humanoid figure rushes into your tent and knocks you unconscious. When you wake up, you notice that an \033[33martefact\033[0m has been stolen from you."},
+                        3: {"money": 0, "time": 15, "artefacts": 0,
+                            "text": "You go back to sleep and see a vision of your god. He praises your faith and rewards you with \033[34m15 days\033[0m' extra time."}
+                    }
+                },
+                "hide":{
+                    "cost": {"money": 0, "time": 0, "artefacts": 0},
+                    "results": {
+                        1: {"money": 0, "time": -5, "artefacts": 0,"text":"You get into a fetal position under a blanket and wait out the entire night. Morning comes and you feel exhausted. Your sleep debt costs you \33[34m5 days\033[0m."},
+                        2: {"money": 0, "time": 0, "artefacts": 0,"text":"You quickly grab your belongings and hide under a pile of clothes. You hear someone stepping in and looking around. Thankfully, they don't notice you."}
+                    }
                 }
-            },
+            }
+        }
+            }
 
 
-
-    }
     # todo !!!Kun pelaajalle lisätään rahaa, käytä \033[32m${int(round(100*money_modifier))}\033[0m TEKSTIN SISÄLLÄ -> CHOICES, TEKSTISSÄ, TEE F STRINGEJÄ !!
     # todo KÄYTÄ int(round(100*money_modifier)) (EI HAKASULKUJA, TULEE SETTI) TEKSTIN ULKOPUOLELLA -> RESULTS KOHDASSA RAHAN LISÄYS
 
@@ -538,7 +534,7 @@ def intro():
               "- Exploring consists of randomized events, which can both cost and reward money, time or artefacts.\n"
               "- In the auction house you can either buy or sell artefacts.\n"
               "- Traveling to another continent costs more.\n"
-              "- Airport size determines the cost of travel and affects rewards gained from exploring.\n"    
+              "- Airport size determines the cost of travel and affects some rewards.\n"    
               "----")
 
 def print_all():
@@ -814,7 +810,7 @@ def remove_artefact(index):
             artefacts.remove(artefacts[index])
     # todo jotain jos pelaajalla ei ole artefakteja?
     else:
-        print("Good thing you had no artefacts to lose!")
+        pass
 
 def list_artefacts(selling):
     if len(artefacts) > 0:
@@ -1004,17 +1000,18 @@ def winning():
     color_temp = [f"\033[31m{c}\033[0m" for c in visited_countries]
     text = ", ".join(color_temp[:-1]) + " and " + color_temp[-1]
     print(
-        "You have arrived at the Ancient Chamber in Antarctica before your time ran out. Well done!\n"
-        "Now, it's finally time to complete the ritual, with the \033[33martefacts\033[0m you have collected.\n"
-        "Placing the \033[33martefacts\033[0m on the ground in a circle, everything starts to shake.\n"
-        "The chamber fills with fog, and you see something blurry in front of you, could it be? It must be!\n"
-        "A figure steps through the fog and you recognize it, it's god himself. You have done it!!!"
+        "You arrive at the \033[31mAncient Chamber\033[0m well in time.\n"
+        "It's finally time to complete the ritual. You reach for your backpack and pull out the artefacts you have collected.\n"
+        "Beside each candle in the circle, there is a small slot. You place the artefacts in the slots, one by one, and feel everything start to gradually shake.\n"
+        "The chamber fills with fog, and you see something blurry in front of you. Or rather, someone.\n"
+        "A figure steps through the fog, the chamber echoing with his footsteps. Your god stands before you, fully materialized.\n"
+        '"Congratulations", the voice says, "you have done me proud." The divine being touches you, and you ascend to a higher state of being.'
     )
     print("----")
     print(
-        "Along your jorney you visited " + text + f", and travelled a total of \033[36m{total_distance} km\033[0m rewarding you", (total_distance // 60), "points\n"
-        f"You had \033[32m${money}\033[0m rewarding you", money, f"points and \033[34m{time} days\033[0m rewarding you", (time * 10), "points.\n"
-        "Your total score was", score
+        "Along your jorney you visited " + text + f", and travelled a total of \033[36m{total_distance} km\033[0m, rewarding you", (total_distance // 60), "points.\n"
+        f"You had \033[32m${money}\033[0m rewarding you", money //2, f"points and \033[34m{time} days\033[0m rewarding you", (time * 10), "points.\n"
+        "Your total score was", score,"."
     )
 
     game_over = True
@@ -1182,7 +1179,7 @@ def airport_actions():
 
         while action not in all_actions:
             action = input(
-                "Would you like to either \033[35mcheck\033[0m your stats, \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mdepart\033[0m?\n> ")
+                "Would you like to either \033[35mcheck\033[0m your standing, \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mdepart\033[0m?\n> ")
 
         print("----")
         if action == "work":
