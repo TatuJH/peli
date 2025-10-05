@@ -5,6 +5,13 @@ from trivia_list import *
 from geopy import distance
 from achievements import *
 
+# DROP TABLE goal_reached; DROP TABLE goal; DROP TABLE game;
+#
+# CREATE TABLE scores (
+#     -> id INT AUTO_INCREMENT PRIMARY KEY,
+#     -> score INT NOT NULL
+#     -> );
+
 money_modifier = 1.0
 
 events = dict()
@@ -1013,7 +1020,8 @@ def winning():
         f"You had \033[32m${money}\033[0m rewarding you", money //2, f"points and \033[34m{time} days\033[0m rewarding you", (time * 10), "points.\n"
         "Your total score was", score,"."
     )
-
+    cursor.execute("INSERT INTO scores (score) VALUES (%s)", (score,))
+    conn.commit()
     game_over = True
 
 def choose_airport(new_cont, an):
