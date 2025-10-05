@@ -6,7 +6,7 @@ def fight(amount):
     fight_over = False
     # hp, dmg, dodge, speed
     types = {
-    "Bulwark":[20, 8, 0, 3],
+    "Bulwark":[16, 6, 0, 3],
     "Warden":[10, 4, 2.5, 2],
     "Vessel":[8, 2, 5, 0],
     "Zealot":[12, 3, 3.33, 1]
