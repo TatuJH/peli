@@ -290,7 +290,7 @@ def get_all_events():
         },
         12: {
             "event": "You come across a cockfighting ring. The host is beckoning passersby to come and bet on one of the roosters.\n"
-                     '"Come on up and bet on one of these fighting birds! Paying 2:1 on winning bets!"',
+                     '"Come on up and bet on one of these fighting birds! Paying 2:1 on winning bets!", you hear an organizer scream.',
             "input": f"Do you \033[35mleave\033[0m, bet \033[32m$\033[0m\033[35m{int(round(200*money_modifier))}\033[0m, \033[32m$\033[0m\033[35m{int(round(400*money_modifier))}\033[0m or try betting an \033[35martefact\033[0m?",
             "choices": {
                 f"{int(round(200*money_modifier))}": {
@@ -410,7 +410,6 @@ game_over = False
 #Ei mitää hajuu mikä on "completed" vastakohta lol
 uncompleted_events = []
 achieved = []
-
 total_distance = 0
 visited_countries = []
 money_earned = 0
@@ -423,7 +422,6 @@ artefacts_index = 0
 events_index = 0
 converted_amount = 0
 convert_index = 0
-
 achievements = {
     "distance":[
         (5000,"\033[1mFirst Steps\033[0m for completing your first flight",0),
@@ -556,7 +554,6 @@ kysymykset = {
            "vastaus":"blue whale"}
     }
 }
-
 # Sanakirja, jossa jokainen mantereen lyhennys vastaa useaa artifaktin nimeä
 artefact_names = \
     {
@@ -582,11 +579,8 @@ artefact_names = \
 "AN" : ("Carved Bone", "Rusted Anchor")
 
 }
-
-
 for eve in events:
     uncompleted_events.append(eve)
-
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
@@ -595,7 +589,6 @@ conn = mysql.connector.connect(
     password='Tietokannat1',
     autocommit=True
 )
-
 sql = f'SELECT latitude_deg AS latitude, longitude_deg AS longitude FROM airport WHERE name="{airport}";'
 cursor = conn.cursor()
 cursor.execute(sql)
