@@ -1,16 +1,6 @@
 import random
 import mysql.connector
-from artefacts import *
-from trivia_list import *
 from geopy import distance
-from achievements import *
-
-# DROP TABLE goal_reached; DROP TABLE goal; DROP TABLE game;
-#
-# CREATE TABLE scores (
-#     -> id INT AUTO_INCREMENT PRIMARY KEY,
-#     -> score INT NOT NULL
-#     -> );
 
 money_modifier = 1.0
 
@@ -434,6 +424,166 @@ events_index = 0
 converted_amount = 0
 convert_index = 0
 
+achievements = {
+    "distance":[
+        (5000,"\033[1mFirst Steps\033[0m for completing your first flight",0),
+        (30000,"\033[1mBeginner Traveler\033[0m for travelling \033[36m30000 km\033[0m",50),
+        (60000,"\033[1mIntermediate Traveler\033[0m for travelling \033[36m60000 km\033[0m",100),
+        (100000,"\033[1mAdvanced Traveler\033[0m for travelling \033[36m100000 km\033[0m",150),
+        (200000,"\033[1mMaster Traveler\033[0m for travelling .\033[36m200000 km\033[0m",200),
+        (9999999999999999999999,"error",999999999999)
+    ],
+    "countries":[
+        (3,"\033[1mSightseer\033[0m for visiting 3 countries",50),
+        (6,"\033[1mTourist\033[0m for visiting 6 countries",100),
+        (10,"\033[1mRegular\033[0m for visiting 10 countries",150),
+        (16,"\033[1mDual Citizenship\033[0m for visiting 16 countries",200),
+        (9999999999999999999999,"error",9999999999)
+    ],
+    "money":[
+        (300,"\033[1mIntern\033[0m for earning \033[32m$300\033[0m",50),
+        (600,"\033[1mHard Worker\033[0m for earning \033[32m$600\033[0m",100),
+        (1200,"\033[1mBusinessman\033[0m for earning \033[32m$1200\033[0m",150),
+        (2000,"\033[1mCEO\033[0m for earning \033[32m$2000\033[0m",200),
+        (99999999999999999999999999,"error",9999999999999999)
+    ],
+    "artefacts":[
+        (1,"\033[1mExplorer\033[0m for finding your first artefact",50),
+        (3,"\033[1mTreasure Hunter\033[0m for finding 3 artefacts",100),
+        (8,"\033[1mCulture Preserver\033[0m for finding 8 artefacts",150),
+        (12,"\033[1mIndiana Jones\033[0m for finding 12 artefacts",200),
+        (9999999999999999999999,"error",9999999999999)
+    ],
+    "events":[
+        (2,"\033[1mRisk-taker\033[0m for completing 2 events",50),
+        (5,"\033[1mLucky Guy\033[0m for completing 5 events",100),
+        (10,"\033[1mTrue Adventurer\033[0m for completing 10 events",150),
+        (16,"\033[1mFortuna\033[0m for completing 16 events",200),
+        (999999999999999999999,"error",9999999999999)
+    ],
+    "convert":[
+        (1,"\033[1mBeliever\033[0m for converting heretics 1 time",50),
+        (2,"\033[1mFaithful\033[0m for converting heretics 2 times",100),
+        (4,"\033[1mDevotee\033[0m for converting heretics 4 times",150),
+        (7,"\033[1mChosen One\033[0m for converting heretic 7 times",200),
+        (999999999999999999999,"error",99999999)
+    ]
+}
+
+kysymykset = {
+    "NA": {
+        1:{"kysymys":"What is the highest mountain in North America? \033[35m_____  ________\033[0m",
+           "vastaus":"mount mckinley"},
+        2:{"kysymys":"Who was the first president of the United States? \033[35m______  __________\033[0m",
+           "vastaus":"george washington"},
+        3:{"kysymys":"Which country colonized Canada before it became independent? The \033[35m______  _______\033[0m",
+           "vastaus":"united kingdom"},
+        4:{"kysymys":"How many states are there in the United States of America? \033[35m__\033[0m",
+           "vastaus":"50"},
+        5:{"kysymys":"What is the largest city in North America by population? \033[35m______  ____\033[0m",
+           "vastaus":"mexico city"}
+    },
+    "SA": {
+        1:{"kysymys":"What is the largest country in South America by area? \033[35m_______\033[0m",
+           "vastaus":"brazil"},
+        2:{"kysymys":"The tango dance originated in which South American country? \033[35m_________\033[0m",
+           "vastaus":"argentina"},
+        3:{"kysymys":"Which South American country has coastlines on both the Pacific Ocean and the Caribbean Sea? \033[35m________\033[0m",
+           "vastaus":"colombia"},
+        4:{"kysymys":"In which city is the famous statue 'Christ the Redeemer' located? \033[35m___  __  ______\033[0m",
+           "vastaus":"rio de janeiro"},
+        5:{"kysymys":"What is the longest river in South America? The \033[35m______  _____\033[0m",
+           "vastaus":"amazon river"}
+    },
+    "EU": {
+        1:{"kysymys":"Which European country is famous for inventing pizza and pasta? \033[35m_____\033[0m",
+           "vastaus":"italy"},
+        2:{"kysymys":"What is the smallest country in Europe, by both population and area? \033[35m_______  ____\033[0m",
+           "vastaus":"vatican city"},
+        3:{"kysymys":"What is the longest river in Europe? The \033[35m_____  _____\033[0m",
+           "vastaus":"volga river"},
+        4:{"kysymys":"What mountain range separates Europe and Asia? The \033[35m____  ________\033[0m",
+           "vastaus":"ural mountains"},
+        5:{"kysymys":"Which year did the Soviet Union collapse? \033[35m____\033[0m",
+           "vastaus":"1991"}
+    },
+    "AS": {
+        1:{"kysymys":"What is the highest mountain in Asia? \033[35m_____  _______\033[0m",
+           "vastaus":"mount everest"},
+        2:{"kysymys":"In which country is the longest river in Asia located? \033[35m_____\033[0m",
+           "vastaus":"china"},
+        3:{"kysymys":"Who was the founder of the Mongol Empire? \033[35m_______  ____\033[0m",
+           "vastaus":"genghis khan"},
+        4:{"kysymys":"Which city is the most populous in Asia? \033[35m_____\033[0m",
+           "vastaus":"tokyo"},
+        5:{"kysymys":"In which country can you ride the world’s fastest train, the Maglev? \033[35m_____\033[0m",
+           "vastaus":"china"}
+    },
+    "OC": {
+        1:{"kysymys":"What is the largest city in Australia by population? \033[35m______\033[0m",
+           "vastaus":"sydney"},
+        2:{"kysymys":"Which reef system, visible from space, lies off the coast of Queensland? The \033[35m_____  _______  ____\033[0m",
+           "vastaus":"great barrier reef"},
+        3:{"kysymys":"What is the national animal of Australia? The \033[35m________\033[0m",
+           "vastaus":"kangaroo"},
+        4:{"kysymys":"How many states are there in Australia? \033[35m_\033[0m",
+           "vastaus":"6"},
+        5:{"kysymys":"What is the capital city of Australia? \033[35m_______\033[0m",
+           "vastaus":"canberra"}
+    },
+    "AF": {
+        1:{"kysymys":"What is the longest river in Africa? The \033[35m____  _____\033[0m",
+           "vastaus":"nile river"},
+        2:{"kysymys":"What is the largest desert in Africa? The \033[35m______  ______\033[0m",
+           "vastaus":"sahara desert"},
+        3:{"kysymys":"What is the only African country that was never colonized? \033[35m_______\033[0m",
+           "vastaus":"ethiopia"},
+        4:{"kysymys":"What is the most populous country in Africa? \033[35m_______\033[0m",
+           "vastaus":"nigeria"},
+        5:{"kysymys":"What is the highest mountain in Africa? \033[35m_____  __________\033[0m",
+           "vastaus":"mount kilimanjaro"}
+    },
+    "AN": {
+        1:{"kysymys":"Which continent is larger: Antarctica or Europe? \033[35m__________\033[0m",
+           "vastaus":"antarctica"},
+        2:{"kysymys":"Which ocean surrounds Antarctica? The \033[35m________  ______\033[0m",
+           "vastaus":"southern ocean"},
+        3:{"kysymys":"In which century was Antarctica discovered? The \033[35m__th  _______\033[0m",
+           "vastaus":"19th century"},
+        4:{"kysymys":"How many cities are there in Antarctica? \033[35m_\033[0m",
+           "vastaus":"0"},
+        5:{"kysymys":"Which type of whale, the largest animal on Earth, can be found in Antarctic waters? \033[35m____  _____\033[0m",
+           "vastaus":"blue whale"}
+    }
+}
+
+# Sanakirja, jossa jokainen mantereen lyhennys vastaa useaa artifaktin nimeä
+artefact_names = \
+    {
+# Europe
+"EU" : ("Ivory Figurine", "Celtic Sword", "Gold Bracelet", "Ceramic Pot", "Iron Axehead", "Roman Gold Coin", "Ceramic Figurine", "Jade Pendant", "Golden Chalice", "Book of Hours", "Pewter Silverware"),
+
+# Oceania
+"OC" : ("Aboriginal Boomerang", "Didgeridoo", "Hielaman Shield", "Sea Snail Rattle", "Message Stick", "Quartzite Grinding Stone", "Tasmanian Devil Necklace", "Decorated Pearl Shell"),
+
+# Africa
+"AF" : ("Ancient Spearhead", "Egyptian Adze", "Rosetta Stone", "Nok Terracotta", "Ivory Statue", "Chair of Power", "Songye Mask", "Ooni Brass Head"),
+
+# South America
+"SA" : ("Tobacco Pipe", "Aztec Sword", "Olmec Celt", "Gold Poporo Vessel", "Gold Figure", "Ceramic Incense Burner", "Ceramic Sherd", "Death Whistle"),
+
+# North America
+"NA" : ("Flint Arrowhead", "Feathered Headdress", "Sacred Wooden Mask", "Clovis Point Spearhead", "Hammerstone", "Rhyolite Arrowhead", "Gold Pendant"),
+
+# Asia
+"AS" : ("Jade Sculpture", "Bronze Vessel", "Gold Mask", "Bronze Bird", "Zhang Jade Blade", "Pottery Pig", "Bronze Spearhead", "Ivory Chest", "Decorated Plate", "Ming Dynasty Painting", "Wooden Figures"),
+
+#
+"AN" : ("Carved Bone", "Rusted Anchor")
+
+}
+
+
 for eve in events:
     uncompleted_events.append(eve)
 
@@ -546,7 +696,7 @@ def intro():
               "- Exploring consists of randomized events, which can both cost and reward money, time or artefacts.\n"
               "- Converting heretics is a fighting minigame. The actions are as follows:\n"
               "  STRIKE (#) decreases the selected enemy's stamina, but has a chance to miss.\n"
-              "  HEAL (#) heals you by 9 stamina, but has limited uses.\n"
+              "  HEAL (#) heals you based on your current stamina, and has limited uses.\n"
               "  GUARD decreases the amount of stamina you lose from enemy attacks.\n"
               "- In the auction house you can either buy or sell artefacts.\n"
               "- Each action consumes \033[34m5 days\033[0m in addition to other costs.\n"
@@ -964,9 +1114,13 @@ def fight(amount):
             if enemy < amount-1:
                 if enemies_in_fight[enemy]["hp"] != 0:
                     print(f"Enemy \033[35m{enemy+1}\033[0m: "+f"\033[1m{enemies[enemy]}\033[0m"+f' \033[33m{enemies_in_fight[enemy]["hp"]}\033[0m'+ f' (\033[36m{temp}\33[0m)',end=" | ")
+                else:
+                    pass
             else:
                 if enemies_in_fight[enemy]["hp"] != 0:
                     print(f"Enemy \033[35m{enemy + 1}\033[0m: " + f"\033[1m{enemies[enemy]}\033[0m"+ f' \033[33m{enemies_in_fight[enemy]["hp"]}\033[0m'+ f' (\033[36m{temp}\33[0m)')
+                else:
+                    pass
 
         print(f"----\n\033[33m{hp}\033[0m | \033[35mSTRIKE\033[0m (\033[35m#\033[0m)\033[0m | \033[35mHEAL\033[0m ({heals}) | \33[35mGUARD\033[0m | \033[35mESCAPE\033[0m")
         action = ""
@@ -1022,8 +1176,11 @@ def fight(amount):
                 converted_amount += 1
                 fight_over = True
         elif action == "heal":
-            print("You reach for a red potion and drink it. You gain \033[33m9 stamina\033[0m.")
-            hp += 9
+            heal_amount = random.randint(8,13) - hp
+            if heal_amount < 1:
+                heal_amount = 1
+            print(f"You reach for a red potion and drink from it. You gain \033[33m{heal_amount} stamina\033[0m.")
+            hp += heal_amount
             heals -= 1
             print("----")
         elif action == "guard":
