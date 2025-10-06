@@ -1020,6 +1020,7 @@ def winning():
         f"You had \033[32m${money}\033[0m rewarding you", money //2, f"points and \033[34m{time} days\033[0m rewarding you", (time * 10), "points.\n"
         "Your total score was", score,"."
     )
+    cursor = conn.cursor()
     cursor.execute("INSERT INTO scores (score) VALUES (%s)", (score,))
     conn.commit()
     game_over = True
