@@ -418,6 +418,7 @@ remaining_actions = 0
 game_over = False
 #Ei mitää hajuu mikä on "completed" vastakohta lol
 uncompleted_events = []
+achieved = []
 
 total_distance = 0
 visited_countries = []
@@ -481,6 +482,7 @@ def intro():
     global artefacts_index
     global distance_index
     global events_index
+    global achieved
 
     money = 100000
     time = 365
@@ -490,6 +492,7 @@ def intro():
     airport = "Ancient Chamber"
     country = "Antarctica"
     size = "ritual_site"
+    achieved = []
     remaining_actions = 3
     game_over = False
     uncompleted_events = []
@@ -997,6 +1000,7 @@ def winning():
     global money
     global time
     global total_distance
+    global achieved
 
     score = 0
 
@@ -1015,10 +1019,14 @@ def winning():
         '"Congratulations", the voice says, "you have done me proud." The divine being touches you, and you ascend to a higher state of being.'
     )
     print("----")
+    print("You got the following achievements:")
+    for ach in achieved:
+        print(ach)
+    print("----")
     print(
         "Along your journey you visited " + text + f", and travelled a total of \033[36m{total_distance} km\033[0m, rewarding you", (total_distance // 60), "points.\n"
         f"You had \033[32m${money}\033[0m rewarding you", money //2, f"points and \033[34m{time} days\033[0m rewarding you", (time * 10), "points.\n"
-        "Your total score was", score,"."
+        f"Your total score was {score}."
     )
     cursor = conn.cursor()
     cursor.execute("INSERT INTO scores (score) VALUES (%s)", (score,))
@@ -1304,32 +1312,38 @@ def achievement():
     global events_index
     global distance_index
     global money
+    global achieved
 
     if len(visited_countries) >= achievements["countries"][countries_index][0]:
         print("You've achieved",achievements["countries"][countries_index][1],f"and earned \033[32m${achievements['countries'][countries_index][2]}\033[0m.")
         print("----")
         countries_index += 1
         money += achievements["countries"][countries_index][2]
+        achieved.append(achievements["countries"][countries_index][1])
     if money_earned >= achievements["money"][money_index][0]:
         print("You've achieved",achievements["money"][money_index][1],f"and earned \033[32m${achievements['money'][money_index][2]}\033[0m.")
         print("----")
         money_index += 1
         money += achievements["money"][money_index][2]
+        achieved.append(achievements["money"][money_index][1])
     if total_distance >= achievements["distance"][distance_index][0]:
         print("You've achieved",achievements["distance"][distance_index][1],f"and earned \033[32m${achievements['distance'][distance_index][2]}\033[0m.")
         print("----")
         distance_index += 1
         money += achievements["distance"][distance_index][2]
+        achieved.append(achievements["distance"][distance_index][1])
     if artefacts_earned >= achievements["artefacts"][artefacts_index][0]:
         print("You've achieved",achievements["artefacts"][artefacts_index][1],f"and earned \033[32m${achievements['artefacts'][artefacts_index][2]}\033[0m.")
         print("----")
         artefacts_index += 1
         money += achievements["artefacts"][artefacts_index][2]
+        achieved.append(achievements["artefacts"][artefacts_index][1])
     if events_completed >= achievements["events"][events_index][0]:
         print("You've achieved",achievements["events"][events_index][1],f"and earned \033[32m${achievements['events'][events_index][2]}\033[0m.")
         print("----")
         events_index += 1
         money += achievements["events"][events_index][2]
+        achieved.append(achievements["events"][events_index][1])
 
 def all_artefacts_test():
     global cont
