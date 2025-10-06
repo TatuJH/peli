@@ -407,7 +407,7 @@ def get_all_events():
     # Matka (syaani) \033[36mTEKSTI\033[0m
 
 get_all_events()
-money = 5000
+money = 3000
 time = 365
 artefacts = list()
 cont = ""
@@ -437,12 +437,10 @@ convert_index = 0
 for eve in events:
     uncompleted_events.append(eve)
 
-
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    # minä itken aina kun tämä muuttuu
-    database='demogame',
+    database='demokanta',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -453,8 +451,6 @@ cursor = conn.cursor()
 cursor.execute(sql)
 latlong = cursor.fetchall()
 cursor.close()
-
-
 
 class Artefact:
     def __init__(self, nimi, arvo, manner):
@@ -488,7 +484,7 @@ def intro():
     global converted_amount
     global convert_index
 
-    money = 1000
+    money = 3000
     time = 365
     artefacts = list()
     cont = "AN"
@@ -613,7 +609,6 @@ def add_artefact(count):
                     nimi = tup[random.randint(0,len(tup)-1)]
                     artefacts.append(Artefact(nimi, val, cont))
                     names.append(nimi)
-
 
 def shop():
     global money
@@ -1173,8 +1168,8 @@ def winning():
     score = 0
 
     score += money
-    score += total_distance
-    score += time
+    score += total_distance // 60
+    score += time * 10
 
     color_temp = [f"\033[31m{c}\033[0m" for c in visited_countries]
     text = ", ".join(color_temp[:-1]) + " and " + color_temp[-1]
@@ -1193,7 +1188,7 @@ def winning():
     print("----")
     print(
         "Along your journey you visited " + text + f", and travelled a total of \033[36m{total_distance} km\033[0m, rewarding you", (total_distance // 60), "points.\n"
-        f"You had \033[32m${money}\033[0m rewarding you", money //2, f"points and \033[34m{time} days\033[0m rewarding you", (time * 10), "points.\n"
+        f"You had \033[32m${money}\033[0m rewarding you", money, f"points and \033[34m{time} days\033[0m rewarding you", (time * 10), "points.\n"
         "Your total score was", score,"."
     )
     cursor = conn.cursor()
@@ -1290,7 +1285,6 @@ def choose_airport(new_cont, an):
         # RIP suorituskyky
         get_all_events()
 
-
         print(f"You arrive in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m.")
         uncompleted_events = []
         for i in events:
@@ -1377,15 +1371,17 @@ def airport_actions():
                 f"You decide to work as a {random.choice(work)}. You earn \033[32m${moneygain}\033[0m, but lose \033[34m10 days\033[0m.")
             money += moneygain
             money_earned += moneygain
-            time -= 10
+            time -= 15
             print("----")
             achievement()
         elif action == "explore":
             event()
             achievement()
+            time -= 5
         elif action == "auction":
             shop()
             achievement()
+            time -= 5
         elif action == "check":
             check_inventory()
             # reppuun katsominen ei vie paljon aikaa
@@ -1394,6 +1390,7 @@ def airport_actions():
         elif action == "convert":
             fight(1)
             achievement()
+            time -= 5
 
         elif action == "depart":
             # ei rahea jolla lentöö
