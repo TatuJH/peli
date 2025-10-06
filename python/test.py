@@ -1,7 +1,7 @@
 import random
 
 def fight(amount):
-    hp = 20
+    hp = 15 + amount * 5
     guarding = False
     fight_over = False
     # hp, dmg, dodge, speed
@@ -34,7 +34,7 @@ def fight(amount):
         enemies_in_fight[enemy]["hp"] = types[enemies[enemy]][0]
         enemies_in_fight[enemy]["dmg"] = types[enemies[enemy]][1]
         enemies_in_fight[enemy]["ddg"] = types[enemies[enemy]][2]
-        enemies_in_fight[enemy]["spd"] = random.randint(0, types[enemies[enemy]][3])
+        enemies_in_fight[enemy]["spd"] = types[enemies[enemy]][3]
 
     changing_amount = amount
 
