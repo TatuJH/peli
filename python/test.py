@@ -2,6 +2,7 @@ import random
 
 def fight(amount):
     hp = 15 + amount * 5
+    heals = 1
     guarding = False
     fight_over = False
     # hp, dmg, dodge, speed
@@ -53,15 +54,14 @@ def fight(amount):
                 if enemies_in_fight[enemy]["hp"] != 0:
                     print(f"Enemy \033[35m{enemy + 1}\033[0m: " + f"\033[1m{enemies[enemy]}\033[0m"+ f' \033[33m{enemies_in_fight[enemy]["hp"]}\033[0m'+ f' (\033[36m{temp}\33[0m)')
 
-        print(f"----\n\033[33m{hp}\033[0m | \033[35mSTRIKE\033[0m (\033[35m#\033[0m)\033[0m | \033[35mPUSH\033[0m (\033[35m#\033[0m)\033[0m | \33[35mGUARD\033[0m | \033[35mESCAPE\033[0m")
+        print(f"----\n\033[33m{hp}\033[0m | \033[35mSTRIKE\033[0m (\033[35m#\033[0m)\033[0m | \033[35mHEAL\033[0m ({heals}) | \33[35mGUARD\033[0m | \033[35mESCAPE\033[0m")
         action = ""
-        tempactionlist = ["slow", "guard", "escape"]
+        tempactionlist = ["guard", "escape"]
         for i in range(amount):
             if enemies_in_fight[i]["hp"] != 0:
                 tempactionlist.append(f"strike {i+1}")
-        for i in range(amount):
-            if enemies_in_fight[i]["hp"] != 0:
-                tempactionlist.append(f"push {i+1}")
+        if heals > 0:
+            tempactionlist.append("heal")
         while action not in tempactionlist:
             action = input("> ").strip().lower()
         print("----")
@@ -104,11 +104,10 @@ def fight(amount):
             if changing_amount == 0:
                 print(f"Having defeated all the heretics, you earn \033[32m${amount*100}\033[0m.")
                 fight_over = True
-        elif "push" in action:
-            enemynumber = int(action[5])-1
-            print(f"You push the \033[1m{enemies[enemynumber]}\033[0m back, slowing their advance by \033[36m2 turns\033[0m. The \033[1m{enemies[enemynumber]}\033[0m retaliates, dealing \033[31m{enemies_in_fight[enemynumber]['dmg'] // 3}\033[0m damage.")
-            enemies_in_fight[enemynumber]["spd"] = enemies_in_fight[enemynumber]["spd"] + 2
-            hp -= enemies_in_fight[enemynumber]['dmg'] // 3
+        elif action == "heal":
+            print("You reach for a red potion and drink it. You gain \033[33m9\033[0m stamina.")
+            hp += 9
+            heals -= 1
             print("----")
         elif action == "guard":
             print("You enter a meditative state and feel your skin harden.")
