@@ -19,7 +19,7 @@ artefact_names = \
 # Asia
 "AS" : ("Jade Sculpture", "Bronze Vessel", "Gold Mask", "Bronze Bird", "Zhang Jade Blade", "Pottery Pig", "Bronze Spearhead", "Ivory Chest", "Decorated Plate", "Ming Dynasty Painting", "Wooden Figures"),
 
-#
+# ei pitäisi olla saatavilla !!
 "AN" : ("Carved Bone", "Rusted Anchor")
 
 }
