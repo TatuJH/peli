@@ -1,38 +1,38 @@
 achievements = {
     "distance":[
         (5000,"\033[1mFirst Steps\033[0m for completing your first flight."),
-        (30000,"\033[1mBeginner Traveler\033[0m for travelling \033[36m30000 km\033[0m."),
-        (60000,"\033[1mIntermediate Traveler\033[0m for travelling \033[36m60000 km\033[0m."),
-        (100000,"\033[1mAdvanced Traveler\033[0m for travelling \033[36m100000 km\033[0m."),
-        (200000,"\033[1mMaster Traveler\033[0m for travelling .\033[36m200000 km\033[0m."),
-        (9999999999999999999999,"error")
+        (30000,"\033[1mBeginner Traveler\033[0m for travelling \033[36m30000 km\033[0m and earned \033[32m$50\033[0m.",50),
+        (60000,"\033[1mIntermediate Traveler\033[0m for travelling \033[36m60000 km\033[0m and earned \033[32m$100\033[0m.",100),
+        (100000,"\033[1mAdvanced Traveler\033[0m for travelling \033[36m100000 km\033[0m and earned \033[32m$150\033[0m.",150),
+        (200000,"\033[1mMaster Traveler\033[0m for travelling .\033[36m200000 km\033[0m and earned \033[32m$200\033[0m.",200),
+        (9999999999999999999999,"error",999999999999)
     ],
     "countries":[
-        (3,"\033[1mSightseer\033[0m for visiting 3 countries."),
-        (6,"\033[1mTourist\033[0m for visiting 6 countries."),
-        (10,"\033[1mRegular\033[0m for visiting 10 countries."),
-        (16,"\033[1mDual Citizenship\033[0m for visiting 16 countries."),
-        (9999999999999999999999,"error")
+        (3,"\033[1mSightseer\033[0m for visiting 3 countries and earned \033[32m$50\033[0m.",50),
+        (6,"\033[1mTourist\033[0m for visiting 6 countries and earned \033[32m$100\033[0m.",10),
+        (10,"\033[1mRegular\033[0m for visiting 10 countries and earned \033[32m$150\033[0m.",150),
+        (16,"\033[1mDual Citizenship\033[0m for visiting 16 countries and earned \033[32m$200\033[0m.",200),
+        (9999999999999999999999,"error",9999999999)
     ],
     "money":[
-        (300,"\033[1mIntern\033[0m for earning \033[32m$300\033[0m."),
-        (600,"\033[1mHard Worker\033[0m for earning \033[32m$600\033[0m."),
-        (1200,"\033[1mBusinessman\033[0m for earning \033[32m$1200\033[0m."),
-        (2000,"\033[1mCEO\033[0m for earning \033[32m$2000\033[0m."),
-        (99999999999999999999999999,"error")
+        (300,"\033[1mIntern\033[0m for earning \033[32m$300\033[0m and earned \033[32m$50\033[0m.",50),
+        (600,"\033[1mHard Worker\033[0m for earning \033[32m$600\033[0m and earned \033[32m$100\033[0m.",100),
+        (1200,"\033[1mBusinessman\033[0m for earning \033[32m$1200\033[0m and earned \033[32m$150\033[0m.",150),
+        (2000,"\033[1mCEO\033[0m for earning \033[32m$2000\033[0m and earned \033[32m$200\033[0m.",200),
+        (99999999999999999999999999,"error",9999999999999999)
     ],
     "artefacts":[
-        (1,"\033[1mExplorer\033[0m for finding your first artefact."),
-        (3,"\033[1mTreasure Hunter\033[0m for finding 3 artefacts."),
-        (8,"\033[1mCulture Preserver\033[0m for finding 8 artefacts."),
-        (12,"\033[1mIndiana Jones\033[0m for finding 12 artefacts."),
+        (1,"\033[1mExplorer\033[0m for finding your first artefact and earned \033[32m$50\033[0m.",50),
+        (3,"\033[1mTreasure Hunter\033[0m for finding 3 artefacts and earned \033[32m$100\033[0m.",100),
+        (8,"\033[1mCulture Preserver\033[0m for finding 8 artefacts and earned \033[32m$150\033[0m.",150),
+        (12,"\033[1mIndiana Jones\033[0m for finding 12 artefacts and earned \033[32m$200\033[0m.",200),
         (9999999999999999999999,"error")
     ],
     "events":[
-        (2,"\033[1mRisk-taker\033[0m for completing 2 events."),
-        (5,"\033[1mLucky Guy\033[0m for completing 5 events."),
-        (10,"\033[1mTrue Adventurer\033[0m for completing 10 events."),
-        (16,"\033[1mFortuna\033[0m for completing 16 events."),
+        (2,"\033[1mRisk-taker\033[0m for completing 2 events and earned \033[32m$50\033[0m.",50),
+        (5,"\033[1mLucky Guy\033[0m for completing 5 events and earned \033[32m$100\033[0m.",100),
+        (10,"\033[1mTrue Adventurer\033[0m for completing 10 events and earned \033[32m$150\033[0m.",150),
+        (16,"\033[1mFortuna\033[0m for completing 16 events and earned \033[32m$200\033[0m.",200),
         (999999999999999999999,"error")
     ]
 }
