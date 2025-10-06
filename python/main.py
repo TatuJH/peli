@@ -940,7 +940,6 @@ def choose_continent():
         other_continents.append(c)
 
     other_continents.remove(cont)
-    print(conts)
 
     for i in range(len(other_continents)):
         if i < len(other_continents) - 2:
