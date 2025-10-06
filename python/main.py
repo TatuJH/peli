@@ -184,7 +184,7 @@ def get_all_events():
             }
         },
         8:{
-            "event":"You hear sounds of metal hitting rock. Upon further inspection, you find a dig site, where a dozen men are swinging their pickaxes. One of the men offers you their position for \033[34m20 days\033[0m.",
+            "event":"You hear sounds of metal hitting rock. Upon further inspection, you find a dig site, where a dozen men are swinging their pickaxes. \nOne of the men offers you their position for \033[34m20 days\033[0m.",
             "input":f"Do you \033[35maccept\033[0m it, \033[35mpay\033[0m the man \033[32m${int(round(200*money_modifier))}\033[0m to dig for you or \033[35mrefuse\033[0m?",
             "choices":{
                 "accept":{
@@ -279,7 +279,7 @@ def get_all_events():
                         1: {"money": 0, "time": -5, "artefacts": 1,
                             "text": "You spend \033[34m5 days\033[0m living with the tribesmen, who teach you their ways. Happy about your stay, they send you off with an \033[33martefact\033[0m."},
                         2: {"money": 0, "time": 0, "artefacts": 0,
-                            "text": "You greet the tribesmen and are treated to seemingly endless tales about the people who used to live in these lands. You fall asleep out of boredom and get kicked out of the camp for this."}
+                            "text": "You greet the tribesmen and are treated to seemingly endless tales about the people who used to live in these lands. \nYou fall asleep out of boredom and get kicked out of the camp for this."}
                     }
                 },
                 "steal": {
