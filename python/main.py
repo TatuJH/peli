@@ -307,8 +307,8 @@ def get_all_events():
         },
         12: {
             "event": "You come across a cockfighting ring. The host is beckoning passersby to come and bet on one of the roosters.\n"
-                     "\033[36m'C'mon up and bet on one of these fightin' birds! Paying 2:1 on winning bets!'\033[0m",
-            "input": f"Do you \033[35mleave\033[0m, bet $\033[35m{int(round(200*money_modifier))}\033[0m, $\033[35m{int(round(400*money_modifier))}\033[0m or try betting an \033[35martefact\033[0m?",
+                     '"Come on up and bet on one of these fighting birds! Paying 2:1 on winning bets!"',
+            "input": f"Do you \033[35mleave\033[0m, bet \033[32m$\033[0m\033[35m{int(round(200*money_modifier))}\033[0m, \033[32m$\033[0m\033[35m{int(round(400*money_modifier))}\033[0m or try betting an \033[35martefact\033[0m?",
             "choices": {
                 f"{int(round(200*money_modifier))}": {
                     "cost": {"money": int(round(200*money_modifier)), "time": 0, "artefacts": 0},
