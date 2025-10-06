@@ -523,7 +523,7 @@ def intro():
     global events_index
     global achieved
 
-    money = 100000
+    money = 1000
     time = 365
     artefacts = list()
     cont = "AN"
@@ -590,13 +590,16 @@ def intro():
         cursor = conn.cursor()
         cursor.execute(sql)
         highest = cursor.fetchall()
-        print(f"Your highest score was {highest[0][1]} in game {highest[0][0]}.")
-        sql = "SELECT * FROM scores;"
-        cursor = conn.cursor()
-        cursor.execute(sql)
-        scorelist = cursor.fetchall()
-        for scoretemp in range(len(scorelist)):
-            print(f"Game {scorelist[scoretemp][0]}: {scorelist[scoretemp][1]}")
+        if len(highest) > 0:
+            print(f"Your highest score was {highest[0][1]} in game {highest[0][0]}.")
+            sql = "SELECT * FROM scores;"
+            cursor = conn.cursor()
+            cursor.execute(sql)
+            scorelist = cursor.fetchall()
+            for scoretemp in range(len(scorelist)):
+                print(f"Game {scorelist[scoretemp][0]}: {scorelist[scoretemp][1]}")
+        else:
+            print(f"Nothing to show!")
         print("----")
 
 def print_all():
@@ -992,16 +995,23 @@ def choose_continent():
     print(
         f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m. Other available continents are",
         end=" ")
-    for i in range(len(conts)):
-        if cont != conts[i]:
-            if i < len(conts) - 2:
-                print(f"\033[35m{conts[i]}\033[0m", end=", ")
-            elif i < len(conts) - 1:
-                print(f"\033[35m{conts[i]}\033[0m", end=" and ")
-            else:
-                print(f"\033[35m{conts[i]}\033[0m.")
+
+    other_continents = list()
+    for c in conts:
+        other_continents.append(c)
+
+    other_continents.remove(cont)
+    print(conts)
+
+    for i in range(len(other_continents)):
+        if i < len(other_continents) - 2:
+            print(f"\033[35m{other_continents[i]}\033[0m", end=", ")
+        elif i < len(other_continents) - 1:
+            print(f"\033[35m{other_continents[i]}\033[0m", end=" and ")
+        else:
+            print(f"\033[35m{other_continents[i]}\033[0m.")
     if cont != "AN":
-        while cont_temp != "stay" or cont_temp not in conts:
+        while cont_temp != "stay" or cont_temp not in other_continents:
             cont_temp = input(f"You can either \033[35mstay\033[0m in \033[31m{cont}\033[0m or choose a new continent.\n> ").strip().upper()
             if cont_temp == "STAY" or cont_temp == cont:
                 cont = cont

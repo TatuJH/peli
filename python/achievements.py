@@ -1,6 +1,6 @@
 achievements = {
     "distance":[
-        (5000,"\033[1mFirst Steps\033[0m for completing your first flight",0),
+        #(5000,"\033[1mFirst Steps\033[0m for completing your first flight",0),
         (30000,"\033[1mBeginner Traveler\033[0m for travelling \033[36m30000 km\033[0m",50),
         (60000,"\033[1mIntermediate Traveler\033[0m for travelling \033[36m60000 km\033[0m",100),
         (100000,"\033[1mAdvanced Traveler\033[0m for travelling \033[36m100000 km\033[0m",150),
@@ -8,8 +8,8 @@ achievements = {
         (9999999999999999999999,"error",999999999999)
     ],
     "countries":[
-        (3,"\033[1mSightseer\033[0m for visiting 3 countries",50),
-        (6,"\033[1mTourist\033[0m for visiting 6 countries",10),
+        #(3,"\033[1mSightseer\033[0m for visiting 3 countries",50),
+        (6,"\033[1mTourist\033[0m for visiting 6 countries",100),
         (10,"\033[1mRegular\033[0m for visiting 10 countries",150),
         (16,"\033[1mDual Citizenship\033[0m for visiting 16 countries",200),
         (9999999999999999999999,"error",9999999999)
