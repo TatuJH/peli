@@ -1016,9 +1016,9 @@ def fight(amount):
                         changing_amount -= 1
             print("----")
             if changing_amount == 0:
-                print(f"Having converted all the heretics, your god blesses you with \033[32m${amount*100}\033[0m.")
+                print(f"Having converted all the heretics, your god blesses you with \033[32m${amount*150}\033[0m.")
                 print("----")
-                money += amount*100
+                money += amount*150
                 converted_amount += 1
                 fight_over = True
         elif action == "heal":
@@ -1195,7 +1195,7 @@ def winning():
     print(
         "Along your journey you visited " + text + f", and travelled a total of \033[36m{total_distance} km\033[0m, rewarding you", (total_distance // 60), "points.\n"
         f"You had \033[32m${money}\033[0m rewarding you", money, f"points and \033[34m{time} days\033[0m rewarding you", (time * 10), "points.\n"
-        "Your total score was", score,"."
+        f"Your total score was {score}."
     )
     cursor = conn.cursor()
     cursor.execute("INSERT INTO scores (score) VALUES (%s)", (score,))
