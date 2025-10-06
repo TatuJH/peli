@@ -541,14 +541,19 @@ def intro():
               "You feel the air rising as a fading projection of your god appears in front of you. You hear a deep voice.\n"
               "The voice commands you to bring him six artefacts - one from each of the other continents - to finish the ritual.\n"
               "After you have found and collected an artefact from every other continent, you shall return to Antarctica\n"
-              f"You are given \033[34m{int(time)}\033[0m days\033[0m to complete your quest - otherwise the ritual fails.\n"
+              f"You are given limited time to complete your quest - otherwise the ritual fails.\n"
               "In addition, to ensure your obedience, a spirit is sent after you. You feel like you don't want to make contact with it.\n"
               "You leave the chamber as a waning voice behind you asks you to hurry.\n----")
         print("Important things to note:\n"
-              "- You only have a limited number of actions on each airport (3), and if you dont depart as your last action, the spirit will catch you.\n"          
+              "- You only have a limited number of actions on each airport, and if you dont depart as your last action, the spirit will catch you.\n"          
               "- Working gives you money, but costs you time.\n"
               "- Exploring consists of randomized events, which can both cost and reward money, time or artefacts.\n"
+              "- Converting heretics is a fighting minigame. The actions are as follows:\n"
+              "  STRIKE (#) decreases the selected enemy's stamina, but has a chance to miss.\n"
+              "  HEAL (#) heals you by 9 stamina, but has limited uses.\n"
+              "  GUARD decreases the amount of stamina you lose from enemy attacks.\n"
               "- In the auction house you can either buy or sell artefacts.\n"
+              "- Each action consumes \033[34m5 days\033[0m in addition to other costs.\n"
               "- Traveling to another continent costs more.\n"
               "- Airport size determines the cost of travel and affects some rewards.\n"    
               "----")
@@ -915,10 +920,10 @@ import random
 
 def fight(amount):
     hp = 15 + amount * 5
-    heals = 1
+    heals = amount // 2
     guarding = False
     fight_over = False
-    global money, converted_amount
+    global money, converted_amount, time
     # hp, dmg, dodge, speed
     types = {
     "Bulwark":[16, 6, 0, 3],
@@ -1022,7 +1027,7 @@ def fight(amount):
                 converted_amount += 1
                 fight_over = True
         elif action == "heal":
-            print("You reach for a red potion and drink it. You gain \033[33m9\033[0m stamina.")
+            print("You reach for a red potion and drink it. You gain \033[33m9 stamina\033[0m.")
             hp += 9
             heals -= 1
             print("----")
@@ -1046,7 +1051,8 @@ def fight(amount):
                     enemies_in_fight[enemy]["spd"] = enemies_in_fight[enemy]["spd"] - 1
 
         if hp <= 0:
-            print("You lose all your stamina and land in a puddle of mud. The heretics win and leave the scene.")
+            print("You lose all your stamina and pass out for \033[34m10 days\033[0m. The heretics win and leave the scene.")
+            time -= 10
             fight_over = True
         guarding = False
 
@@ -1392,7 +1398,7 @@ def airport_actions():
             remaining_actions += 1
             achievement()
         elif action == "convert":
-            fight(1)
+            fight(random.randint(1,4))
             achievement()
 
         elif action == "depart":
