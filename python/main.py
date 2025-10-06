@@ -1016,7 +1016,7 @@ def winning():
     )
     print("----")
     print(
-        "Along your jorney you visited " + text + f", and travelled a total of \033[36m{total_distance} km\033[0m, rewarding you", (total_distance // 60), "points.\n"
+        "Along your journey you visited " + text + f", and travelled a total of \033[36m{total_distance} km\033[0m, rewarding you", (total_distance // 60), "points.\n"
         f"You had \033[32m${money}\033[0m rewarding you", money //2, f"points and \033[34m{time} days\033[0m rewarding you", (time * 10), "points.\n"
         "Your total score was", score,"."
     )
