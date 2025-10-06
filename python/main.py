@@ -431,6 +431,8 @@ money_index = 0
 distance_index = 0
 artefacts_index = 0
 events_index = 0
+converted_amount = 0
+convert_index = 0
 
 for eve in events:
     uncompleted_events.append(eve)
@@ -483,6 +485,8 @@ def intro():
     global artefacts_index
     global distance_index
     global events_index
+    global converted_amount
+    global convert_index
 
     money = 1000
     time = 365
@@ -516,6 +520,8 @@ def intro():
     distance_index = 0
     artefacts_index = 0
     events_index = 0
+    converted_amount = 0
+    convert_index = 0
 
     temp = ""
     print("This game is color-coded. Every time you're presented with a choice, your typeable actions are marked with \033[35mmagenta\033[0m.")
@@ -524,8 +530,8 @@ def intro():
     print("----")
     temp = ""
     print("Reading the introduction is recommended for a first-time playthrough.")
-    while temp != "read" and temp != "play":
-        temp = input("Would you like to \033[35mread\033[0m the introduction or start \033[35mplay\033[0ming?\n> ").strip().lower()
+    while temp != "read" and temp != "play" and temp != "scores":
+        temp = input("Would you like to \033[35mread\033[0m the introduction, check past \033[35mscores\033[0m or start \033[35mplay\033[0ming?\n> ").strip().lower()
     print("----")
     if temp == "read":
         print(f"You belong in a cult dead-set on waking up an ancient god.\n"
@@ -560,7 +566,7 @@ def intro():
             for scoretemp in range(len(scorelist)):
                 print(f"Game {scorelist[scoretemp][0]}: {scorelist[scoretemp][1]}")
         else:
-            print(f"Nothing to show!")
+            print(f"No games played in the past.")
         print("----")
 
 def print_all():
@@ -905,6 +911,146 @@ def event():
     if events[event_id]["choices"][choice]["results"][outcome]["artefacts"] > 0:
         add_artefact(events[event_id]["choices"][choice]["results"][outcome]["artefacts"])
 
+import random
+
+def fight(amount):
+    hp = 15 + amount * 5
+    heals = 1
+    guarding = False
+    fight_over = False
+    global money, converted_amount
+    # hp, dmg, dodge, speed
+    types = {
+    "Bulwark":[16, 6, 0, 3],
+    "Warden":[10, 4, 2.5, 2],
+    "Vessel":[8, 2, 5, 0],
+    "Zealot":[12, 3, 3.33, 1]
+    }
+    enemies = []
+
+    enemies_in_fight = {}
+    for i in range(amount):
+        enemies_in_fight[i] = {
+            "hp":0,
+            "dmg":0,
+            "ddg":0,
+            "spd":0
+        }
+
+    if amount == 1:
+        print(f"You find a singular robed man and prepare to convert him, no matter the cost.")
+    else:
+        print(f"You find a group of {amount} robed men and prepare to convert them, no matter the cost.")
+
+    print("----")
+
+    for enemy in range(amount):
+        enemies.append(random.choice(["Bulwark", "Vessel", "Warden", "Zealot"]))
+        enemies_in_fight[enemy]["hp"] = types[enemies[enemy]][0]
+        enemies_in_fight[enemy]["dmg"] = types[enemies[enemy]][1]
+        enemies_in_fight[enemy]["ddg"] = types[enemies[enemy]][2]
+        enemies_in_fight[enemy]["spd"] = types[enemies[enemy]][3]
+
+    changing_amount = amount
+
+    while not fight_over:
+        for enemy in range(amount):
+            if enemies_in_fight[enemy]["hp"] == 0:
+                temp = 'unconscious'
+            elif enemies_in_fight[enemy]["spd"] == 0:
+                temp = 'attacking'
+            else:
+                temp = f'charging for {enemies_in_fight[enemy]["spd"]} turns'
+            if enemy < amount-1:
+                if enemies_in_fight[enemy]["hp"] != 0:
+                    print(f"Enemy \033[35m{enemy+1}\033[0m: "+f"\033[1m{enemies[enemy]}\033[0m"+f' \033[33m{enemies_in_fight[enemy]["hp"]}\033[0m'+ f' (\033[36m{temp}\33[0m)',end=" | ")
+            else:
+                if enemies_in_fight[enemy]["hp"] != 0:
+                    print(f"Enemy \033[35m{enemy + 1}\033[0m: " + f"\033[1m{enemies[enemy]}\033[0m"+ f' \033[33m{enemies_in_fight[enemy]["hp"]}\033[0m'+ f' (\033[36m{temp}\33[0m)')
+
+        print(f"----\n\033[33m{hp}\033[0m | \033[35mSTRIKE\033[0m (\033[35m#\033[0m)\033[0m | \033[35mHEAL\033[0m ({heals}) | \33[35mGUARD\033[0m | \033[35mESCAPE\033[0m")
+        action = ""
+        tempactionlist = ["guard", "escape"]
+        for i in range(amount):
+            if enemies_in_fight[i]["hp"] != 0:
+                tempactionlist.append(f"strike {i+1}")
+        if heals > 0:
+            tempactionlist.append("heal")
+        while action not in tempactionlist:
+            action = input("> ").strip().lower()
+        print("----")
+        if action == "escape":
+            if random.random() <= 0.3:
+                if hp == 20:
+                    print("You manage to escape the quarrel unscathed.")
+                    print("----")
+                else:
+                    print("You manage to escape the beating.")
+                    print("----")
+            else:
+                print("You try scrambling your way out but fail.")
+                print("----")
+        elif "strike" in action:
+            enemynumber = int(action[7])-1
+            print(f"You try striking the \033[1m{enemies[enemynumber]}\033[0m in his {random.choice(['head','chest','right arm','left arm','stomach'])}.",end=" ")
+            if enemies_in_fight[enemynumber]["ddg"] >= random.uniform(0, 10):
+                print(f"The \033[1m{enemies[enemynumber]}\033[0m dodges the blow and you miss.")
+            else:
+                if random.random() <= 0.3:
+                    dmg = int(round(random.randint(3,6)*1.5))
+                    print(f"The blow lands critically, dealing \033[31m{dmg}\033[0m damage.")
+                    enemies_in_fight[enemynumber]["hp"] = enemies_in_fight[enemynumber]["hp"] - dmg
+                    if enemies_in_fight[enemynumber]["hp"] <= 0:
+                        print("----")
+                        enemies_in_fight[enemynumber]["hp"] = 0
+                        print(f"The \033[1m{enemies[enemynumber]}\033[0m loses all his stamina and decides to convert.")
+                        changing_amount -= 1
+                else:
+                    dmg = int(round(random.randint(3,6)))
+                    print(f"The blow lands, dealing \033[31m{dmg}\033[0m damage.")
+                    enemies_in_fight[enemynumber]["hp"] = enemies_in_fight[enemynumber]["hp"] - dmg
+                    if enemies_in_fight[enemynumber]["hp"] <= 0:
+                        print("----")
+                        enemies_in_fight[enemynumber]["hp"] = 0
+                        print(f"The \033[1m{enemies[enemynumber]}\033[0m loses all his stamina and decides to convert.")
+                        changing_amount -= 1
+            print("----")
+            if changing_amount == 0:
+                print(f"Having converted all the heretics, your god blesses you with \033[32m${amount*100}\033[0m.")
+                print("----")
+                money += amount*100
+                converted_amount += 1
+                fight_over = True
+        elif action == "heal":
+            print("You reach for a red potion and drink it. You gain \033[33m9\033[0m stamina.")
+            hp += 9
+            heals -= 1
+            print("----")
+        elif action == "guard":
+            print("You enter a meditative state and feel your skin harden.")
+            print("----")
+            guarding = True
+
+        for enemy in range(amount):
+            if enemies_in_fight[enemy]["hp"] != 0:
+                if enemies_in_fight[enemy]["spd"] == 0:
+                    if guarding:
+                        print(f"The \033[1m{enemies[enemy]}\033[0m {random.choice(['smacks', 'hits', 'strikes', 'punches', 'kicks'])} you in your {random.choice(['head', 'chest', 'right arm', 'left arm', 'stomach'])}, dealing \033[31m{enemies_in_fight[enemy]['dmg'] // 3}\033[0m damage.")
+                        hp -= enemies_in_fight[enemy]['dmg'] // 3
+                    else:
+                        print(f"The \033[1m{enemies[enemy]}\033[0m {random.choice(['smacks', 'hits', 'strikes', 'punches', 'kicks'])} you in your {random.choice(['head','chest','right arm','left arm','stomach'])}, dealing \033[31m{enemies_in_fight[enemy]['dmg']}\033[0m damage.")
+                        hp -= enemies_in_fight[enemy]['dmg']
+                    print("----")
+                    enemies_in_fight[enemy]["spd"] = types[enemies[enemy]][3]
+                else:
+                    enemies_in_fight[enemy]["spd"] = enemies_in_fight[enemy]["spd"] - 1
+
+        if hp <= 0:
+            print("You lose all your stamina and land in a puddle of mud. The heretics win and leave the scene.")
+            fight_over = True
+        guarding = False
+
+
 def check_inventory():
     temp = ["your water bottle", "some snacks", "your phone", "a picture of mommy", "an amulet", "a dreamcatcher", "your lucky rock collection"]
     temp1 = random.choice(temp)
@@ -1199,7 +1345,7 @@ def airport_actions():
         quiz(cont)
 
     # muokattava lista
-    all_actions = ["work", "explore", "auction", "check", "depart"]
+    all_actions = ["work", "explore", "auction", "check", "depart", "convert"]
     achievement()
     while remaining_actions > 0:
         # Nollaa joka kierroksen alussa
@@ -1219,7 +1365,7 @@ def airport_actions():
 
         while action not in all_actions:
             action = input(
-                "Would you like to either \033[35mcheck\033[0m your standing, \033[35mwork\033[0m, \033[35mexplore\033[0m, visit the \033[35mauction\033[0m house or \033[35mdepart\033[0m?\n> ")
+                "Would you like to either \033[35mcheck\033[0m your standing, \033[35mwork\033[0m, \033[35mexplore\033[0m, \033[35mconvert\033[0m heretics, visit the \033[35mauction\033[0m house or \033[35mdepart\033[0m?\n> ")
 
         print("----")
         if action == "work":
@@ -1244,6 +1390,9 @@ def airport_actions():
             check_inventory()
             # reppuun katsominen ei vie paljon aikaa
             remaining_actions += 1
+            achievement()
+        elif action == "convert":
+            fight(1)
             achievement()
 
         elif action == "depart":
@@ -1336,6 +1485,8 @@ def achievement():
     global distance_index
     global money
     global achieved
+    global converted_amount
+    global convert_index
 
     if len(visited_countries) >= achievements["countries"][countries_index][0]:
         print("You've achieved",achievements["countries"][countries_index][1],f"and earned \033[32m${achievements['countries'][countries_index][2]}\033[0m.")
@@ -1365,6 +1516,11 @@ def achievement():
         print("----")
         money += achievements["events"][events_index][2]
         events_index += 1
+    if converted_amount >= achievements["convert"][convert_index][0]:
+        print("You've achieved", achievements["convert"][convert_index][1],f"and earned \033[32m${achievements['convert'][convert_index][2]}\033[0m.")
+        print("----")
+        money += achievements["convert"][convert_index][2]
+        convert_index += 1
 
 def all_artefacts_test():
     global cont

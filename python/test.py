@@ -24,9 +24,9 @@ def fight(amount):
         }
 
     if amount == 1:
-        print(f"You're minding your business, as you feel a tap on your shoulder. You turn around to a to a robed man. A heretic, trying to stop you. You prepare to fight.")
+        print(f"You find a singular robed man and prepare to convert him, no matter the cost.")
     else:
-        print(f"You're minding your business, as you feel a tap on your shoulder. You turn around to a to a group of {amount} robed men. Heretics, trying to stop you. You prepare to fight.")
+        print(f"You find a group of {amount} robed men and prepare to convert them, no matter the cost.")
 
     print("----")
 
@@ -68,10 +68,10 @@ def fight(amount):
         if action == "escape":
             if random.random() <= 0.3:
                 if hp == 20:
-                    print("You manage to escape the ambush unscathed.")
+                    print("You manage to escape the quarrel unscathed.")
                     print("----")
                 else:
-                    print("You manage to escape the ambush.")
+                    print("You manage to escape the beating.")
                     print("----")
             else:
                 print("You try scrambling your way out but fail.")
@@ -89,7 +89,7 @@ def fight(amount):
                     if enemies_in_fight[enemynumber]["hp"] <= 0:
                         print("----")
                         enemies_in_fight[enemynumber]["hp"] = 0
-                        print(f"The \033[1m{enemies[enemynumber]}\033[0m loses all his stamina and gets knocked out.")
+                        print(f"The \033[1m{enemies[enemynumber]}\033[0m loses all his stamina and decides to convert.")
                         changing_amount -= 1
                 else:
                     dmg = int(round(random.randint(3,6)))
@@ -98,11 +98,12 @@ def fight(amount):
                     if enemies_in_fight[enemynumber]["hp"] <= 0:
                         print("----")
                         enemies_in_fight[enemynumber]["hp"] = 0
-                        print(f"The \033[1m{enemies[enemynumber]}\033[0m loses all his stamina and gets knocked out.")
+                        print(f"The \033[1m{enemies[enemynumber]}\033[0m loses all his stamina and decides to convert.")
                         changing_amount -= 1
             print("----")
             if changing_amount == 0:
-                print(f"Having defeated all the heretics, you earn \033[32m${amount*100}\033[0m.")
+                print(f"Having converted all the heretics, your god blesses you with \033[32m${amount*100}\033[0m.")
+                money += amount*100
                 fight_over = True
         elif action == "heal":
             print("You reach for a red potion and drink it. You gain \033[33m9\033[0m stamina.")

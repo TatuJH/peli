@@ -26,13 +26,20 @@ achievements = {
         (3,"\033[1mTreasure Hunter\033[0m for finding 3 artefacts",100),
         (8,"\033[1mCulture Preserver\033[0m for finding 8 artefacts",150),
         (12,"\033[1mIndiana Jones\033[0m for finding 12 artefacts",200),
-        (9999999999999999999999,"error")
+        (9999999999999999999999,"error",9999999999999)
     ],
     "events":[
         (2,"\033[1mRisk-taker\033[0m for completing 2 events",50),
         (5,"\033[1mLucky Guy\033[0m for completing 5 events",100),
         (10,"\033[1mTrue Adventurer\033[0m for completing 10 events",150),
         (16,"\033[1mFortuna\033[0m for completing 16 events",200),
-        (999999999999999999999,"error")
+        (999999999999999999999,"error",9999999999999)
+    ],
+    "convert":[
+        (1,"\033[1mBeliever\033[0m for converting heretics 1 time",50),
+        (2,"\033[1mFaithful\033[0m for converting heretics 2 times",100),
+        (4,"\033[1mDevotee\033[0m for converting heretics 4 times",150),
+        (7,"\033[1mChosen One\033[0m for converting heretic 7 times",200),
+        (999999999999999999999,"error",99999999)
     ]
 }
