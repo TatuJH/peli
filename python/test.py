@@ -83,7 +83,7 @@ def fight(amount):
                 print(f"The \033[1m{enemies[enemynumber]}\033[0m dodges the blow and you miss.")
             else:
                 if random.random() <= 0.3:
-                    dmg = int(round(random.randint(2,5)*1.5))
+                    dmg = int(round(random.randint(3,6)*1.5))
                     print(f"The blow lands critically, dealing \033[31m{dmg}\033[0m damage.")
                     enemies_in_fight[enemynumber]["hp"] = enemies_in_fight[enemynumber]["hp"] - dmg
                     if enemies_in_fight[enemynumber]["hp"] <= 0:
@@ -92,7 +92,7 @@ def fight(amount):
                         print(f"The \033[1m{enemies[enemynumber]}\033[0m loses all his stamina and gets knocked out.")
                         changing_amount -= 1
                 else:
-                    dmg = int(round(random.randint(2,5)))
+                    dmg = int(round(random.randint(3,6)))
                     print(f"The blow lands, dealing \033[31m{dmg}\033[0m damage.")
                     enemies_in_fight[enemynumber]["hp"] = enemies_in_fight[enemynumber]["hp"] - dmg
                     if enemies_in_fight[enemynumber]["hp"] <= 0:
