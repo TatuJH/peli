@@ -563,8 +563,8 @@ def intro():
     print("----")
     temp = ""
     print("Reading the introduction is recommended for a first-time playthrough.")
-    while temp != "read" and temp != "play":
-        temp = input("Would you like to \033[35mread\033[0m the introduction or start \033[35mplay\033[0ming?\n> ").strip().lower()
+    while temp != "read" and temp != "play" and temp != "scores":
+        temp = input("Would you like to \033[35mread\033[0m the introduction, check past \033[35mscores\033[0m or start \033[35mplay\033[0ming?\n> ").strip().lower()
     print("----")
     if temp == "read":
         print(f"You belong in a cult dead-set on waking up an ancient god.\n"
@@ -585,6 +585,19 @@ def intro():
               "- Traveling to another continent costs more.\n"
               "- Airport size determines the cost of travel and affects some rewards.\n"    
               "----")
+    elif temp == "scores":
+        sql = "SELECT id, score FROM scores WHERE score IN (SELECT MAX(score) FROM scores);"
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        highest = cursor.fetchall()
+        print(f"Your highest score was {highest[0][1]} in game {highest[0][0]}.")
+        sql = "SELECT * FROM scores;"
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        scorelist = cursor.fetchall()
+        for scoretemp in range(len(scorelist)):
+            print(f"Game {scorelist[scoretemp][0]}: {scorelist[scoretemp][1]}")
+        print("----")
 
 def print_all():
     print(money, time, cont, country, size, airport, artefacts, uncompleted_events, latlong, total_distance, visited_countries)
