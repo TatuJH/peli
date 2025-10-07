@@ -731,11 +731,11 @@ def intro():
     if temp == "read":
         print(f"You belong in a cult dead-set on waking up an ancient god.\n"
               "After centuries of hard work, the moment is finally at hand.\n"
-              "You arrive in an ancient chamber. The chamber smells of sulfur and debris on the ground seems to move on its own.\n"
+              "You arrive in an ancient chamber located in Antarctica. The chamber smells of sulfur and debris on the ground seems to move on its own.\n"
               "In the middle of the chamber lies a circle made of lit candles. You step in, and start performing a ritual.\n"
               "You feel the air rising as a fading projection of your god appears in front of you. You hear a deep voice.\n"
               "The voice commands you to bring him six artefacts - one from each of the other continents - to finish the ritual.\n"
-              "After you have found and collected an artefact from every other continent, you shall return to Antarctica\n"
+              "After you have found and collected an artefact from every other continent, you shall return to Antarctica.\n"
               f"You are given limited time to complete your quest - otherwise the ritual fails.\n"
               "In addition, to ensure your obedience, a spirit is sent after you. You feel like you don't want to make contact with it.\n"
               "You leave the chamber as a waning voice behind you asks you to hurry.\n----")
