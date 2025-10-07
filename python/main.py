@@ -1164,7 +1164,9 @@ def event():
             remove_artefact()
 
 def fight(amount):
-    hp = 15 + amount * 5
+    hp = 10
+    if amount > 1:
+        hp += amount * 5
     heals = amount // 2
     guarding = False
     fight_over = False
@@ -1878,12 +1880,8 @@ def achievement():
         achieved.append(achievements["money"][money_index][1])
         money_index += 1
     if total_distance >= achievements["distance"][distance_index][0]:
-        if distance_index != 0:
-            print("You've achieved",achievements["distance"][distance_index][1],f"and earned \033[32m${achievements['distance'][distance_index][2]}\033[0m.")
-            print("----")
-        else:
-            print(f"You've achieved {achievements['distance'][distance_index][1]}.")
-            print("----")
+        print("You've achieved",achievements["distance"][distance_index][1],f"and earned \033[32m${achievements['distance'][distance_index][2]}\033[0m.")
+        print("----")
         money += achievements["distance"][distance_index][2]
         achieved.append(achievements["distance"][distance_index][1])
         distance_index += 1
