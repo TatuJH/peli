@@ -463,7 +463,7 @@ achievements = {
         (1,"\033[1mBeliever\033[0m for converting heretics 1 time",50),
         (2,"\033[1mFaithful\033[0m for converting heretics 2 times",100),
         (4,"\033[1mDevotee\033[0m for converting heretics 4 times",150),
-        (7,"\033[1mChosen One\033[0m for converting heretic 7 times",200),
+        (7,"\033[1mChosen One\033[0m for converting heretics 7 times",200),
         (999999999999999999999,"error",99999999)
     ]
 }
@@ -1653,8 +1653,12 @@ def achievement():
         money += achievements["money"][money_index][2]
         money_index += 1
     if total_distance >= achievements["distance"][distance_index][0]:
-        print("You've achieved",achievements["distance"][distance_index][1],f"and earned \033[32m${achievements['distance'][distance_index][2]}\033[0m.")
-        print("----")
+        if distance_index != 0:
+            print("You've achieved",achievements["distance"][distance_index][1],f"and earned \033[32m${achievements['distance'][distance_index][2]}\033[0m.")
+            print("----")
+        else:
+            print(f"You've achieved {achievements['distance'][distance_index][1]}.")
+            print("----")
         money += achievements["distance"][distance_index][2]
         distance_index += 1
         achieved.append(achievements["distance"][distance_index][1])
