@@ -737,10 +737,10 @@ def intro():
               "The voice commands you to bring him six artefacts - one from each of the other continents - to finish the ritual.\n"
               "After you have found and collected an artefact from every other continent, you shall return to Antarctica.\n"
               f"You are given limited time to complete your quest - otherwise the ritual fails.\n"
-              "In addition, to ensure your obedience, a spirit is sent after you. You feel like you don't want to make contact with it.\n"
+              "In addition, to ensure your obedience, a spirit is sent after you. You feel as if you don't want to make contact with it.\n"
               "You leave the chamber as a waning voice behind you asks you to hurry.\n----")
         print("Important things to note:\n"
-              "- You only have a limited number of actions on each airport, and if you dont depart as your last action, the spirit will catch you.\n"          
+              "- You only have a limited number of actions on each airport, and if you don't depart as your last action, the spirit will catch you.\n"          
               "- Working gives you money, but costs you time.\n"
               "- Exploring consists of randomized events, which can both cost and reward money, time or artefacts.\n"
               "- Converting heretics is a fighting minigame. The actions are as follows:\n"
