@@ -472,18 +472,22 @@ converted_amount = 0
 convert_index = 0
 achievements = {
     "distance":[
-        (5000,"\033[1mFirst Steps\033[0m for completing your first flight",0),
-        (30000,"\033[1mBeginner Traveler\033[0m for travelling \033[36m30000 km\033[0m",50),
+        (10000,"\033[1mFirst Steps\033[0m for travelling \033[36m10000 km\033[0m",50),
+        (30000,"\033[1mBeginner Traveler\033[0m for travelling \033[36m30000 km\033[0m",75),
         (60000,"\033[1mIntermediate Traveler\033[0m for travelling \033[36m60000 km\033[0m",100),
-        (100000,"\033[1mAdvanced Traveler\033[0m for travelling \033[36m100000 km\033[0m",150),
-        (200000,"\033[1mMaster Traveler\033[0m for travelling \033[36m200000 km\033[0m",200),
+        (80000,"\033[1mAdvanced Traveler\033[0m for travelling \033[36m80000 km\033[0m",150),
+        (125000,"\033[1mMaster Traveler\033[0m for travelling \033[36m125000 km\033[0m",300),
+        (175000,"\033[1mBusiness Class\033[0m for travelling \033[175000 km\033[0m",400),
+        (200000,"\033[1mFirst Class\033[0m for travelling \033[36m200000 km\033[0m",500),
+        (250000,"\033[1mApostle\033[0m for travelling \033[36m250000 km\033[0m",500),
         (9999999999999999999999,"error",999999999999)
     ],
     "countries":[
-        (3,"\033[1mSightseer\033[0m for visiting 3 countries",50),
+        (3,"\033[1mSightseer\033[0m for visiting 4 countries",75),
         (6,"\033[1mTourist\033[0m for visiting 6 countries",100),
         (10,"\033[1mRegular\033[0m for visiting 10 countries",150),
-        (16,"\033[1mDual Citizenship\033[0m for visiting 16 countries",200),
+        (13,"\033[1mDual Citizenship\033[0m for visiting 13 countries",200),
+        (18, "\033[1mMissionary\033[0m for visiting 18 countries", 350),
         (9999999999999999999999,"error",9999999999)
     ],
     "money":[
@@ -491,6 +495,8 @@ achievements = {
         (600,"\033[1mHard Worker\033[0m for earning \033[32m$600\033[0m",100),
         (1200,"\033[1mBusinessman\033[0m for earning \033[32m$1200\033[0m",150),
         (2000,"\033[1mCEO\033[0m for earning \033[32m$2000\033[0m",200),
+        (3000, "\033[1mTithe\033[0m for earning \033[32m$3000\033[0m", 300),
+        (4000, "\033[1mPeter's Pence\033[0m for earning \033[32m$4000\033[0m", 300),
         (99999999999999999999999999,"error",9999999999999999)
     ],
     "artefacts":[
@@ -501,17 +507,18 @@ achievements = {
         (9999999999999999999999,"error",9999999999999)
     ],
     "events":[
-        (2,"\033[1mRisk-taker\033[0m for completing 2 events",50),
-        (5,"\033[1mLucky Guy\033[0m for completing 5 events",100),
+        (3,"\033[1mRisk-taker\033[0m for completing 2 events",75),
+        (6,"\033[1mLucky Guy\033[0m for completing 5 events",125),
         (10,"\033[1mTrue Adventurer\033[0m for completing 10 events",150),
-        (16,"\033[1mFortuna\033[0m for completing 16 events",200),
+        (16,"\033[1mFortuna\033[0m for completing 16 events",300),
         (999999999999999999999,"error",9999999999999)
     ],
     "convert":[
-        (1,"\033[1mBeliever\033[0m for converting heretics 1 time",50),
-        (2,"\033[1mFaithful\033[0m for converting heretics 2 times",100),
-        (4,"\033[1mDevotee\033[0m for converting heretics 4 times",150),
-        (7,"\033[1mChosen One\033[0m for converting heretics 7 times",200),
+        (1,"\033[1mBeliever\033[0m for converting heretics once",100),
+        (2,"\033[1mFaithful\033[0m for converting heretics 2 times",150),
+        (4,"\033[1mDevotee\033[0m for converting heretics 4 times",200),
+        (7,"\033[1mChosen One\033[0m for converting heretics 7 times",300),
+        (10,"\033[1mMandate From Heaven\033[0m for converting heretics 10 times",400),
         (999999999999999999999,"error",99999999)
     ]
 }
@@ -632,7 +639,7 @@ for eve in events:
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demokanta',
+    database='demogame',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -767,6 +774,8 @@ def print_all():
 def add_artefact(count):
     global cont
     global artefacts_earned
+    if count is None:
+        count = 1
 
     artefacts_earned += count
 
@@ -782,8 +791,6 @@ def add_artefact(count):
     for nm in artefacts:
         names.append(nm.name)
 
-    if count is None:
-        count = 1
     # Montako artefaktia lisätään?
     for c in range(0,count):
         # Satunnainen rahamäärä
@@ -1074,7 +1081,6 @@ def list_artefacts(selling):
                 print(f"{artefacts.index(a) + 1}: \033[33m{a.name}\033[0m from \033[31m{ctemp}\033[0m, \033[32m${a.value}\033[0m")
     else:
         pass
-
 def event():
     global money
     global time
@@ -1084,6 +1090,12 @@ def event():
     global artefacts_earned
     global events_completed
     event_id = random.choice(uncompleted_events)
+    # chicken
+    #event_id = 12
+    # tribe
+    #event_id = 11
+
+    # vvvv kommentoi testatessa vvvv
     uncompleted_events.remove(event_id)
 
     events_completed += 1
@@ -1113,24 +1125,42 @@ def event():
     # Tapahtuman hinta
     money -= events[event_id]["choices"][choice]["cost"]["money"]
     time -= events[event_id]["choices"][choice]["cost"]["time"]
-    if events[event_id]["choices"][choice]["cost"]["artefacts"] > 0:
-        remove_artefact(events[event_id]["choices"][choice]["cost"]["artefacts"])
 
-    outcome = random.randint(1, len(events[event_id]["choices"][choice]["results"]))
+    # ota eventin mahdolliset lopputulokset
+    results = list()
+    for i in range(1, len(events[event_id]["choices"][choice]["results"])+1):
+        results.append(events[event_id]["choices"][choice]["results"][i])
+
+    # sekoita niiden lista
+    random.shuffle(results)
+    # ei warningia
+    outcome = results[0]
+    # mene kaikkien läpi
+    for i in range(0,len(results)):
+        outcome = results[i]
+        # ota ensimmäinen, joka ei vie pelaajalta liikaa artefakteja!!
+        if not len(artefacts) + outcome["artefacts"] < 0:
+            break
+
 
     #Tapahtuman lopputulos
-    print(events[event_id]["choices"][choice]["results"][outcome]["text"],f"\n----")
-    money += events[event_id]["choices"][choice]["results"][outcome]["money"]
-    if events[event_id]["choices"][choice]["results"][outcome]["money"] > 0:
-        money_earned += events[event_id]["choices"][choice]["results"][outcome]["money"]
+    print(outcome["text"],f"\n----")
+    money += outcome["money"]
+    if outcome["money"] > 0:
+        money_earned += outcome["money"]
     if money < 0:
         money = 0
-    time += events[event_id]["choices"][choice]["results"][outcome]["time"]
+    time += outcome["time"]
     if time < 0:
         time = 0
-    #artefacts += events[event_id]["choices"][choice]["results"][outcome]["artefacts"]
-    if events[event_id]["choices"][choice]["results"][outcome]["artefacts"] > 0:
-        add_artefact(events[event_id]["choices"][choice]["results"][outcome]["artefacts"])
+
+
+    # lisää / poista aarre
+    if outcome["artefacts"] > 0:
+        add_artefact(outcome["artefacts"])
+    elif outcome["artefacts"] < 0:
+        for i in range(0, outcome["artefacts"]):
+            remove_artefact()
 
 def fight(amount):
     hp = 15 + amount * 5
@@ -1142,7 +1172,7 @@ def fight(amount):
     types = {
     "Bulwark":[16, 6, 0, 3],
     "Warden":[10, 4, 2.5, 2],
-    "Vessel":[8, 2, 5, 0],
+    "Vessel":[6, 2, 4, 0],
     "Zealot":[12, 3, 3.33, 1]
     }
     enemies = []
