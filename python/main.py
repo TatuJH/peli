@@ -83,7 +83,7 @@ def get_all_events():
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":0,"time":0,"artefacts":1,"text":"Something rumbles. A hatch opens underneath the monument, revealing an \033[33martefact\033[0m. The gods must be pleased."},
-                        2:{"money":0,"time":-15,"artefacts":1,"text":"The monument shakes and reveals something behind it. You look closer and fall into a coma. You wake up \033[34m15 days\033[0m later and find an \033[33martefact\033[0m next to you."},
+                        2:{"money":0,"time":-15,"artefacts":1,"text":"The monument shakes and reveals something under it. You take a peek and lose consciousness. You wake up \033[34m15 days\033[0m later and find an \033[33martefact\033[0m next to you."},
                         3:{"money":int(round(-100*money_modifier)),"time":-10,"artefacts":0,"text": f"The monument starts glowing red. The gods didn't seem to like your praying. You feel a curse sweeping through you, draining you of \033[32m${int(round(100*money_modifier))}\033[0m and \033[34m10 days\033[0m."}
 
                     }
@@ -91,7 +91,8 @@ def get_all_events():
                 "standing":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
-                        1:{"money":int(round(-100*money_modifier)),"time":-10,"artefacts":0,"text":f"The monument starts glowing red. The gods didn't seem to like your praying. You feel a curse sweeping through you, draining you of \033[32m${int(round(100*money_modifier))}\033[0m and \033[34m10 days\033[0m."}
+                        1:{"money":int(round(-100*money_modifier)),"time":-10,"artefacts":0,"text":f"The monument starts glowing red. The gods didn't seem to like your praying. You feel a curse sweeping through you, draining you of \033[32m${int(round(100*money_modifier))}\033[0m and \033[34m10 days\033[0m."},
+                        2:{"money":int(round(100*money_modifier)),"time":0,"artefacts":0,"text":f"You feel a pleasant sensation. The gods must've been pleased with your praying. You notice you're carrying \033[32m${int(round(100*money_modifier))}\033[0m more than before."}
                     }
                 },
                 "leave":{
@@ -508,7 +509,7 @@ achievements = {
     ],
     "events":[
         (3,"\033[1mRisk-taker\033[0m for completing 2 events",75),
-        (6,"\033[1mLucky Guy\033[0m for completing 5 events",125),
+        (6,"\033[1mLucky Guy\033[0m for completing 6 events",125),
         (10,"\033[1mTrue Adventurer\033[0m for completing 10 events",150),
         (16,"\033[1mFortuna\033[0m for completing 16 events",300),
         (999999999999999999999,"error",9999999999999)
@@ -518,7 +519,7 @@ achievements = {
         (2,"\033[1mFaithful\033[0m for converting heretics 2 times",150),
         (4,"\033[1mDevotee\033[0m for converting heretics 4 times",200),
         (7,"\033[1mChosen One\033[0m for converting heretics 7 times",300),
-        (10,"\033[1mMandate From Heaven\033[0m for converting heretics 10 times",400),
+        (10,"\033[1mMandate from Heaven\033[0m for converting heretics 10 times",400),
         (999999999999999999999,"error",99999999)
     ]
 }
@@ -1170,10 +1171,10 @@ def fight(amount):
     global money, converted_amount, time
     # hp, dmg, dodge, speed
     types = {
-    "Bulwark":[16, 6, 0, 3],
+    "Bulwark":[16, 7, 1, 3],
     "Warden":[10, 4, 2.5, 2],
-    "Vessel":[6, 2, 4, 0],
-    "Zealot":[12, 3, 3.33, 1]
+    "Vessel":[7, 2, 4, 0],
+    "Zealot":[12, 3, 3, 1]
     }
     enemies = []
 
@@ -1201,6 +1202,9 @@ def fight(amount):
         enemies_in_fight[enemy]["spd"] = types[enemies[enemy]][3]
 
     changing_amount = amount
+    enemylist = []
+    for i in range(amount):
+        enemylist.append(i)
 
     while not fight_over:
         for enemy in range(amount):
@@ -1210,18 +1214,14 @@ def fight(amount):
                 temp = 'attacking'
             else:
                 temp = f'charging for {enemies_in_fight[enemy]["spd"]} turns'
-            if enemy < amount-1:
+            if enemy < enemylist[len(enemylist) - 1]:
                 if enemies_in_fight[enemy]["hp"] != 0:
                     print(f"Enemy \033[35m{enemy+1}\033[0m: "+f"\033[1m{enemies[enemy]}\033[0m"+f' \033[33m{enemies_in_fight[enemy]["hp"]}\033[0m'+ f' (\033[36m{temp}\33[0m)',end=" | ")
-                else:
-                    pass
             else:
                 if enemies_in_fight[enemy]["hp"] != 0:
-                    print(f"Enemy \033[35m{enemy + 1}\033[0m: " + f"\033[1m{enemies[enemy]}\033[0m"+ f' \033[33m{enemies_in_fight[enemy]["hp"]}\033[0m'+ f' (\033[36m{temp}\33[0m)')
-                else:
-                    pass
+                    print(f"Enemy \033[35m{enemy + 1}\033[0m: " + f"\033[1m{enemies[enemy]}\033[0m"+ f' \033[33m{enemies_in_fight[enemy]["hp"]}\033[0m'+ f' (\033[36m{temp}\33[0m)\n----')
 
-        print(f"----\n\033[33m{hp}\033[0m | \033[35mSTRIKE\033[0m (\033[35m#\033[0m)\033[0m | \033[35mHEAL\033[0m ({heals}) | \33[35mGUARD\033[0m | \033[35mESCAPE\033[0m")
+        print(f"\033[33m{hp}\033[0m | \033[35mSTRIKE\033[0m (\033[35m#\033[0m)\033[0m | \033[35mHEAL\033[0m ({heals}) | \33[35mGUARD\033[0m | \033[35mESCAPE\033[0m")
         action = ""
         tempactionlist = ["guard", "escape"]
         for i in range(amount):
@@ -1258,6 +1258,7 @@ def fight(amount):
                         enemies_in_fight[enemynumber]["hp"] = 0
                         print(f"The \033[1m{enemies[enemynumber]}\033[0m loses all his stamina and decides to convert.")
                         changing_amount -= 1
+                        enemylist.remove(enemynumber)
                 else:
                     dmg = int(round(random.randint(3,6)))
                     print(f"The blow lands, dealing \033[31m{dmg}\033[0m damage.")
@@ -1267,12 +1268,13 @@ def fight(amount):
                         enemies_in_fight[enemynumber]["hp"] = 0
                         print(f"The \033[1m{enemies[enemynumber]}\033[0m loses all his stamina and decides to convert.")
                         changing_amount -= 1
+                        enemylist.remove(enemynumber)
             print("----")
             if changing_amount == 0:
                 print(f"Having converted all the heretics, your god blesses you with \033[32m${amount*150}\033[0m.")
-                print("----")
                 money += amount*150
                 converted_amount += 1
+                print("----")
                 fight_over = True
         elif action == "heal":
             heal_amount = random.randint(8,13) - hp

@@ -1,8 +1,11 @@
 import random
 
+from python.main import converted_amount
+
+
 def fight(amount):
     hp = 15 + amount * 5
-    heals = 1
+    heals = amount // 2
     guarding = False
     fight_over = False
     # hp, dmg, dodge, speed
@@ -38,6 +41,9 @@ def fight(amount):
         enemies_in_fight[enemy]["spd"] = types[enemies[enemy]][3]
 
     changing_amount = amount
+    enemylist = []
+    for i in range(amount):
+        enemylist.append(i)
 
     while not fight_over:
         for enemy in range(amount):
@@ -47,14 +53,14 @@ def fight(amount):
                 temp = 'attacking'
             else:
                 temp = f'charging for {enemies_in_fight[enemy]["spd"]} turns'
-            if enemy < amount-1:
+            if enemy < enemylist[len(enemylist) - 1]:
                 if enemies_in_fight[enemy]["hp"] != 0:
                     print(f"Enemy \033[35m{enemy+1}\033[0m: "+f"\033[1m{enemies[enemy]}\033[0m"+f' \033[33m{enemies_in_fight[enemy]["hp"]}\033[0m'+ f' (\033[36m{temp}\33[0m)',end=" | ")
             else:
                 if enemies_in_fight[enemy]["hp"] != 0:
-                    print(f"Enemy \033[35m{enemy + 1}\033[0m: " + f"\033[1m{enemies[enemy]}\033[0m"+ f' \033[33m{enemies_in_fight[enemy]["hp"]}\033[0m'+ f' (\033[36m{temp}\33[0m)')
+                    print(f"Enemy \033[35m{enemy + 1}\033[0m: " + f"\033[1m{enemies[enemy]}\033[0m"+ f' \033[33m{enemies_in_fight[enemy]["hp"]}\033[0m'+ f' (\033[36m{temp}\33[0m)\n----')
 
-        print(f"----\n\033[33m{hp}\033[0m | \033[35mSTRIKE\033[0m (\033[35m#\033[0m)\033[0m | \033[35mHEAL\033[0m ({heals}) | \33[35mGUARD\033[0m | \033[35mESCAPE\033[0m")
+        print(f"\033[33m{hp}\033[0m | \033[35mSTRIKE\033[0m (\033[35m#\033[0m)\033[0m | \033[35mHEAL\033[0m ({heals}) | \33[35mGUARD\033[0m | \033[35mESCAPE\033[0m")
         action = ""
         tempactionlist = ["guard", "escape"]
         for i in range(amount):
@@ -91,6 +97,7 @@ def fight(amount):
                         enemies_in_fight[enemynumber]["hp"] = 0
                         print(f"The \033[1m{enemies[enemynumber]}\033[0m loses all his stamina and decides to convert.")
                         changing_amount -= 1
+                        enemylist.remove(enemynumber)
                 else:
                     dmg = int(round(random.randint(3,6)))
                     print(f"The blow lands, dealing \033[31m{dmg}\033[0m damage.")
@@ -100,14 +107,20 @@ def fight(amount):
                         enemies_in_fight[enemynumber]["hp"] = 0
                         print(f"The \033[1m{enemies[enemynumber]}\033[0m loses all his stamina and decides to convert.")
                         changing_amount -= 1
+                        enemylist.remove(enemynumber)
             print("----")
             if changing_amount == 0:
-                print(f"Having converted all the heretics, your god blesses you with \033[32m${amount*100}\033[0m.")
-                money += amount*100
+                print(f"Having converted all the heretics, your god blesses you with \033[32m${amount*150}\033[0m.")
+                money += amount*150
+                converted_amount += 1
+                print("----")
                 fight_over = True
         elif action == "heal":
-            print("You reach for a red potion and drink it. You gain \033[33m9\033[0m stamina.")
-            hp += 9
+            heal_amount = random.randint(8,13) - hp
+            if heal_amount < 1:
+                heal_amount = 1
+            print(f"You reach for a red potion and drink from it. You gain \033[33m{heal_amount} stamina\033[0m.")
+            hp += heal_amount
             heals -= 1
             print("----")
         elif action == "guard":
@@ -130,7 +143,8 @@ def fight(amount):
                     enemies_in_fight[enemy]["spd"] = enemies_in_fight[enemy]["spd"] - 1
 
         if hp <= 0:
-            print("You lose all your stamina and land in a puddle of mud. The heretics win and leave the scene.")
+            print("You lose all your stamina and pass out for \033[34m10 days\033[0m. The heretics win and leave the scene.")
+            time -= 10
             fight_over = True
         guarding = False
 
