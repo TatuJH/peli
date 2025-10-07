@@ -743,7 +743,7 @@ def intro():
               "- You only have a limited number of actions on each airport, and if you don't depart as your last action, the spirit will catch you.\n"          
               "- Working gives you money, but costs you time.\n"
               "- Exploring consists of randomized events, which can both cost and reward money, time or artefacts.\n"
-              "- Converting heretics is a fighting minigame. The actions are as follows:\n"
+              "- Converting heretics is a fighting minigame. Winning nets you money. The actions are as follows:\n"
               "  STRIKE (#) decreases the selected enemy's stamina, but has a chance to miss.\n"
               "  HEAL (#) heals you based on your current stamina, and has limited uses.\n"
               "  GUARD decreases the amount of stamina you lose from enemy attacks.\n"
