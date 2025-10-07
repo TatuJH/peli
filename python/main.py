@@ -975,11 +975,26 @@ def shop():
                 if ar.continent == ct:
                     sm.append(ar)
             coward = False
+            ctemp=""
+            if ct == "SA":
+                ctemp = "South America"
+            elif ct == "EU":
+                ctemp = "Europe"
+            elif ct == "NA":
+                ctemp = "North America"
+            elif ct == "OC":
+                ctemp = "Oceania"
+            elif ct == "AS":
+                ctemp = "Asia"
+            elif ct == "AN":
+                ctemp = "Antarctica"
+            elif ct == "AF":
+                ctemp = "Africa"
             # Onko pelaajalla vain 1 valitun mantereen aarre?
             if len(sm) < 2:
                 while True:
                     p = input(
-                        f"That's your only artefact from \033[31m{ct}\033[0m. Are you sure you want to \033[35msell\033[0m it, or would you rather \033[35mback\033[0m out?\n> ").strip().lower()
+                        f"That's your only artefact from \033[31m{ctemp}\033[0m. Are you sure you want to \033[35msell\033[0m it, or would you rather \033[35mback\033[0m out?\n> ").strip().lower()
                     if p == "sell":
                         break
                     elif p == "back":
@@ -1037,11 +1052,26 @@ def remove_artefact(index):
 
 def list_artefacts(selling):
     if len(artefacts) > 0:
+        ctemp=""
         for a in artefacts:
+            if a.continent == "SA":
+                ctemp = "South America"
+            elif a.continent == "EU":
+                ctemp = "Europe"
+            elif a.continent == "NA":
+                ctemp = "North America"
+            elif a.continent == "OC":
+                ctemp = "Oceania"
+            elif a.continent == "AS":
+                ctemp = "Asia"
+            elif a.continent == "AN":
+                ctemp = "Antarctica"
+            elif a.continent == "AF":
+                ctemp = "Africa"
             if selling:
-                print(f"\033[35m{artefacts.index(a)+1}\033[0m: \033[33m{a.name}\033[0m from \033[31m{a.continent}\033[0m, \033[32m${a.value}\033[0m")
+                print(f"\033[35m{artefacts.index(a)+1}\033[0m: \033[33m{a.name}\033[0m from \033[31m{ctemp}\033[0m, \033[32m${a.value}\033[0m")
             else:
-                print(f"{artefacts.index(a) + 1}: \033[33m{a.name}\033[0m from \033[31m{a.continent}\033[0m, \033[32m${a.value}\033[0m")
+                print(f"{artefacts.index(a) + 1}: \033[33m{a.name}\033[0m from \033[31m{ctemp}\033[0m, \033[32m${a.value}\033[0m")
     else:
         pass
 
@@ -1101,8 +1131,6 @@ def event():
     #artefacts += events[event_id]["choices"][choice]["results"][outcome]["artefacts"]
     if events[event_id]["choices"][choice]["results"][outcome]["artefacts"] > 0:
         add_artefact(events[event_id]["choices"][choice]["results"][outcome]["artefacts"])
-
-import random
 
 def fight(amount):
     hp = 15 + amount * 5
@@ -1249,14 +1277,28 @@ def fight(amount):
             fight_over = True
         guarding = False
 
-
 def check_inventory():
     temp = ["your water bottle", "some snacks", "your phone", "a picture of mommy", "an amulet", "a dreamcatcher", "your lucky rock collection"]
     temp1 = random.choice(temp)
     global visited_countries
     print(f"You open your backpack and reach for {temp1}.")
     print("----")
-    print(f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m.")
+    ctemp=""
+    if cont == "SA":
+        ctemp = "South America"
+    elif cont == "EU":
+        ctemp = "Europe"
+    elif cont == "NA":
+        ctemp = "North America"
+    elif cont == "OC":
+        ctemp = "Oceania"
+    elif cont == "AS":
+        ctemp = "Asia"
+    elif cont == "AN":
+        ctemp = "Antarctica"
+    elif cont == "AF":
+        ctemp = "Africa"
+    print(f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{ctemp}\033[0m.")
     color_temp = [f"\033[31m{c}\033[0m" for c in visited_countries]
     if len(color_temp) > 1:
         text = ", ".join(color_temp[:-1]) + " and " + color_temp[-1]
@@ -1276,8 +1318,23 @@ def choose_continent():
     cont_temp = ""
     ant_temp = False
     new_cont = False
+    ctemp=""
+    if cont == "SA":
+        ctemp = "South America"
+    elif cont == "EU":
+        ctemp = "Europe"
+    elif cont == "NA":
+        ctemp = "North America"
+    elif cont == "OC":
+        ctemp = "Oceania"
+    elif cont == "AS":
+        ctemp = "Asia"
+    elif cont == "AN":
+        ctemp = "Antarctica"
+    elif cont == "AF":
+        ctemp = "Africa"
     print(
-        f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m. Other available continents are",
+        f"You are currently in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{ctemp}\033[0m. Other available continents are",
         end=" ")
 
     other_continents = list()
@@ -1287,15 +1344,45 @@ def choose_continent():
     other_continents.remove(cont)
 
     for i in range(len(other_continents)):
+        ctemp=""
+        if other_continents[i] == "SA":
+            ctemp = "\033[35mS\033[0m\033[31mouth\033[0m \033[35mA\033[0m\033[31mmerica\033[0m"
+        elif other_continents[i] == "EU":
+            ctemp = "\033[35mEu\033[0m\033[31mrope\033[0m"
+        elif other_continents[i] == "NA":
+            ctemp = "\033[35mN\033[0m\033[31morth\033[0m \033[35mA\033[0m\033[31mmerica\033[0m"
+        elif other_continents[i] == "OC":
+            ctemp = "\033[35mOc\033[0m\033[31meania\033[0m"
+        elif other_continents[i] == "AS":
+            ctemp = "\033[35mAs\033[0m\033[31mia\033[0m"
+        elif other_continents[i] == "AN":
+            ctemp = "\033[35mAn\033[0m\033[31mtarctica\033[0m"
+        elif other_continents[i] == "AF":
+            ctemp = "\033[35mAf\033[0m\033[31mrica\033[0m"
         if i < len(other_continents) - 2:
-            print(f"\033[35m{other_continents[i]}\033[0m", end=", ")
+            print(f"{ctemp}", end=", ")
         elif i < len(other_continents) - 1:
-            print(f"\033[35m{other_continents[i]}\033[0m", end=" and ")
+            print(f"{ctemp}", end=" and ")
         else:
-            print(f"\033[35m{other_continents[i]}\033[0m.")
+            print(f"{ctemp}.")
     if cont != "AN":
+        ctemp = ""
+        if cont == "SA":
+            ctemp = "South America"
+        elif cont == "EU":
+            ctemp = "Europe"
+        elif cont == "NA":
+            ctemp = "North America"
+        elif cont == "OC":
+            ctemp = "Oceania"
+        elif cont == "AS":
+            ctemp = "Asia"
+        elif cont == "AN":
+            ctemp = "Antarctica"
+        elif cont == "AF":
+            ctemp = "Africa"
         while cont_temp != "stay" or cont_temp not in other_continents:
-            cont_temp = input(f"You can either \033[35mstay\033[0m in \033[31m{cont}\033[0m or choose a new continent.\n> ").strip().upper()
+            cont_temp = input(f"You can either \033[35mstay\033[0m in \033[31m{ctemp}\033[0m or choose a new continent.\n> ").strip().upper()
             if cont_temp == "STAY" or cont_temp == cont:
                 cont = cont
                 new_cont = False
@@ -1348,13 +1435,24 @@ def BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica():
     if len(continents) > 0:
         print("----")
         print(f"You're missing artefacts from the following continents: ",end="")
-        lanka = [f"\033[31m{c}\033[0m" for c in continents]
+        mapping = {
+            "SA": "South America",
+            "EU": "Europe",
+            "NA": "North America",
+            "OC": "Oceania",
+            "AS": "Asia",
+            "AN": "Antarctica",
+            "AF": "Africa"
+        }
+
+        lanka = [f"\033[31m{mapping.get(c, 'Unknown')}\033[0m" for c in continents]
+
         if len(lanka) > 1:
-            text = ", ".join(lanka[:-1]) + ", " + lanka[-1]
+            text = ", ".join(lanka[:-1]) + " and " + lanka[-1] + "."
         else:
-            text = lanka[0]
+            text = lanka[0] + "."
+
         print(text)
-        print("----")
         return False
     else:
         print("----")
@@ -1427,8 +1525,22 @@ def choose_airport(new_cont, an):
     cursor.execute(sql)
     airport_results = cursor.fetchall()
     cursor.close()
-
-    print(f'Available airports in \033[31m{cont}\033[0m:')
+    ctemp = ""
+    if cont == "SA":
+        ctemp = "South America"
+    elif cont == "EU":
+        ctemp = "Europe"
+    elif cont == "NA":
+        ctemp = "North America"
+    elif cont == "OC":
+        ctemp = "Oceania"
+    elif cont == "AS":
+        ctemp = "Asia"
+    elif cont == "AN":
+        ctemp = "Antarctica"
+    elif cont == "AF":
+        ctemp = "Africa"
+    print(f'Available airports in \033[31m{ctemp}\033[0m:')
 
     for i in range(len(airport_results)):
         if new_cont:
@@ -1488,8 +1600,22 @@ def choose_airport(new_cont, an):
             money_modifier = 1
         # RIP suorituskyky
         get_all_events()
-
-        print(f"You arrive in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m.")
+        ctemp = ""
+        if cont == "SA":
+            ctemp = "South America"
+        elif cont == "EU":
+            ctemp = "Europe"
+        elif cont == "NA":
+            ctemp = "North America"
+        elif cont == "OC":
+            ctemp = "Oceania"
+        elif cont == "AS":
+            ctemp = "Asia"
+        elif cont == "AN":
+            ctemp = "Antarctica"
+        elif cont == "AF":
+            ctemp = "Africa"
+        print(f"You arrive in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{ctemp}\033[0m.")
         uncompleted_events = []
         for i in events:
             uncompleted_events.append(i)
@@ -1659,8 +1785,23 @@ def check_gameover(nomoneyforairport):
                 game_loop()
             elif temp == "decline":
                 print(f"----\nGame over.\n----")
+                ctemp = ""
+                if cont == "SA":
+                    ctemp = "South America"
+                elif cont == "EU":
+                    ctemp = "Europe"
+                elif cont == "NA":
+                    ctemp = "North America"
+                elif cont == "OC":
+                    ctemp = "Oceania"
+                elif cont == "AS":
+                    ctemp = "Asia"
+                elif cont == "AN":
+                    ctemp = "Antarctica"
+                elif cont == "AF":
+                    ctemp = "Africa"
                 print(
-                    f"Your journey ended in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{cont}\033[0m.")
+                    f"Your journey ended in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{ctemp}\033[0m.")
                 color_temp = [f"\033[31m{c}\033[0m" for c in visited_countries]
                 if len(color_temp) > 1:
                     text = ", ".join(color_temp[:-1]) + " and " + color_temp[-1]
