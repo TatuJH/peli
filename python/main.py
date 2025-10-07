@@ -38,7 +38,7 @@ def get_all_events():
                 "accept":{
                     "cost":{f"money":200,"time":0,"artefacts":0},
                     "results":{
-                        1:{"money":0,"time":15,"artefacts":0,"text":"You bought yourself some time. \033[34m15 days\033[0m to be exact."}
+                        1:{"money":0,"time":15,"artefacts":0,"text":"You bought yourself some time. \033[34m10 days\033[0m to be exact."}
                     }
                 },
                 "decline":{
@@ -84,7 +84,7 @@ def get_all_events():
                     "results":{
                         1:{"money":0,"time":0,"artefacts":1,"text":"Something rumbles. A hatch opens underneath the monument, revealing an \033[33martefact\033[0m. The gods must be pleased."},
                         2:{"money":0,"time":-15,"artefacts":1,"text":"The monument shakes and reveals something behind it. You look closer and fall into a coma. You wake up \033[34m15 days\033[0m later and find an \033[33martefact\033[0m next to you."},
-                        3:{"money":int(round(-100*money_modifier)),"time":-10,"artefacts":0,"text": "The monument starts glowing red. The gods didn't seem to like your praying. You feel a curse sweeping through you, draining you of \033[32m${int(round(100*money_modifier))}\033[0m and \033[34m10 days\033[0m."}
+                        3:{"money":int(round(-100*money_modifier)),"time":-10,"artefacts":0,"text": f"The monument starts glowing red. The gods didn't seem to like your praying. You feel a curse sweeping through you, draining you of \033[32m${int(round(100*money_modifier))}\033[0m and \033[34m10 days\033[0m."}
 
                     }
                 },
@@ -401,8 +401,8 @@ def get_all_events():
                             "text": "You come to the conclusion that it's just the wind. When you wake up, you notice that nothing has changed."},
                         2: {"money": 0, "time": 0, "artefacts": -1,
                             "text": "As you go back to sleep, a humanoid figure rushes into your tent and knocks you unconscious. When you wake up, you notice that an \033[33martefact\033[0m has been stolen from you."},
-                        3: {"money": 0, "time": 15, "artefacts": 0,
-                            "text": "You go back to sleep and see a vision of your god. He praises your faith and rewards you with \033[34m15 days\033[0m' extra time."}
+                        3: {"money": 0, "time": 10, "artefacts": 0,
+                            "text": "You go back to sleep and see a vision of your god. He praises your faith and rewards you with \033[34m10 days\033[0m' extra time."}
                     }
                 },
                 "hide": {
