@@ -1431,9 +1431,9 @@ def choose_airport(new_cont, an):
 
     for i in range(len(airport_results)):
         if new_cont:
-            if money >= int(costs[i] * 1.5):
+            if money >= int(costs[i] + 200):
                 latlong_temp = (airport_results[i]["latitude"], airport_results[i]["longitude"])
-                print(f'\033[35m{i+1}\033[0m: \033[31m{airport_results[i]["name"]}\033[0m, a {airport_results[i]["type"].replace("_"," ")} in \033[31m{airport_results[i]["country"]}\033[0m - \033[36m{int(round(distance.distance(latlong,latlong_temp).km))} km\033[0m - \033[32m${int(costs[i] * 1.5)}\033[0m, \033[34m10 days\033[0m')
+                print(f'\033[35m{i+1}\033[0m: \033[31m{airport_results[i]["name"]}\033[0m, a {airport_results[i]["type"].replace("_"," ")} in \033[31m{airport_results[i]["country"]}\033[0m - \033[36m{int(round(distance.distance(latlong,latlong_temp).km))} km\033[0m - \033[32m${int(costs[i] + 200)}\033[0m, \033[34m10 days\033[0m')
                 airport_names_temp.append(airport_results[i]["name"])
                 airport_sizes_temp.append(airport_results[i]["type"])
                 airport_country_temp.append(airport_results[i]["country"])
@@ -1470,7 +1470,7 @@ def choose_airport(new_cont, an):
             latlong = dest
 
         if new_cont:
-            money -= int(costs[answer_temp-1] * 1.5)
+            money -= int(costs[answer_temp-1] + 200)
             time -= 10
         else:
             money -= int(costs[answer_temp-1])
