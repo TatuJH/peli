@@ -265,7 +265,8 @@ def get_all_events():
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": 20, "artefacts": 0,
-                            "text": "You walk the rest of the trail and feel completely at peace. As if you have \033[34mno rush at all.\033[0m"},
+                            "text": "You walk the rest of the trail and feel completely at peace. As if you have no rush at all.\n"
+                                    "The sense of calmness extends your time by \033{34m10 days\033[0m."},
                         2: {"money": 0, "time": -5, "artefacts": 0,
                             "text": "You forgot to read the length of the trail and walk a ridiculous distance.\nYou spend \033[34m5\033[0m days in various lodges along the trail until you finally get to the end."},
                         3: {"money": 0, "time": 0, "artefacts": 0,
