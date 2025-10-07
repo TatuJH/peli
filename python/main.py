@@ -163,9 +163,9 @@ def get_all_events():
                         1:{"money":int(round(300*money_modifier)),"time":0,"artefacts":0,"text":f"You toss the coin into the well and a bag of money falls from the sky. You're not sure how, but you also don't really care. Inside it you find \033[32m${int(round(300*money_modifier))}\033[0m."},
                         2:{"money":int(round(450*money_modifier)),"time":0,"artefacts":0,"text":f"You toss the coin into the well and a bag of money falls from the sky. You're not sure how, but you also don't really care. Inside it you find \033[32m${int(round(450*money_modifier))}\033[0m."},
                         3:{"money":int(round(600*money_modifier)),"time":0,"artefacts":0,"text":f"You toss the coin into the well and a bag of money falls from the sky. You're not sure how, but you also don't really care. Inside it you find \033[32m${int(round(600*money_modifier))}\033[0m."},
-                        4:{"money":0,"time":30,"artefacts":0,"text":"You toss the coin into the well and feel a surge of energy coursing through you. You receive \033[34m30 days\033[0m."},
-                        5:{"money":0,"time":45,"artefacts":0,"text":"You toss the coin into the well and feel a surge of energy coursing through you. You receive \033[34m45 days\033[0m."},
-                        6:{"money":0,"time":60,"artefacts":0,"text":"You toss the coin into the well and feel a surge of energy coursing through you. You receive \033[34m60 days\033[0m."}
+                        4:{"money":0,"time":20,"artefacts":0,"text":"You toss the coin into the well and feel a surge of energy coursing through you. You receive \033[34m20 days\033[0m."},
+                        5:{"money":0,"time":30,"artefacts":0,"text":"You toss the coin into the well and feel a surge of energy coursing through you. You receive \033[34m30 days\033[0m."},
+                        6:{"money":0,"time":40,"artefacts":0,"text":"You toss the coin into the well and feel a surge of energy coursing through you. You receive \033[34m40 days\033[0m."}
                     }
                 },
                 "pass":{
@@ -239,8 +239,8 @@ def get_all_events():
                 "surroundings":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
-                        1:{"money":0,"time":-5,"artefacts":1,"text":"You walk around the building, and see a pile of dirt with a shovel beside it. You decide to dig and after \033[34m5 days\033[0m, your shovel hits an \033[33martefact\033[0m."},
-                        2:{"money":0,"time":0,"artefacts":0,"text":"You don't really see anything after a walk around the building. You decide to just leave it be."}
+                        1:{"money":0,"time":-10,"artefacts":1,"text":"You walk around the building, and see a pile of dirt with a shovel beside it. You decide to dig and after \033[34m10 days\033[0m, your shovel hits an \033[33martefact\033[0m."},
+                        2:{"money":0,"time":-5,"artefacts":0,"text":"You don't really see anything after a walk around the building for quite a while. You decide to just leave it be and lose \033[34m5 days\033[0m."}
                     }
                 },
                 "away":{
@@ -260,8 +260,8 @@ def get_all_events():
                     "results": {
                         1: {"money": 0, "time": 10, "artefacts": 0,
                             "text": "You walk the rest of the trail and feel completely at peace, as if you have no rush at all. The sense of calmness extends your time by \033{34m10 days\033[0m."},
-                        2: {"money": 0, "time": -5, "artefacts": 0,
-                            "text": "You forgot to read the length of the trail and walk a ridiculous distance. You spend \033[34m5\033[0m days in various lodges along the trail until you finally get to the end."},
+                        2: {"money": 0, "time": -10, "artefacts": 0,
+                            "text": "You forgot to read the length of the trail and walk a ridiculous distance. You spend \033[34m10\033[0m days in various lodges along the trail until you finally get to the end."},
                         3: {"money": 0, "time": 0, "artefacts": 0,
                             "text": "You find the quickest way out of the trail and get back on your journey."},
                     }
@@ -269,10 +269,10 @@ def get_all_events():
                 "greet": {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
-                        1: {"money": 0, "time": -5, "artefacts": 1,
-                            "text": "You spend \033[34m5 days\033[0m living with the tribesmen, who teach you their ways. Happy about your stay, they send you off with an \033[33martefact\033[0m."},
-                        2: {"money": 0, "time": 0, "artefacts": 0,
-                            "text": "You greet the tribesmen and are treated to seemingly endless tales about the people who used to live in these lands. \nYou fall asleep out of boredom and get kicked out of the camp for this."}
+                        1: {"money": 0, "time": -15, "artefacts": 1,
+                            "text": "You spend \033[34m15 days\033[0m living with the tribesmen, who teach you their ways. Happy about your stay, they send you off with an \033[33martefact\033[0m."},
+                        2: {"money": 0, "time": -10, "artefacts": 0,
+                            "text": "You greet the tribesmen and are treated to seemingly endless tales about the people who used to live in these lands. \nYou fall asleep out of boredom and get kicked out of the camp for this, losing \033[34m10 days\033[0m."}
                     }
                 },
                 "steal": {
@@ -1494,8 +1494,11 @@ def airport_actions():
     global money_earned
 
     achievement()
+
+    i = random.randint(1,10)
     if cont != "AN":
-        quiz(cont)
+        if i <= 4:
+            quiz(cont)
 
     # muokattava lista
     all_actions = ["work", "explore", "auction", "check", "depart", "convert"]
