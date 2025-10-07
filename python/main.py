@@ -428,7 +428,7 @@ achievements = {
         (30000,"\033[1mBeginner Traveler\033[0m for travelling \033[36m30000 km\033[0m",50),
         (60000,"\033[1mIntermediate Traveler\033[0m for travelling \033[36m60000 km\033[0m",100),
         (100000,"\033[1mAdvanced Traveler\033[0m for travelling \033[36m100000 km\033[0m",150),
-        (200000,"\033[1mMaster Traveler\033[0m for travelling .\033[36m200000 km\033[0m",200),
+        (200000,"\033[1mMaster Traveler\033[0m for travelling \033[36m200000 km\033[0m",200),
         (9999999999999999999999,"error",999999999999)
     ],
     "countries":[
@@ -1645,12 +1645,13 @@ def achievement():
         print("You've achieved",achievements["countries"][countries_index][1],f"and earned \033[32m${achievements['countries'][countries_index][2]}\033[0m.")
         print("----")
         money += achievements["countries"][countries_index][2]
-        countries_index += 1
         achieved.append(achievements["countries"][countries_index][1])
+        countries_index += 1
     if money_earned >= achievements["money"][money_index][0]:
         print("You've achieved",achievements["money"][money_index][1],f"and earned \033[32m${achievements['money'][money_index][2]}\033[0m.")
         print("----")
         money += achievements["money"][money_index][2]
+        achieved.append(achievements["money"][money_index][1])
         money_index += 1
     if total_distance >= achievements["distance"][distance_index][0]:
         if distance_index != 0:
@@ -1660,23 +1661,25 @@ def achievement():
             print(f"You've achieved {achievements['distance'][distance_index][1]}.")
             print("----")
         money += achievements["distance"][distance_index][2]
-        distance_index += 1
         achieved.append(achievements["distance"][distance_index][1])
+        distance_index += 1
     if artefacts_earned >= achievements["artefacts"][artefacts_index][0]:
         print("You've achieved",achievements["artefacts"][artefacts_index][1],f"and earned \033[32m${achievements['artefacts'][artefacts_index][2]}\033[0m.")
         print("----")
         money += achievements["artefacts"][artefacts_index][2]
-        artefacts_index += 1
         achieved.append(achievements["artefacts"][artefacts_index][1])
+        artefacts_index += 1
     if events_completed >= achievements["events"][events_index][0]:
         print("You've achieved",achievements["events"][events_index][1],f"and earned \033[32m${achievements['events'][events_index][2]}\033[0m.")
         print("----")
         money += achievements["events"][events_index][2]
+        achieved.append(achievements["events"][events_index][1])
         events_index += 1
     if converted_amount >= achievements["convert"][convert_index][0]:
         print("You've achieved", achievements["convert"][convert_index][1],f"and earned \033[32m${achievements['convert'][convert_index][2]}\033[0m.")
         print("----")
         money += achievements["convert"][convert_index][2]
+        achieved.append(achievements["convert"][convert_index][1])
         convert_index += 1
 
 def all_artefacts_test():
