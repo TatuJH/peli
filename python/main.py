@@ -20,7 +20,7 @@ def get_all_events():
                     "results":{
                         1:{f"money":int(round(300*money_modifier)),"time":0,"artefacts":0,"text":f"The opportunity actually paid out. You earned \033[32m${int(round(300*money_modifier))}.\033[0m"},
                         2:{"money":0,"time":0,"artefacts":0,"text":f"The opportunity was real... But you lost your \033[32m${int(round(100*money_modifier))}\033[0m."},
-                        3:{"money":int(round(200*money_modifier)),"time":-5,"artefacts":0,"text":f"The man takes off running! You chase him and get your \033[32m${int(round(100*money_modifier))}\033[0m back. You also manage to snatch \033[32m${int(round(100*money_modifier))}\033[0m extra from him, but lose \033[34m5 days\033[0m in the process."}
+                        3:{"money":int(round(200*money_modifier)),"time":-10,"artefacts":0,"text":f"The man takes off running! You chase him and get your \033[32m${int(round(100*money_modifier))}\033[0m back. You also manage to snatch \033[32m${int(round(100*money_modifier))}\033[0m extra from him, but lose \033[34m10 days\033[0m in the process."}
                     }
                 },
                 "decline":{
@@ -32,11 +32,11 @@ def get_all_events():
             }
         },
         2:{
-            "event":f"You meet a witch, who says she can buy you time. Literally. She offers you \033[34m15 days\033[0m in exchange for \033[32m${int(round(100*money_modifier))}\033[0m.",
+            "event":f"You meet a witch, who says she can buy you time. Literally. She offers you \033[34m10 days\033[0m in exchange for \033[32m$200\033[0m.",
             "input":"Do you \033[35maccept\033[0m or \033[35mdecline\033[0m the offer?",
             "choices":{
                 "accept":{
-                    "cost":{f"money":int(round(100*money_modifier)),"time":0,"artefacts":0},
+                    "cost":{f"money":200,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":0,"time":15,"artefacts":0,"text":"You bought yourself some time. \033[34m15 days\033[0m to be exact."}
                     }
@@ -44,7 +44,7 @@ def get_all_events():
                 "decline":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
-                        1:{"money":0,"time":-5,"artefacts":0,"text":"The witch gets mad at you declining her offer. She curses you, draining you of \033[34m5 days\033[0m."}
+                        1:{"money":0,"time":-10,"artefacts":0,"text":"The witch gets mad at you declining her offer. She curses you, draining you of \033[34m10 days\033[0m."}
                     }
                 }
             }
@@ -82,7 +82,10 @@ def get_all_events():
                 "knees":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
-                        1:{"money":0,"time":0,"artefacts":1,"text":"Something rumbles. A hatch opens underneath the monument, revealing an \033[33martefact\033[0m. The gods must be pleased."}
+                        1:{"money":0,"time":0,"artefacts":1,"text":"Something rumbles. A hatch opens underneath the monument, revealing an \033[33martefact\033[0m. The gods must be pleased."},
+                        2:{"money":0,"time":-15,"artefacts":1,"text":"The monument shakes and reveals something behind it. You look closer and fall into a coma. You wake up \033[34m15 days\033[0m later and find an \033[33martefact\033[0m next to you."},
+                        3:{"money":int(round(-100*money_modifier)),"time":-10,"artefacts":0,"text": "The monument starts glowing red. The gods didn't seem to like your praying. You feel a curse sweeping through you, draining you of \033[32m${int(round(100*money_modifier))}\033[0m and \033[34m10 days\033[0m."}
+
                     }
                 },
                 "standing":{
@@ -584,7 +587,7 @@ for eve in events:
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demogame',
+    database='demokanta',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -1531,13 +1534,13 @@ def airport_actions():
             print("----")
             achievement()
         elif action == "explore":
+            time -= 5
             event()
             achievement()
-            time -= 5
         elif action == "auction":
+            time -= 5
             shop()
             achievement()
-            time -= 5
         elif action == "check":
             check_inventory()
             # reppuun katsominen ei vie paljon aikaa
