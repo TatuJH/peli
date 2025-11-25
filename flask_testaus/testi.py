@@ -1,5 +1,42 @@
+import mysql.connector
+
+conn = mysql.connector.connect(
+    host='localhost',
+    port=3306,
+    database='demokanta',
+    user='tatu',
+    password='Tietokannat1',
+    autocommit=True
+)
 
 money_modifier = 1
+
+#{scorelist[scoretemp][0]}: {scorelist[scoretemp][1]}
+
+def scores():
+    sql = "SELECT id, score FROM scores WHERE score IN (SELECT MAX(score) FROM scores);"
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    highest = cursor.fetchall()
+
+    if len(highest) > 0:
+        print(f"Your highest score was {highest[0][1]} in game {highest[0][0]}.")
+        sql = "SELECT * FROM scores;"
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        scorelist = cursor.fetchall()
+        scorelist2 = {}
+        for scoretemp in range(len(scorelist)):
+            scorelist2[scorelist[scoretemp][0]] = scorelist[scoretemp][1]
+
+        print(scorelist2)
+        return scorelist2
+
+scores()
+
+def events(numero):
+    return f'{eventit[numero]["event"]}'
+
 eventit = {
         1:{
             "event":f"You are given an investment opportunity on the street by a man in a trench coat. He says that by giving him \033[32m${int(round(100*money_modifier))}\033[0m you could make \033[32m${int(round(300*money_modifier))}\033[0m." ,

@@ -16,9 +16,16 @@ for (let button of buttons) {
 }
 
 async function a(action, number) {
+    if (action === "event") {
   response = await fetch(`http://127.0.0.1:3000/${action}/${number}`);
   data = await response.json();
   update(data)
+    }
+    else if (action === "scores") {
+        response = await fetch(`http://127.0.0.1:3000/${action}`);
+        data = await response.json();
+         update(data)
+    }
 }
 
 function update(info) {

@@ -42,3 +42,24 @@
 .intro_button:hover {
     background: #d5d5d5;
 }
+
+.main_nav {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.main_nav p {
+    margin: 0;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.main_header {
+    background-color: #32659B;
+    display: flex;
+    align-items: flex-start;
+    padding: 0 20px;
+    height: 5rem;
+    justify-content: flex-start;
+}

@@ -7,6 +7,24 @@ money = 0
 
 app = flask.Flask(__name__)
 CORS(app)
+
+@app.route('/scores', methods=['GET', 'POST'])
+def score():
+
+    teksti = ""
+
+    scores = testi.scores()
+
+    for i in range(len(scores)):
+        teksti = teksti + f', {scores[i + 1]}'
+
+    answer = {
+        "text" : teksti,
+        "money" : 0
+    }
+
+    return answer
+
 @app.route('/event/<nr>', methods=['GET', 'POST'])
 def event(nr):
     global money
