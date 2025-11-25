@@ -1,4 +1,4 @@
-body {
+.intro_body {
     margin: 0;
     height: 650px;
     display: flex;
@@ -6,9 +6,15 @@ body {
     align-items: center;
     background: #669ee8;
     font-family: Arial, sans-serif;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.background {
+.instructions_text {
+    width: 66%;
+}
+
+.intro_background {
     width: 500px;
     padding: 12px;
     box-sizing: border-box;
@@ -16,7 +22,7 @@ body {
     border-radius: 10px;
 }
 
-.buttons {
+.intro_buttons {
 
     display: flex;
     flex-direction: column;
@@ -26,13 +32,13 @@ body {
     border-radius: 10px;
 }
 
-button {
+.intro_button {
     padding: 12px 20px;
     font-size: 30px;
     border-radius: 6px;
     background: #e0e0e0;
 }
 
-button:hover {
+.intro_button:hover {
     background: #d5d5d5;
 }
