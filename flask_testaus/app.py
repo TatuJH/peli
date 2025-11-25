@@ -1,3 +1,5 @@
+import random
+
 import flask
 from flask import Flask, render_template, request, session
 from flask_cors import CORS
@@ -28,8 +30,13 @@ def score():
 @app.route('/event/<nr>', methods=['GET', 'POST'])
 def event(nr):
     global money
-    teksti = testi.events(int(nr))
+    nr = int(nr)
+    if nr == 0:
+        nr = random.randint(1, len(testi.eventit))
 
+
+
+    teksti = testi.events(nr)
     money += 10
 
     answer = {
