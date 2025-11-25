@@ -10,6 +10,21 @@ money = 0
 app = flask.Flask(__name__)
 CORS(app)
 
+@app.route('/intro_text', methods=['GET', 'POST'])
+def introduction():
+
+    teksti = testi.intro_text()
+
+    answer = {
+        "text" : teksti,
+        "money" : 0
+    }
+
+    print(answer)
+
+    return answer
+
+
 @app.route('/scores', methods=['GET', 'POST'])
 def score():
 

@@ -11,7 +11,34 @@ conn = mysql.connector.connect(
 
 money_modifier = 1
 
-#{scorelist[scoretemp][0]}: {scorelist[scoretemp][1]}
+def intro_text():
+    intro_text1 = ("You belong in a cult dead-set on waking up an ancient god."
+                   "After centuries of hard work, the moment is finally at hand."
+                   "You arrive in an ancient chamber located in Antarctica. The chamber smells of sulfur and debris on the ground seems to move on its own."
+                   "In the middle of the chamber lies a circle made of lit candles. You step in, and start performing a ritual."
+                   "You feel the air rising as a fading projection of your god appears in front of you. You hear a deep voice."
+                   "The voice commands you to bring him six artefacts - one from each of the other continents - to finish the ritual."
+                   "After you have found and collected an artefact from every other continent, you shall return to Antarctica."
+                   "You are given limited time to complete your quest - otherwise the ritual fails."
+                   "In addition, to ensure your obedience, a spirit is sent after you. You feel as if you don't want to make contact with it."
+                   "You leave the chamber as a waning voice behind you asks you to hurry.<br>")
+
+    intro_text2 = ("Important things to note:"
+                   "- You only have a limited number of actions on each airport, and if you don't depart as your last action, the spirit will catch you."
+                   "- Working gives you money, but costs you time."
+                   "- Exploring consists of randomized events, which can both cost and reward money, time or artefacts."
+                   "- Converting heretics is a fighting minigame. Winning nets you money. The actions are as follows:"
+                   "  STRIKE (#) decreases the selected enemy's stamina, but has a chance to miss."
+                   "  HEAL (#) heals you based on your current stamina, and has limited uses."
+                   "  GUARD decreases the amount of stamina you lose from enemy attacks."
+                   "- In the auction house you can either buy or sell artefacts."
+                   "- Each action consumes days in addition to other costs."
+                   "- Traveling to another continent costs more."
+                   "- Airport size determines the cost of travel and affects some rewards.")
+    intro_texts = intro_text1 + intro_text2
+    return intro_texts
+
+print(intro_text())
 
 def scores():
     sql = "SELECT id, score FROM scores WHERE score IN (SELECT MAX(score) FROM scores);"
