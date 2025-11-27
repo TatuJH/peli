@@ -40,11 +40,20 @@ let data = "";
 // //     stats.textContent = 'Money: ' + info['money'];
 // // }
 
-const eventdiv = document.getElementById('eventdiv');
-const button = document.getElementById("event");
-const stats = document.getElementById("stats");
 
-button.addEventListener('click', async function(evt) {
+
+const eventdiv = document.getElementById('eventdiv');
+const stats = document.getElementById("stats");
+const geteventbtn = document.createElement("button");
+geteventbtn.classList.add('button');
+geteventbtn.id = 'event';
+geteventbtn.textContent = 'EVENT';
+
+eventdiv.appendChild(geteventbtn);
+
+const eventbtn = document.getElementById("event");
+
+eventbtn.addEventListener('click', async function(evt) {
     evt.preventDefault();
 
     eventdiv.innerHTML = '';
@@ -93,10 +102,14 @@ button.addEventListener('click', async function(evt) {
             eventdiv.appendChild(text);
 
             stats.textContent = `Money: ${money}, time: ${time}`;
+
+            eventdiv.appendChild(eventbtn);
             } else {
                 const error = document.createElement('p');
                 error.textContent = 'Not enough resources';
                 eventdiv.appendChild(error);
+
+                eventdiv.appendChild(eventbtn);
             }
         })
         eventdiv.appendChild(eventbutton);
