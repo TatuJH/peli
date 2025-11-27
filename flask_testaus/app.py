@@ -6,6 +6,7 @@ from flask_cors import CORS
 import testi
 
 money = 0
+time = 0
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -20,7 +21,6 @@ def introduction():
         "money" : 0
     }
 
-    print(answer)
 
     return answer
 
@@ -42,22 +42,42 @@ def score():
 
     return answer
 
-@app.route('/event/<nr>', methods=['GET', 'POST'])
-def event(nr):
+# @app.route('/event/<nr>', methods=['GET', 'POST'])
+# def event(nr):
+#     global money
+#     nr = int(nr)
+#     if nr == 0:
+#         nr = random.randint(1, len(testi.eventit))
+#
+#
+#
+#     teksti = testi.events(nr)
+#     money += 10
+#
+#     answer = {
+#         "text" : teksti,
+#         "money" : money
+#     }
+#     return answer
+
+@app.route('/getevent', methods=['GET', 'POST'])
+def getevent():
     global money
-    nr = int(nr)
-    if nr == 0:
-        nr = random.randint(1, len(testi.eventit))
+    global time
+    nr = random.randint(1, len(testi.eventit))
 
+    response = testi.get_event(nr)
 
+    return response
 
-    teksti = testi.events(nr)
-    money += 10
+@app.route('/eventresult/<number>/<choice>', methods=['GET', 'POST'])
+def eventresult(number, choice):
+    global money
+    global time
+    nr = int(number)
 
-    answer = {
-        "text" : teksti,
-        "money" : money
-    }
-    return answer
+    response = testi.get_event_result(nr, choice)
+
+    return response
 
 app.run(use_reloader=True, host='127.0.0.1', port=3000)
