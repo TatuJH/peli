@@ -461,7 +461,7 @@ eventit = {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": -5, "artefacts": 0,
-                            "text": "You get into a fetal position under a blanket and wait out the entire night. Morning comes and you feel exhausted. Your sleep debt costs you \33[5 days."},
+                            "text": "You get into a fetal position under a blanket and wait out the entire night. Morning comes and you feel exhausted. Your sleep debt costs you 5 days."},
                         2: {"money": 0, "time": 0, "artefacts": 0,
                             "text": "You quickly grab your belongings and hide under a pile of clothes. You hear someone stepping in and looking around. Thankfully, they don't notice you."}
                     }
