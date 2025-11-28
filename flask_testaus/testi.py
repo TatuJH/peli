@@ -4,7 +4,7 @@ import random
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demokanta',
+    database='demogame',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -47,7 +47,6 @@ def scores():
     highest = cursor.fetchall()
 
     if len(highest) > 0:
-        print(f"Your highest score was {highest[0][1]} in game {highest[0][0]}.")
         sql = "SELECT * FROM scores;"
         cursor = conn.cursor()
         cursor.execute(sql)
@@ -55,8 +54,6 @@ def scores():
         scorelist2 = {}
         for scoretemp in range(len(scorelist)):
             scorelist2[scorelist[scoretemp][0]] = scorelist[scoretemp][1]
-
-        print(scorelist2)
         return scorelist2
 
 scores()
@@ -500,4 +497,43 @@ def get_event_result(numero, choice):
         "time" : eventit[numero]["choices"][choice]["results"][result]["time"],
         "artefacts" : eventit[numero]["choices"][choice]["results"][result]["artefacts"]
     }
+
+def start_fight(amount):
+    player_hp = 10 + 5 * amount
+    player_heals = 0 + amount // 2
+
+    # hp, dmg, dodge, speed
+    types = {
+        "Bulwark": [16, 7, 1, 3],
+        "Warden": [10, 4, 2.5, 2],
+        "Vessel": [7, 2, 4, 0],
+        "Zealot": [12, 3, 3, 1]
+    }
+    enemies_in_fight = {}
+    for i in range(amount):
+        enemies_in_fight[int(i)] = {
+            "type": "",
+            "hp": 0,
+            "dmg": 0,
+            "ddg": 0,
+            "spd": 0,
+            "d_spd": 0,
+        }
+    for enemy in range(amount):
+        enemies_in_fight[enemy]["type"] = random.choice(list(types.keys()))
+        enemies_in_fight[enemy]["hp"] = types[enemies_in_fight[enemy]["type"]][0]
+        enemies_in_fight[enemy]["dmg"] = types[enemies_in_fight[enemy]["type"]][1]
+        enemies_in_fight[enemy]["ddg"] = types[enemies_in_fight[enemy]["type"]][2]
+        enemies_in_fight[enemy]["spd"] = types[enemies_in_fight[enemy]["type"]][3]
+        enemies_in_fight[enemy]["d_spd"] = types[enemies_in_fight[enemy]["type"]][3]
+
+    return {
+        "text": f"You find a group of {amount} robed men. You prepare to convert them, no matter the cost.",
+        "player_hp": player_hp,
+        "player_heals": player_heals,
+        "enemies_in_fight": enemies_in_fight,
+        "amount": amount,
+        "guarding": False
+    }
+
 

@@ -1,8 +1,5 @@
 import random
 
-from python.main import converted_amount
-
-
 def fight(amount):
     hp = 15 + amount * 5
     heals = amount // 2
@@ -111,8 +108,6 @@ def fight(amount):
             print("----")
             if changing_amount == 0:
                 print(f"Having converted all the heretics, your god blesses you with \033[32m${amount*150}\033[0m.")
-                money += amount*150
-                converted_amount += 1
                 print("----")
                 fight_over = True
         elif action == "heal":
@@ -144,7 +139,6 @@ def fight(amount):
 
         if hp <= 0:
             print("You lose all your stamina and pass out for \033[34m10 days\033[0m. The heretics win and leave the scene.")
-            time -= 10
             fight_over = True
         guarding = False
 
