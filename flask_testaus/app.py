@@ -16,6 +16,8 @@ def introduction():
 
     teksti = testi.intro_text()
 
+    
+
     answer = {
         "text" : teksti,
         "money" : 0
@@ -25,19 +27,13 @@ def introduction():
     return answer
 
 
-@app.route('/scores', methods=['GET', 'POST'])
+@app.route('/scores', methods=['GET'])
 def score():
-
-    teksti = ""
 
     scores = testi.scores()
 
-    for i in range(len(scores)):
-        teksti = teksti + f', {scores[i + 1]}'
-
     answer = {
-        "text" : teksti,
-        "money" : 0
+        "scores" : scores
     }
 
     return answer

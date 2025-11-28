@@ -4,7 +4,7 @@ import random
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demogame',
+    database='demokanta',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -24,20 +24,20 @@ def intro_text():
                    "In addition, to ensure your obedience, a spirit is sent after you. You feel as if you don't want to make contact with it."
                    "You leave the chamber as a waning voice behind you asks you to hurry.<br>")
 
-    intro_text2 = ("Important things to note:"
-                   "- You only have a limited number of actions on each airport, and if you don't depart as your last action, the spirit will catch you."
-                   "- Working gives you money, but costs you time."
-                   "- Exploring consists of randomized events, which can both cost and reward money, time or artefacts."
-                   "- Converting heretics is a fighting minigame. Winning nets you money. The actions are as follows:"
-                   "  STRIKE (#) decreases the selected enemy's stamina, but has a chance to miss."
-                   "  HEAL (#) heals you based on your current stamina, and has limited uses."
-                   "  GUARD decreases the amount of stamina you lose from enemy attacks."
-                   "- In the auction house you can either buy or sell artefacts."
-                   "- Each action consumes days in addition to other costs."
-                   "- Traveling to another continent costs more."
+    intro_text2 = ("Important things to note:",
+                   "- You only have a limited number of actions on each airport, and if you don't depart as your last action, the spirit will catch you.",
+                   "- Working gives you money, but costs you time.",
+                   "- Exploring consists of randomized events, which can both cost and reward money, time or artefacts.",
+                   "- Converting heretics is a fighting minigame. Winning nets you money. The actions are as follows:",
+                   "  STRIKE (#) decreases the selected enemy's stamina, but has a chance to miss.",
+                   "  HEAL (#) heals you based on your current stamina, and has limited uses.",
+                   "  GUARD decreases the amount of stamina you lose from enemy attacks.",
+                   "- In the auction house you can either buy or sell artefacts.",
+                   "- Each action consumes days in addition to other costs.",
+                   "- Traveling to another continent costs more.",
                    "- Airport size determines the cost of travel and affects some rewards.")
-    intro_texts = intro_text1 + intro_text2
-    return intro_texts
+
+    return intro_text1, intro_text2
 
 
 def scores():
