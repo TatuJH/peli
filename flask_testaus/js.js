@@ -40,6 +40,7 @@ let data = "";
 
 const div = document.getElementById("div");
 const eventdiv = document.createElement('div');
+const invdiv = document.getElementById("inventory")
 eventdiv.id = "eventdiv";
 div.appendChild(eventdiv);
 const stats = document.getElementById("stats");
@@ -47,6 +48,7 @@ const geteventbtn = document.createElement("button");
 geteventbtn.classList.add('button');
 geteventbtn.id = 'event';
 geteventbtn.textContent = 'EVENT';
+
 
 eventdiv.appendChild(geteventbtn);
 
@@ -81,19 +83,27 @@ eventbtn.addEventListener('click', async function(evt) {
         eventbutton.setAttribute('artefacts', data['artefacts_costs'][i]);
         eventbutton.addEventListener('click', async function(evt) {
             evt.preventDefault();
-            if (data['money'] >= eventbutton.getAttribute('money') && data['time'] >= eventbutton.getAttribute('time')) {
-            eventdiv.innerHTML = '';
+            if (data['money'] >= eventbutton.getAttribute('money') && data['time'] >= eventbutton.getAttribute('time'))
+            {
+                eventdiv.innerHTML = '';
 
-            response = await fetch(`http://127.0.0.1:3000/events/result/${data['number']}/${eventbutton.value}`);
-            data = await response.json();
+                response = await fetch(`http://127.0.0.1:3000/events/result/${data['number']}/${eventbutton.value}`);
+                data = await response.json();
 
-            const text = document.createElement('p');
-            text.textContent = data['text'];
-            eventdiv.appendChild(text);
+                const text = document.createElement('p');
+                text.textContent = data['text'];
+                eventdiv.appendChild(text);
 
-            stats.textContent = `Money: ${data['money']}, time: ${data['time']}`;
+                stats.textContent = `Money: ${data['money']}, time: ${data['time']}`;
 
-            eventdiv.appendChild(eventbtn);
+                eventdiv.appendChild(eventbtn);
+
+                // tää on ainoastaan olemassa jos pelaaja saa artefakteja
+                if("items" in data)
+                {
+                    // kannattaa parsettaa se data koska se muuten on vaan vitun pitkä stringi :D
+                    addArtefacts(JSON.parse(data["items"]))
+                }
             } else {
                 const error = document.createElement('p');
                 error.textContent = 'Not enough resources';
@@ -103,6 +113,23 @@ eventbtn.addEventListener('click', async function(evt) {
         eventdiv.appendChild(eventbutton);
     }
 });
+
+
+function addArtefacts(arts)
+{
+    let artdiv;
+    let artp;
+    for (let i = 0; i < arts.length; i++)
+    {
+        artdiv = document.createElement('div');
+        artp = document.createElement("p");
+        artdiv.id = "artefact"
+        artp.id = "text_artefact"
+        invdiv.appendChild(artdiv)
+        artdiv.appendChild(artp)
+        artp.textContent = `Artefact name: ${arts[i]["name"]} Value: ${arts[i]["value"]} Continent: ${arts[i]["continent"]}`
+    }
+}
 
 const fightdiv = document.createElement('div');
 fightdiv.id="fightdiv";

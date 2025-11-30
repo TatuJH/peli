@@ -1,63 +1,24 @@
 import mysql.connector
 import random
+import data
 
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demogame',
+    database='demokanta',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
 )
 
+class Artefact:
+    def __init__(self, nimi, arvo, manner):
+        self.name = nimi
+        self.value = arvo
+        self.continent = manner
+
+uncompleted_events = []
 money_modifier = 1
-
-def intro_text():
-    intro_text1 = ("You belong in a cult dead-set on waking up an ancient god."
-                   "After centuries of hard work, the moment is finally at hand."
-                   "You arrive in an ancient chamber located in Antarctica. The chamber smells of sulfur and debris on the ground seems to move on its own."
-                   "In the middle of the chamber lies a circle made of lit candles. You step in, and start performing a ritual."
-                   "You feel the air rising as a fading projection of your god appears in front of you. You hear a deep voice."
-                   "The voice commands you to bring him six artefacts - one from each of the other continents - to finish the ritual."
-                   "After you have found and collected an artefact from every other continent, you shall return to Antarctica."
-                   "You are given limited time to complete your quest - otherwise the ritual fails."
-                   "In addition, to ensure your obedience, a spirit is sent after you. You feel as if you don't want to make contact with it."
-                   "You leave the chamber as a waning voice behind you asks you to hurry.<br>")
-
-    intro_text2 = ("Important things to note:",
-                   "- You only have a limited number of actions on each airport, and if you don't depart as your last action, the spirit will catch you.",
-                   "- Working gives you money, but costs you time.",
-                   "- Exploring consists of randomized events, which can both cost and reward money, time or artefacts.",
-                   "- Converting heretics is a fighting minigame. Winning nets you money. The actions are as follows:",
-                   "  STRIKE (#) decreases the selected enemy's stamina, but has a chance to miss.",
-                   "  HEAL (#) heals you based on your current stamina, and has limited uses.",
-                   "  GUARD decreases the amount of stamina you lose from enemy attacks.",
-                   "- In the auction house you can either buy or sell artefacts.",
-                   "- Each action consumes days in addition to other costs.",
-                   "- Traveling to another continent costs more.",
-                   "- Airport size determines the cost of travel and affects some rewards.")
-
-    return intro_text1, intro_text2
-
-
-def scores():
-    sql = "SELECT id, score FROM scores WHERE score IN (SELECT MAX(score) FROM scores);"
-    cursor = conn.cursor()
-    cursor.execute(sql)
-    highest = cursor.fetchall()
-
-    if len(highest) > 0:
-        sql = "SELECT * FROM scores;"
-        cursor = conn.cursor()
-        cursor.execute(sql)
-        scorelist = cursor.fetchall()
-        scorelist2 = {}
-        for scoretemp in range(len(scorelist)):
-            scorelist2[scorelist[scoretemp][0]] = scorelist[scoretemp][1]
-        return scorelist2
-
-scores()
-
 eventit = {
         1:{
             "event":f"You are given an investment opportunity on the street by a man in a trench coat. He says that by giving him ${int(round(100*money_modifier))} you could make ${int(round(300*money_modifier))}." ,
@@ -467,7 +428,113 @@ eventit = {
         }
     }
 
-def get_event(numero):
+def intro_text():
+    intro_text1 = ("You belong in a cult dead-set on waking up an ancient god."
+                   "After centuries of hard work, the moment is finally at hand."
+                   "You arrive in an ancient chamber located in Antarctica. The chamber smells of sulfur and debris on the ground seems to move on its own."
+                   "In the middle of the chamber lies a circle made of lit candles. You step in, and start performing a ritual."
+                   "You feel the air rising as a fading projection of your god appears in front of you. You hear a deep voice."
+                   "The voice commands you to bring him six artefacts - one from each of the other continents - to finish the ritual."
+                   "After you have found and collected an artefact from every other continent, you shall return to Antarctica."
+                   "You are given limited time to complete your quest - otherwise the ritual fails."
+                   "In addition, to ensure your obedience, a spirit is sent after you. You feel as if you don't want to make contact with it."
+                   "You leave the chamber as a waning voice behind you asks you to hurry.<br>")
+
+    intro_text2 = ("Important things to note:",
+                   "- You only have a limited number of actions on each airport, and if you don't depart as your last action, the spirit will catch you.",
+                   "- Working gives you money, but costs you time.",
+                   "- Exploring consists of randomized events, which can both cost and reward money, time or artefacts.",
+                   "- Converting heretics is a fighting minigame. Winning nets you money. The actions are as follows:",
+                   "  STRIKE (#) decreases the selected enemy's stamina, but has a chance to miss.",
+                   "  HEAL (#) heals you based on your current stamina, and has limited uses.",
+                   "  GUARD decreases the amount of stamina you lose from enemy attacks.",
+                   "- In the auction house you can either buy or sell artefacts.",
+                   "- Each action consumes days in addition to other costs.",
+                   "- Traveling to another continent costs more.",
+                   "- Airport size determines the cost of travel and affects some rewards.")
+
+    return intro_text1, intro_text2
+
+def start():
+    for eve in eventit:
+        uncompleted_events.append(eve)
+
+def scores():
+    sql = "SELECT id, score FROM scores WHERE score IN (SELECT MAX(score) FROM scores);"
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    highest = cursor.fetchall()
+
+    if len(highest) > 0:
+        sql = "SELECT * FROM scores;"
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        scorelist = cursor.fetchall()
+        scorelist2 = {}
+        for scoretemp in range(len(scorelist)):
+            scorelist2[scorelist[scoretemp][0]] = scorelist[scoretemp][1]
+        return scorelist2
+
+scores()
+start()
+
+# tää returnaa nyt listan uusista artefakteista
+# parametreina nykyiset artefaktit, nykyinen manner ja annettava määrä
+def add_artefact(artefacts,cont, count = 1):
+
+
+    #global artefacts_earned
+    #artefacts_earned += count
+
+    # Hanki kaikki mahd. aarteiden nimet mantereen perusteella
+    tup = list(data.artefact_names[cont])
+
+    # Sekoita artefaktien lista jotta pelaaja ei saa jokaisella pelikerralla samoja aarteita ekana
+    random.shuffle(tup)
+
+    # Luo erikseen lista pelaajan omistamista aarteiden nimistä
+    # -> artefacts listaa olioita eikä sanoja joten ei voida verrata sillä
+    names = list()
+    for nm in artefacts:
+        names.append(nm.name)
+
+    new_artefacts = list()
+
+    # Montako artefaktia lisätään?
+    for c in range(0,count):
+        # Satunnainen rahamäärä
+        val = random.randint(600, 1000)
+
+        # Montako mahdollista nimeä on?
+        for i in range(0,len(tup)):
+            nimi = tup[i]
+
+            # Pelaaja ei voi saada duplikaatteja artifakteista
+            if nimi not in names:
+                new_artefacts.append(Artefact(nimi, val, cont))
+                names.append(nimi)
+                # Poistu loopista jos löydettiin käyttämätön nimi
+                break
+            else:
+                if i == len(tup)-1:
+                    # Mikäli pelaajalla on jo JOKAINEN aarre mantereelta, valitse satunnaisesti duplikaatti
+                    nimi = tup[random.randint(0,len(tup)-1)]
+                    new_artefacts.append(Artefact(nimi, val, cont))
+                    names.append(nimi)
+
+    return new_artefacts
+
+def get_event():
+    global uncompleted_events
+
+    numero = random.choice(uncompleted_events)
+    uncompleted_events.remove(numero)
+
+    # testausta varten laitetaan lista täyteen taas jos se on tyhjä
+    if len(uncompleted_events) == 0:
+        for eve in eventit:
+            uncompleted_events.append(eve)
+
     choices = []
     mcosts = []
     tcosts = []
@@ -495,7 +562,7 @@ def get_event_result(numero, choice):
         "text" : eventit[numero]["choices"][choice]["results"][result]["text"],
         "money" : eventit[numero]["choices"][choice]["results"][result]["money"],
         "time" : eventit[numero]["choices"][choice]["results"][result]["time"],
-        "artefacts" : eventit[numero]["choices"][choice]["results"][result]["artefacts"]
+        "artefact_count" : eventit[numero]["choices"][choice]["results"][result]["artefacts"]
     }
 
 def start_fight(amount):

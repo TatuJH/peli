@@ -1,15 +1,24 @@
 import random
-
+import json
 import flask
 from flask import Flask, render_template, request, session
 from flask_cors import CORS
 import testi
+import data
 
-money = 1000
+
+
+artefacts = list()
+# nykyinen manner
+cont = "EU"
+# kaikki mantereet
+conts = []
+# airport
+airport = ""
+country = ""
+size = ""
+money = 0
 time = 365
-fight = {}
-enemy_amount = 0
-
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -59,14 +68,15 @@ CORS(app)
 #     }
 #     return answer
 
+
+
 @app.route('/events/<action>/<int:number>/<choice>', methods=['GET', 'POST'])
 def getevent(action, number, choice):
     global money
     global time
-    if action == "get":
-        nr = random.randint(1, len(testi.eventit))
 
-        response = testi.get_event(nr)
+    if action == "get":
+        response = testi.get_event()
         response['money'] = money
         response['time'] = time
 
@@ -81,9 +91,22 @@ def getevent(action, number, choice):
         money += response['money']
         time += response['time']
 
+        if money < 0:
+            money = 0
+        if time < 0:
+            time = 0
         response['money'] = money
         response['time'] = time
 
+        if response["artefact_count"] > 0:
+            # extend lisää pelkästään annetun listan jäsenet eikä itse listaa
+            newarts = testi.add_artefact(artefacts, cont, response["artefact_count"])
+            artefacts.extend(newarts)
+            jayson = json.dumps([art.__dict__ for art in newarts])
+            response["items"] = jayson
+
+            print(jayson)
+        print(response)
         return response
 
 @app.route('/fight/<action>/<int:enemy>', methods=['GET', 'POST'])
