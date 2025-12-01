@@ -48,6 +48,8 @@ const geteventbtn = document.createElement("button");
 geteventbtn.classList.add('button');
 geteventbtn.id = 'event';
 geteventbtn.textContent = 'EVENT';
+const stats_money = document.getElementById('money')
+const stats_time = document.getElementById('time')
 
 
 eventdiv.appendChild(geteventbtn);
@@ -94,7 +96,9 @@ eventbtn.addEventListener('click', async function(evt) {
                 text.textContent = data['text'];
                 eventdiv.appendChild(text);
 
-                stats.textContent = `Money: ${data['money']}, time: ${data['time']}`;
+                stats_money.textContent = `Money: ${data['money']}`;
+
+                stats_time.textContent = `Time: ${data['time']}`;
 
                 eventdiv.appendChild(eventbtn);
 
