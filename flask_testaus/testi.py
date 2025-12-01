@@ -428,32 +428,80 @@ eventit = {
         }
     }
 
-def intro_text():
-    intro_text1 = ("You belong in a cult dead-set on waking up an ancient god."
-                   "After centuries of hard work, the moment is finally at hand."
-                   "You arrive in an ancient chamber located in Antarctica. The chamber smells of sulfur and debris on the ground seems to move on its own."
-                   "In the middle of the chamber lies a circle made of lit candles. You step in, and start performing a ritual."
-                   "You feel the air rising as a fading projection of your god appears in front of you. You hear a deep voice."
-                   "The voice commands you to bring him six artefacts - one from each of the other continents - to finish the ritual."
-                   "After you have found and collected an artefact from every other continent, you shall return to Antarctica."
-                   "You are given limited time to complete your quest - otherwise the ritual fails."
-                   "In addition, to ensure your obedience, a spirit is sent after you. You feel as if you don't want to make contact with it."
-                   "You leave the chamber as a waning voice behind you asks you to hurry.<br>")
-
-    intro_text2 = ("Important things to note:",
-                   "- You only have a limited number of actions on each airport, and if you don't depart as your last action, the spirit will catch you.",
-                   "- Working gives you money, but costs you time.",
-                   "- Exploring consists of randomized events, which can both cost and reward money, time or artefacts.",
-                   "- Converting heretics is a fighting minigame. Winning nets you money. The actions are as follows:",
-                   "  STRIKE (#) decreases the selected enemy's stamina, but has a chance to miss.",
-                   "  HEAL (#) heals you based on your current stamina, and has limited uses.",
-                   "  GUARD decreases the amount of stamina you lose from enemy attacks.",
-                   "- In the auction house you can either buy or sell artefacts.",
-                   "- Each action consumes days in addition to other costs.",
-                   "- Traveling to another continent costs more.",
-                   "- Airport size determines the cost of travel and affects some rewards.")
-
-    return intro_text1, intro_text2
+kysymykset = {
+    "NA": {
+        1:{"kysymys":"What is the highest mountain in North America? _____  ________",
+           "vastaus":"mount mckinley"},
+        2:{"kysymys":"Who was the first president of the United States? ______  __________",
+           "vastaus":"george washington"},
+        3:{"kysymys":"Which country colonized Canada before it became independent? The ______  _______",
+           "vastaus":"united kingdom"},
+        4:{"kysymys":"How many states are there in the United States of America? __",
+           "vastaus":"50"},
+        5:{"kysymys":"What is the largest city in North America by population? ______  ____",
+           "vastaus":"mexico city"}
+    },
+    "SA": {
+        1:{"kysymys":"What is the largest country in South America by area? _______",
+           "vastaus":"brazil"},
+        2:{"kysymys":"The tango dance originated in which South American country? _________",
+           "vastaus":"argentina"},
+        3:{"kysymys":"Which South American country has coastlines on both the Pacific Ocean and the Caribbean Sea? ________",
+           "vastaus":"colombia"},
+        4:{"kysymys":"In which city is the famous statue 'Christ the Redeemer' located? ___  __  ______",
+           "vastaus":"rio de janeiro"},
+        5:{"kysymys":"What is the longest river in South America? The ______  _____",
+           "vastaus":"amazon river"}
+    },
+    "EU": {
+        1:{"kysymys":"Which European country is famous for inventing pizza and pasta? _____",
+           "vastaus":"italy"},
+        2:{"kysymys":"What is the smallest country in Europe, by both population and area? _______  ____",
+           "vastaus":"vatican city"},
+        3:{"kysymys":"What is the longest river in Europe? The _____  _____",
+           "vastaus":"volga river"},
+        4:{"kysymys":"What mountain range separates Europe and Asia? The ____  ________",
+           "vastaus":"ural mountains"},
+        5:{"kysymys":"Which year did the Soviet Union collapse? ____",
+           "vastaus":"1991"}
+    },
+    "AS": {
+        1:{"kysymys":"What is the highest mountain in Asia? _____  _______",
+           "vastaus":"mount everest"},
+        2:{"kysymys":"In which country is the longest river in Asia located? _____",
+           "vastaus":"china"},
+        3:{"kysymys":"Who was the founder of the Mongol Empire? _______  ____",
+           "vastaus":"genghis khan"},
+        4:{"kysymys":"Which city is the most populous in Asia? _____",
+           "vastaus":"tokyo"},
+        5:{"kysymys":"In which country can you ride the world’s fastest train, the Maglev? _____",
+           "vastaus":"china"}
+    },
+    "OC": {
+        1:{"kysymys":"What is the largest city in Australia by population? ______",
+           "vastaus":"sydney"},
+        2:{"kysymys":"Which reef system, visible from space, lies off the coast of Queensland? The _____  _______  ____",
+           "vastaus":"great barrier reef"},
+        3:{"kysymys":"What is the national animal of Australia? The ________",
+           "vastaus":"kangaroo"},
+        4:{"kysymys":"How many states are there in Australia? _",
+           "vastaus":"6"},
+        5:{"kysymys":"What is the capital city of Australia? _______",
+           "vastaus":"canberra"}
+    },
+    "AF": {
+        1:{"kysymys":"What is the longest river in Africa? The ____  _____",
+           "vastaus":"nile river"},
+        2:{"kysymys":"What is the largest desert in Africa? The ______  ______",
+           "vastaus":"sahara desert"},
+        3:{"kysymys":"What is the only African country that was never colonized? _______",
+           "vastaus":"ethiopia"},
+        4:{"kysymys":"What is the most populous country in Africa? _______",
+           "vastaus":"nigeria"},
+        5:{"kysymys":"What is the highest mountain in Africa? _____  __________",
+           "vastaus":"mount kilimanjaro"}
+    }
+}
 
 def start():
     for eve in eventit:

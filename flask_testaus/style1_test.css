@@ -14,6 +14,15 @@
     width: 66%;
 }
 
+#scores {
+    align-items: center;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 10px;
+    width: 200px;
+    padding: 12px;
+}
+
 .intro_background {
     width: 500px;
     padding: 12px;

@@ -39,17 +39,16 @@ CORS(app)
 #     return answer
 #
 #
-# @app.route('/scores', methods=['GET'])
-# def score():
-#
-#     scores = testi.scores()
-#
-#     answer = {
-#         "scores" : scores
-#     }
-#
-#     return answer
-#
+@app.route('/scores', methods=['GET'])
+def score():
+     scores = testi.scores()
+
+     answer = {
+         "scores" : scores
+     }
+
+     return answer
+
 # @app.route('/event/<nr>', methods=['GET', 'POST'])
 # def event(nr):
 #     global money
@@ -109,6 +108,8 @@ def getevent(action, number, choice):
             print(jayson)
         print(response)
         return response
+
+
 
 @app.route('/fight/<action>/<int:enemy>', methods=['GET', 'POST'])
 def fight(action, enemy):

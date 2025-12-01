@@ -253,3 +253,4 @@ fightbtn.addEventListener('click', async function(evt) {
     })
     fightdiv.appendChild(guard);
 })
+
