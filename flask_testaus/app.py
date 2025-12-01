@@ -7,7 +7,6 @@ import testi
 import data
 
 
-
 artefacts = list()
 # nykyinen manner
 cont = "EU"
@@ -19,6 +18,7 @@ country = ""
 size = ""
 money = 0
 time = 365
+
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -97,6 +97,7 @@ def getevent(action, number, choice):
             time = 0
         response['money'] = money
         response['time'] = time
+
 
         if response["artefact_count"] > 0:
             # extend lisää pelkästään annetun listan jäsenet eikä itse listaa

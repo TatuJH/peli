@@ -1,0 +1,75 @@
+
+dialog {
+    z-index: 15;
+}
+
+
+/*section {*/
+/*  display: flex;*/
+/*  flex-wrap: wrap;*/
+/*  justify-content: space-evenly;*/
+/*  gap: 1rem;*/
+/*}*/
+
+/*article {*/
+/*  width: calc(100% / 3 - 2rem);*/
+/*  box-sizing: border-box;*/
+/*  cursor: pointer;*/
+/*  border: 1px #ccc solid;*/
+/*  padding: 1rem;*/
+/*  border-radius: 6px;*/
+/*  box-shadow: 3px 6px 6px #ccc;*/
+/*  transition: all 0.2s ease-in-out;*/
+/*    z-index: 5;*/
+/*}*/
+
+/*article:hover {*/
+/*  transform: scale(1.02);*/
+/*  box-shadow: 0px 0px 2px #ccc;*/
+/*    z-index: 7;*/
+/*}*/
+
+/*article h2 {*/
+/*  margin: 0;*/
+/*  text-align: center;*/
+/*  padding: 0 0 0.5rem 0;*/
+/*}*/
+
+/*figure {*/
+/*  margin: 0;*/
+/*  text-align: center;*/
+/*}*/
+
+/*figure img {*/
+/*  width: 100%;*/
+/*}*/
+
+/*figcaption {*/
+/*  text-align: center;*/
+/*}*/
+
+
+dialog[closed] {
+  position: fixed;
+  transition: all 0.5s ease-in-out;
+  opacity: 0;
+  display: block;
+}
+
+dialog[open] {
+  opacity: 1;
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.8);
+}
+
+dialog span {
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+  font-size: 2rem;
+  text-decoration: none;
+  color: #fff;
+  filter: drop-shadow(2px 2px 2px #000);
+}
