@@ -1,5 +1,61 @@
 let response = "";
 let data = "";
+const div = document.getElementById("div");
+const div2 = document.getElementById('div2');
+
+const getmapbtn = document.createElement('button');
+getmapbtn.classList.add('button');
+getmapbtn.id = 'map';
+getmapbtn.textContent = 'MAP';
+getmapbtn.addEventListener('click', async() => {
+  div.innerHTML = '';
+
+  var map = L.map('div').setView([51.505, -0.09], 13);
+
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+
+  response = await fetch('http://127.0.0.1:3000/airport');
+  data = await response.json();
+
+  for (let i = 0; i < data.length; i++) {
+    let color;
+
+    if (data[i].type === "large_airport") {
+        color = "red";
+    } else if (data[i].type === "medium_airport") {
+        color = "orange";
+    } else if (data[i].type === "small_airport") {
+        color = "green";
+    }
+
+    const circle = L.circle(
+        [data[i].latitude, data[i].longitude],
+        {
+            color: color,
+            fillColor: color,
+            fillOpacity: 1,
+            radius: 100000
+        }
+    ).addTo(map);
+
+    const attributes = data[i]
+
+    circle.addEventListener('click', () => {
+      div2.innerHTML = '';
+
+      const text = document.createElement('p');
+      text.textContent = `Airport: ${data[i]['aname']}, country: ${data[i]['cname']}, size: ${data[i]['type']}, latitude: ${data[i]['latitude']}, longitude: ${data[i]['longitude']}, ICAO: ${data[i]['icao']}, continent: ${data[i]['continent']}`;
+      div2.appendChild(text);
+    });
+  }
+});
+
+div.appendChild(getmapbtn);
+
+
 //
 // const eventText = document.getElementById('eventText');
 //
@@ -38,7 +94,6 @@ let data = "";
 // //     stats.textContent = 'Money: ' + info['money'];
 // // }
 
-const div = document.getElementById("div");
 const eventdiv = document.createElement('div');
 const invdiv = document.getElementById("inventory")
 eventdiv.id = "eventdiv";

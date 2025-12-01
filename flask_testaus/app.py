@@ -1,7 +1,7 @@
 import random
 import json
 import flask
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, jsonify
 from flask_cors import CORS
 import testi
 import data
@@ -163,5 +163,9 @@ def fight(action, enemy):
 
     fight['guarding'] = False
     return fight
+
+@app.route('/airport', methods=['GET', 'POST'])
+def airport():
+    return testi.get_airport()
 
 app.run(use_reloader=True, host='127.0.0.1', port=3000)
