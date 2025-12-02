@@ -23,9 +23,13 @@ getmapbtn.addEventListener('click', async() => {
 
   var map = L.map('div').setView([0, 0], 1);
 
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  //     maxZoom: 19,
+  //     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright"></a>'
+  // }).addTo(map);
+
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
   }).addTo(map);
 
   response = await fetch('http://127.0.0.1:3000/airport/get/0/0');
