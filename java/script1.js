@@ -54,3 +54,48 @@ async function scores() {
 }
 
 scores();
+
+async function achievements() {
+    const achievements_p = document.getElementById('achievements');
+
+    const response = await fetch("http://127.0.0.1:3000/endscreen");
+    const data = await response.json();
+    const achievement_list = data.achievements
+
+    if (achievement_list.length > 0) {
+        achievements_p.textContent = "You got the following achievements: " + achievement_list.join(", ");
+    } else {
+        achievements_p.textContent = "You got no achievements";
+    }
+}
+
+achievements()
+
+async function total_score() {
+    const total_score_p = document.getElementById('total_score');
+
+    const response = await fetch("http://127.0.0.1:3000/endscreen");
+    const data = await response.json();
+
+    const totalscore = data.score;
+    const money = data.money;
+    const time = data.time;
+    const distance = data.total_distance;
+    const moneyscore = data.money_score;
+    const timescore = data.time_score;
+    const distancescore = data.distance_score;
+    const visited = data.visited_countries
+
+    if (visited.length > 0) {
+
+        total_score_p.textContent = "Along your journey you visited " + visited.join(", ") + " and travelled a total of " + distance + "km rewarding you "
+            + distancescore + " points. You had a " + money + " dollars and " + time + " days left over rewarding you a " + moneyscore + " and "
+            + timescore + " points each. Your total score was " + totalscore + " points. Congrulations!"
+        } else {
+        total_score_p.textContent = "Along your journey you travelled a total of " + distance + "km rewarding you "
+            + distancescore + " points. You had a " + money + " dollars and " + time + " days left over rewarding you a " + moneyscore + " and "
+            + timescore + " points each. Your total score was " + totalscore + " points. Congrulations!"
+    }
+}
+
+total_score()

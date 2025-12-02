@@ -20,36 +20,66 @@ getmapbtn.textContent = 'MAP';
 getmapbtn.addEventListener('click', async() => {
   div.innerHTML = '';
 
-  var map = L.map('div').setView([0, 0], 1);
+  var map = L.map('div', {
+    worldCopyJump: false,
+    minZoom: 2,
+    maxZoom: 20
+  }).setView([0, 0], 2);
 
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  map.setMaxBounds([
+      [-90, -180],
+      [90, 180]
+  ]);
+  map.on('drag', function() {
+    map.panInsideBounds([
+        [-90, -180],
+        [90, 180]
+    ], { animate: false });
+  });
+
+  // map styles
+
+  // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  //     maxZoom: 19,
+  //     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright"></a>'
+  // }).addTo(map);
+
+  // L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	// attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+  // }).addTo(map);
+
+  L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.{ext}', {
+	minZoom: 0,
+	maxZoom: 20,
+	ext: 'png'
   }).addTo(map);
 
   response = await fetch('http://127.0.0.1:3000/airport/get/0/0');
   data = await response.json();
+  console.log(data)
 
   for (let i = 0; i < data.length; i++) {
     let color;
 
     if (i === 0) {
       color = "red";
+    } else if (i === 1) {
+      color = '#7CFC00';
     } else if (data[i].type === "large_airport") {
-        color = "navy";
+      color = "navy";
     } else if (data[i].type === "medium_airport") {
-        color = "dodgerblue";
+      color = "dodgerblue";
     } else if (data[i].type === "small_airport") {
-        color = "lightskyblue";
+      color = "lightskyblue";
     }
 
     const circle = L.circleMarker(
         [data[i].latitude, data[i].longitude],
         {
-            color: color,
+            opacity: 0,
             fillColor: color,
             fillOpacity: 1,
-            radius: 8
+            radius: 15
         }
     ).addTo(map);
 
@@ -63,16 +93,35 @@ getmapbtn.addEventListener('click', async() => {
       departbtn.addEventListener('click', async() => {
         response2 = await fetch(`http://127.0.0.1:3000/airport/depart/${data[i].aname}/${data[i].cname}`);
         data2 = await response2.json();
-        console.log(data2);
 
         div.innerHTML = '';
         div.className = '';
         div2.innerHTML = '';
+        div.appendChild(eventbtn);
+        div.appendChild(fightbtn);
+        div.appendChild(getmapbtn);
       });
       const text = document.createElement('p');
       text.textContent = `Airport: ${data[i]['aname']}, country: ${data[i]['cname']}, size: ${data[i]['type']}, latitude: ${data[i]['latitude']}, longitude: ${data[i]['longitude']}, ICAO: ${data[i]['icao']}, continent: ${data[i]['continent']}`;
       div2.appendChild(text);
       div2.appendChild(departbtn);
+    });
+    circle.on('mouseover', () => {
+      circle.setStyle({fillOpacity : 0.5});
+    });
+    circle.on('mouseout', () => {
+      circle.setStyle({fillOpacity : 1});
+    });
+    circle.bindTooltip(`${data[i].aname}`, {
+    permanent: false,
+    direction: 'top',
+    sticky: true
+    });
+    } else {
+      circle.bindTooltip(`You are currently in ${data[i].aname}`, {
+      permanent: false,
+      direction: 'top',
+      sticky: true
     });
     }
   }
@@ -274,9 +323,15 @@ fightbtn.addEventListener('click', async function(evt) {
             }
             if (data['player_hp'] <= 0) {
                 fightdiv.innerHTML = '';
+                eventdiv.appendChild(eventbtn);
+                fightdiv.appendChild(fightbtn);
+                div.appendChild(getmapbtn);
             }
             if (data['amount'] <= 0) {
                 fightdiv.innerHTML = '';
+                eventdiv.appendChild(eventbtn);
+                fightdiv.appendChild(fightbtn);
+                div.appendChild(getmapbtn);
             }
         })
         fightdiv.appendChild(fight);

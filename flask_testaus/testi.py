@@ -11,6 +11,8 @@ conn = mysql.connector.connect(
     autocommit=True
 )
 
+cursor = conn.cursor()
+
 class Artefact:
     def __init__(self, nimi, arvo, manner):
         self.name = nimi
@@ -188,7 +190,7 @@ eventit = {
             }
         },
         8:{
-            "event":"You hear sounds of metal hitting rock. Upon further inspection, you find a dig site, where a dozen men are swinging their pickaxes. \nOne of the men offers you their position for 20 days.",
+            "event":"You hear sounds of metal hitting rock. Upon further inspection, you find a dig site, where a dozen men are swinging their pickaxes. One of the men offers you their position for 20 days.",
             "input":f"Do you accept it, pay the man ${int(round(200*money_modifier))} to dig for you or refuse?",
             "choices":{
                 "accept":{
@@ -269,17 +271,17 @@ eventit = {
             }
         },
         11: {
-            "event": "You explore the nearby wildlife sanctuary. Halfway through your trail, you notice a campsite full of people in indigenous clothing. \nPerhaps they have an artefact you could take?",
+            "event": "You explore the nearby wildlife sanctuary. Halfway through your trail, you notice a campsite full of people in indigenous clothing. Perhaps they have an artefact you could take?",
             "input": "Do you continue your relaxing walk or greet the tribesmen.. Or try stealing from them?",
             "choices": {
                 "walk": {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": 20, "artefacts": 0,
-                            "text": "You walk the rest of the trail and feel completely at peace. As if you have no rush at all.\n"
-                                    "The sense of calmness extends your time by \033{10 days."},
+                            "text": "You walk the rest of the trail and feel completely at peace. As if you have no rush at all."
+                                    "The sense of calmness extends your time by 10 days."},
                         2: {"money": 0, "time": -5, "artefacts": 0,
-                            "text": "You forgot to read the length of the trail and walk a ridiculous distance.\nYou spend 5 days in various lodges along the trail until you finally get to the end."},
+                            "text": "You forgot to read the length of the trail and walk a ridiculous distance.You spend 5 days in various lodges along the trail until you finally get to the end."},
                         3: {"money": 0, "time": 0, "artefacts": 0,
                             "text": "You find the quickest way out of the trail and get back on your journey."},
                     }
@@ -288,12 +290,12 @@ eventit = {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": -5, "artefacts": 1,
-                            "text": "You spend 5 days living with the tribesmen, who tell you that they're living like their ancestors once did in this area.\nHappy with your stay, they send you off with a souvenir."},
+                            "text": "You spend 5 days living with the tribesmen, who tell you that they're living like their ancestors once did in this area.Happy with your stay, they send you off with a souvenir."},
                         2: {"money": 0, "time": 0, "artefacts": 0,
-                            "text": "You greet the tribesmen and are treated to seemingly endless tales about the people who used to live in these lands.\nYou fall asleep out of boredom and get kicked out of the campsite for this."},
+                            "text": "You greet the tribesmen and are treated to seemingly endless tales about the people who used to live in these lands.You fall asleep out of boredom and get kicked out of the campsite for this."},
                         3: {"money": 0, "time": 15, "artefacts": 0,
                             "text": "You find the tribesmen worshipping a false idol and hastily do right by attacking their totem."
-                                    "\nThe police are called on you but your righteous actions earn you the favour of your god. You get away and are granted 15 days time."
+                                    "The police are called on you but your righteous actions earn you the favour of your god. You get away and are granted 15 days time."
                             }
                     }
                 },
@@ -301,23 +303,23 @@ eventit = {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
-                            "text": "You put on a friendly facade and when the moment is right, you sneakily take something without anyone seeing it.\nAfter leaving you realize it was just a worthless plastic replica."},
+                            "text": "You put on a friendly facade and when the moment is right, you sneakily take something without anyone seeing it.After leaving you realize it was just a worthless plastic replica."},
                         2: {"money": 0, "time": -10, "artefacts": 0,
-                            "text": "You greet the campers and immediately are caught trying to steal a historic artefact. You explain your righteous mission, but to no avail.\n"
+                            "text": "You greet the campers and immediately are caught trying to steal a historic artefact. You explain your righteous mission, but to no avail."
                                     "You spend 10 days in jail for attempted thievery."
                             },
                         3: {"money": int(round(200 * money_modifier)), "time": 0, "artefacts": 0,
                             "text": "You put on a friendly facade and when the moment is right, you sneakily take something without anyone seeing it."
-                                    f"\nYou find the item to be too paltry of an offering and pawn it off for ${int(round(200 * money_modifier))}."},
+                                    f"You find the item to be too paltry of an offering and pawn it off for ${int(round(200 * money_modifier))}."},
                         4: {"money": 0, "time": 0, "artefacts": -1,
-                            "text": "You put on a friendly facade and when the moment is right, you attempt to steal something from the campers but get caught. \n"
+                            "text": "You put on a friendly facade and when the moment is right, you attempt to steal something from the campers but get caught. "
                                     "They end up taking one of your artefacts as punishment and exile you."},
                     }
                 }
             }
         },
         12: {
-            "event": "You come across a cockfighting ring. The host is beckoning passersby to come and bet on one of the roosters.\n"
+            "event": "You come across a cockfighting ring. The host is beckoning passersby to come and bet on one of the roosters."
                      "'C'mon up and bet on one of these fightin' birds! Paying 2:1 on winning bets!'",
             "input": f"Do you leave, bet ${int(round(200 * money_modifier))}, ${int(round(400 * money_modifier))} or try betting an artefact?",
             "choices": {
@@ -326,17 +328,17 @@ eventit = {
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
                             "text": f"You bet ${int(round(200 * money_modifier))} on one of the roosters and join the crowd to watch the battle."
-                                    "\nThe birds are placed into the ring and the bell rings!!\n"
-                                    "\nAfter a few minutes, your rooster waddles away from the opponent and sits down. It's declared the loser and you leave the ring disappointed."},
+                                    "The birds are placed into the ring and the bell rings!!"
+                                    "After a few minutes, your rooster waddles away from the opponent and sits down. It's declared the loser and you leave the ring disappointed."},
                         2: {"money": int(round(400 * money_modifier)), "time": 0, "artefacts": 0,
                             "text": f"You bet ${int(round(200 * money_modifier))} on one of the roosters and join the crowd to watch the battle."
-                                    "\nThe birds are placed into the ring and the bell rings!!\n"
-                                    "\nThe referee tries egging on the roosters to engage in battle, but fails."
-                                    f"\nAfter a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation. You've gained ${int(round(400 * money_modifier))}!!"},
+                                    "The birds are placed into the ring and the bell rings!!"
+                                    "The referee tries egging on the roosters to engage in battle, but fails."
+                                    f"After a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation. You've gained ${int(round(400 * money_modifier))}!!"},
                         3: {"money": int(round(200 * money_modifier)), "time": 0, "artefacts": 0,
                             "text": f"You bet ${int(round(200 * money_modifier))} on one of the roosters and join the crowd to watch the battle."
-                                    "\nThe birds are placed into the ring and the bell rings!!"
-                                    f"\nThe roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw. You're refunded ${int(round(200 * money_modifier))}."}
+                                    "The birds are placed into the ring and the bell rings!!"
+                                    f"The roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw. You're refunded ${int(round(200 * money_modifier))}."}
                     }
                 },
                 f"{int(round(400 * money_modifier))}": {
@@ -344,39 +346,39 @@ eventit = {
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
                             "text": f"You bet ${int(round(400 * money_modifier))} on one of the roosters and join the crowd to watch the battle."
-                                    "\nThe birds are placed into the ring and the bell rings!!\n"
-                                    "\nAfter a few minutes, your rooster waddles away from the opponent and sits down. It's declared the loser and you leave the ring disappointed."},
+                                    "The birds are placed into the ring and the bell rings!!"
+                                    "After a few minutes, your rooster waddles away from the opponent and sits down. It's declared the loser and you leave the ring disappointed."},
                         2: {"money": int(round(800 * money_modifier)), "time": 0, "artefacts": 0,
                             "text": f"You bet ${int(round(400 * money_modifier))} on one of the roosters and join the crowd to watch the battle."
-                                    f"\nThe birds are placed into the ring and the bell rings!!\n"
-                                    f"\nThe referee tries egging on the roosters to engage in battle, but fails."
-                                    f"\nAfter a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation. You've gained ${int(round(800 * money_modifier))}!!"},
+                                    f"The birds are placed into the ring and the bell rings!!"
+                                    f"The referee tries egging on the roosters to engage in battle, but fails."
+                                    f"After a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation. You've gained ${int(round(800 * money_modifier))}!!"},
                         3: {"money": int(round(400 * money_modifier)), "time": 0, "artefacts": 0,
                             "text": f"You bet ${int(round(400 * money_modifier))} on one of the roosters and join the crowd to watch the battle."
-                                    "\nThe birds are placed into the ring and the bell rings!!\n"
-                                    f"\nThe roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw. You're refunded ${int(round(400 * money_modifier))}."}
+                                    "The birds are placed into the ring and the bell rings!!"
+                                    f"The roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw. You're refunded ${int(round(400 * money_modifier))}."}
                     }
                 },
                 "artefact": {
                     "cost": {"money": 0, "time": 0, "artefacts": 1},
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
-                            "text": "You try to convince the referee to accept an artefact as a bet.\n"
+                            "text": "You try to convince the referee to accept an artefact as a bet."
                                     "'Tell you what, I'll take this and give you two treasures from my collection if you win!"
-                                    "\nThe birds are placed into the ring and the bell rings!!"
-                                    "\n\nAfter a few minutes, your rooster waddles away from the opponent and sits down. It's declared the loser and you leave the ring disappointed."},
+                                    "The birds are placed into the ring and the bell rings!!"
+                                    "After a few minutes, your rooster waddles away from the opponent and sits down. It's declared the loser and you leave the ring disappointed."},
                         2: {"money": 0, "time": 0, "artefacts": 2,
-                            "text": "You try to convince the referee to accept an artefact as a bet.\n"
+                            "text": "You try to convince the referee to accept an artefact as a bet."
                                     "'Tell you what, I'll take this and give you two treasures from my collection if you win!"
-                                    "\nThe birds are placed into the ring and the bell rings!!"
-                                    "\n\nThe referee tries egging on the roosters to engage in battle, but fails."
-                                    "\nAfter a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation."
-                                    "\nThe referee concedes and gives you 2 artefacts from his collection!!"},
+                                    "The birds are placed into the ring and the bell rings!!"
+                                    "The referee tries egging on the roosters to engage in battle, but fails."
+                                    "After a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation."
+                                    "The referee concedes and gives you 2 artefacts from his collection!!"},
                         3: {"money": 0, "time": 0, "artefacts": 1,
                             "text": "You try to convince the referee to accept an artefact as a bet."
-                                    "\n'Tell you what, I'll take this and give you two treasures from my collection if you win!"
-                                    "\nThe birds are placed into the ring and the bell rings!!\n"
-                                    "\nThe roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw.\n"
+                                    "'Tell you what, I'll take this and give you two treasures from my collection if you win!"
+                                    "The birds are placed into the ring and the bell rings!!"
+                                    "The roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw."
                                     "You're given an artefact from his collection."}
                     }
                 },
@@ -543,14 +545,13 @@ def start():
         uncompleted_events.append(eve)
 
 def scores():
+    global cursor
     sql = "SELECT id, score FROM scores WHERE score IN (SELECT MAX(score) FROM scores);"
-    cursor = conn.cursor()
     cursor.execute(sql)
     highest = cursor.fetchall()
 
     if len(highest) > 0:
         sql = "SELECT * FROM scores;"
-        cursor = conn.cursor()
         cursor.execute(sql)
         scorelist = cursor.fetchall()
         scorelist2 = {}
@@ -713,12 +714,14 @@ def start_fight(amount):
     }
 
 def get_airport():
-    global current_airport
+    global current_airport, cursor
     airport_list = []
     data = []
     desc = []
-    cursor = conn.cursor()
     sql = f'SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE airport.name="{current_airport}" AND country.iso_country = airport.iso_country'
+    cursor.execute(sql)
+    data.append(cursor.fetchmany(3))
+    sql = f'SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE airport.continent="AN" AND country.iso_country = airport.iso_country'
     cursor.execute(sql)
     data.append(cursor.fetchmany(3))
     for cont in ['NA', 'EU', 'AS', 'SA', 'OC', 'AF']:
