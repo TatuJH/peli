@@ -55,28 +55,14 @@ async function scores() {
 
 scores();
 
-async function achievements() {
+async function win_screen() {
     const achievements_p = document.getElementById('achievements');
-
-    const response = await fetch("http://127.0.0.1:3000/endscreen");
-    const data = await response.json();
-    const achievement_list = data.achievements
-
-    if (achievement_list.length > 0) {
-        achievements_p.textContent = "You got the following achievements: " + achievement_list.join(", ");
-    } else {
-        achievements_p.textContent = "You got no achievements";
-    }
-}
-
-achievements()
-
-async function total_score() {
     const total_score_p = document.getElementById('total_score');
 
-    const response = await fetch("http://127.0.0.1:3000/endscreen");
+    const response = await fetch("http://127.0.0.1:3000/winning");
     const data = await response.json();
 
+    const achievement_list = data.achievements
     const totalscore = data.score;
     const money = data.money;
     const time = data.time;
@@ -96,6 +82,12 @@ async function total_score() {
             + distancescore + " points. You had a " + money + " dollars and " + time + " days left over rewarding you a " + moneyscore + " and "
             + timescore + " points each. Your total score was " + totalscore + " points. Congrulations!"
     }
+
+    if (achievement_list.length > 0) {
+        achievements_p.textContent = "You got the following achievements: " + achievement_list.join(", ");
+    } else {
+        achievements_p.textContent = "You got no achievements";
+    }
 }
 
-total_score()
+win_screen()

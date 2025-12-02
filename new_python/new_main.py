@@ -1478,7 +1478,12 @@ def winning():
     score += total_distance // 60
     score += time * 10
 
-    result = {
+    #cursor = conn.cursor()
+    #cursor.execute("INSERT INTO scores (score) VALUES (%s)", (score,))
+    #conn.commit()
+    #game_over = True
+
+    return {
         "achievements": achieved,
         "visited_countries": visited_countries,
         "total_distance": total_distance,
@@ -1489,13 +1494,6 @@ def winning():
         "time_score": time * 10,
         "distance_score": total_distance // 60
     }
-
-    #cursor = conn.cursor()
-    #cursor.execute("INSERT INTO scores (score) VALUES (%s)", (score,))
-    #conn.commit()
-    #game_over = True
-
-    return result
 
 def choose_airport(new_cont, an):
     global airport
@@ -1763,58 +1761,35 @@ def check_gameover(nomoneyforairport):
     global remaining_actions
     global game_over
     global money
-    temp = ""
+
+    result = {
+        "game_over": False,
+        "reason": "",
+        "end_list": {}
+    }
 
     if remaining_actions <= 0 or time <= 0 or nomoneyforairport:
+        result["game_over"] = True
         game_over = True
         if remaining_actions <= 0:
-            print(
-                "The spirit catches you. You have failed to fulfill your god's wishes and are banished from this realm.")
+            result["reason"] = "remaining_actions"
         elif time <= 0:
-            print("You ran out of time. You have failed to fulfill your god's wishes and are banished from this realm.")
+            result["reason"] = "time"
         elif money < 100:
-            print("Lacking money to escape the spirit, you have failed to fulfill your god's wishes and are banished from this realm.")
-        print("----")
-        while temp != "accept" or "decline":
-            print("You are given the chance to begin anew.")
-            temp = input("Do you \033[35maccept\033[0m or \033[35mdecline\033[0m the offer?\n> ")
-            if temp == "accept":
-                print("----")
-                game_over = False
-                #game_loop()
-            elif temp == "decline":
-                print(f"----\nGame over.\n----")
-                ctemp = ""
-                if cont == "SA":
-                    ctemp = "South America"
-                elif cont == "EU":
-                    ctemp = "Europe"
-                elif cont == "NA":
-                    ctemp = "North America"
-                elif cont == "OC":
-                    ctemp = "Oceania"
-                elif cont == "AS":
-                    ctemp = "Asia"
-                elif cont == "AN":
-                    ctemp = "Antarctica"
-                elif cont == "AF":
-                    ctemp = "Africa"
-                print(
-                    f"Your journey ended in \033[31m{airport}\033[0m in \033[31m{country}\033[0m, \033[31m{ctemp}\033[0m.")
-                color_temp = [f"\033[31m{c}\033[0m" for c in visited_countries]
-                if len(color_temp) > 1:
-                    text = ", ".join(color_temp[:-1]) + " and " + color_temp[-1]
-                else:
-                    text = color_temp[0]
-                print("You visited " + text + f", and travelled a total of \033[36m{total_distance} km\033[0m.")
-                print(f"You had \033[32m${money}\033[0m and \033[34m{time} days\033[0m.")
-                if len(artefacts) > 0:
-                    print("You owned the following artefacts:")
-                    list_artefacts(False)
-                else:
-                    print("You didn't have any artefacts.")
-                break
-            break
+            result["reason"] = "money"
+
+    if game_over == True:
+        result["end_list"] = {
+        "airport": airport,
+        "country": country,
+        "money": money,
+        "time": time,
+        "total_distance": total_distance,
+        "artefacts": artefacts,
+        "visited_countries": visited_countries,
+    }
+
+    return result
 
 def achievement():
     global visited_countries
