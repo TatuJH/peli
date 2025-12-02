@@ -87,8 +87,8 @@ def getevent(action, number, choice):
         return response
 
     if action == "result":
+        # menetetyt ja maksettavat artefaktit
         removables = list()
-        artcost = list()
 
         costs = testi.eventit[number]['choices'][choice]['cost']
         money -= costs['money']
@@ -96,14 +96,8 @@ def getevent(action, number, choice):
         response = testi.get_event_result(number, choice)
         # pelaajan maksama artefakti HINTA
         if costs['artefacts'] > 0:
+            removables.extend(testi.remove_artefacts(artefacts, cont, costs['artefacts']))
 
-            artcost.extend(testi.remove_artefacts(artefacts, cont, costs['artefacts']))
-            print("pelaaja MAKSOI seuraavalla")
-            print(artcost[0].name)
-            # tee artefaktilista uudestaan siten että poistettavia ei lisätä
-            artefacts = [art for art in artefacts if art not in artcost]
-            jason = json.dumps([art.__dict__ for art in artcost])
-            response["artcost"] = jason
 
 
 
@@ -122,31 +116,22 @@ def getevent(action, number, choice):
             newarts = testi.add_artefacts(artefacts, cont, response["artefact_count"])
             artefacts.extend(newarts)
 
-            jayson = json.dumps([art.__dict__ for art in newarts])
-            print("Pelaaja sai artefakteja. uusi lista on NYT")
-            for ar in artefacts:
-                print(ar.name)
-
-            response["items"] = jayson
-
-            print(jayson)
         # jos negatiivinen arvo niin poistetaan se määrä ja passitetaan tieto eteenpäin
         elif response["artefact_count"] < 0:
             # ainoastaan poista artefakti jos SELLAINEN ON
             if len(artefacts) > 0:
                 removables.extend(testi.remove_artefacts(artefacts, cont, abs(response["artefact_count"])))
-                jason = json.dumps([art.__dict__ for art in removables])
-                print("pelaaja menetti seuraavat artefaktit")
-                print(jason)
-                response["removables"] = jason
-            else:
-                print("pelaajalla EI artefaktia jota poistaa q_q")
+
+        # poistetaan kulutetut artefaktit listasta
+        for art in artefacts:
+            if art in removables:
+                artefacts.remove(art)
 
 
-        # tehää artefaktilista uudestaan toisen poiston jälkeen
-        artefacts = [art for art in artefacts if art not in removables or artcost]
+        # heitetään vaan koko lista js puolelle
+        response["all_artefacts"] = json.dumps([art.__dict__ for art in artefacts])
 
-
+        # debug
         print(response)
         return response
 

@@ -1,3 +1,4 @@
+'use strict';
 let response;
 let response2;
 let data;
@@ -5,8 +6,6 @@ let data2;
 const div = document.getElementById("div");
 const div2 = document.getElementById('div2');
 
-// aarreobjektit repussa
-let artefacts = [];
 // repun tekstielementit
 let art_p_elements = [];
 
@@ -165,7 +164,7 @@ eventbtn.addEventListener('click', async function(evt) {
         eventbutton.setAttribute('artefacts', data['artefacts_costs'][i]);
         eventbutton.addEventListener('click', async function(evt) {
             evt.preventDefault();
-            if (data['money'] >= eventbutton.getAttribute('money') && data['time'] >= eventbutton.getAttribute('time') && artefacts.length >= eventbutton.getAttribute('artefacts'))
+            if (data['money'] >= eventbutton.getAttribute('money') && data['time'] >= eventbutton.getAttribute('time') && data["artefacts"] >= eventbutton.getAttribute('artefacts'))
             {
                 eventdiv.innerHTML = '';
 
@@ -182,18 +181,8 @@ eventbtn.addEventListener('click', async function(evt) {
 
                 eventdiv.appendChild(eventbtn);
 
-                // tapahtuman artefakti HINTA
-                if("artcost" in data)
-                    removeArtefacts(JSON.parse(data["artcost"]))
-
-                // tää on ainoastaan olemassa jos pelaaja MENETTÄÄ aarteita
-                if("removables" in data)
-                    removeArtefacts(JSON.parse(data["removables"]))
-
-                // tää on ainoastaan olemassa jos pelaaja saa artefakteja
-                if("items" in data)
-                    // kannattaa parsettaa se data koska se muuten on vaan vitun pitkä stringi :D
-                    addArtefacts(JSON.parse(data["items"]))
+                // lisää reppunäkymään aarteet - muista parsettaa
+                updateInventory(JSON.parse(data["all_artefacts"]))
 
             } else {
                 const error = document.createElement('p');
@@ -206,46 +195,17 @@ eventbtn.addEventListener('click', async function(evt) {
 });
 
 // käy läpi kaikki reppupaikat ja lisää artefaktin mikäli sellainen ON
-function updateInventory()
+function updateInventory(arts)
 {
     for (let i = 0; i < art_p_elements.length; i++)
     {
-        if(artefacts[i])
-            art_p_elements[i].textContent = `Artefact name: ${artefacts[i].name} Value: $${artefacts[i].value} Continent: ${artefacts[i].continent}`
+        if(arts[i])
+            art_p_elements[i].textContent = `Artefact name: ${arts[i]["name"]} Value: $${arts[i]["value"]} Continent: ${arts[i]["continent"]}`
         else
             art_p_elements[i].textContent = "tyhjä repputila :D"
     }
 }
 
-function addArtefacts(arts)
-{
-    let art = {};
-    for (let i = 0; i < arts.length; i++)
-    {
-        // muutetaa se objektiksi aidan tällä puolella
-        art = {name: arts[i]["name"], value: arts[i]["value"], continent: arts[i]["continent"]}
-        // heiteään listaan
-        artefacts.push(art)
-        updateInventory()
-    }
-}
-// tälle annetaan lista jossa on poistettavat artefaktit
-function removeArtefacts(arts)
-{
-    // käydään läpi annettu lista
-    for (let i = 0; i < arts.length; i++)
-    {
-        // samalla käydään läpi omat artefaktit
-        for (let j = 0; j < artefacts.length; j++)
-        {
-            // tarkistetaan sekä nimi ETTÄ arvo ja poistetaan repusta jos löytyy
-            if(artefacts[j].name == arts[i]["name"] && artefacts[j].value == arts[i]["value"])
-                artefacts.splice(artefacts.indexOf(artefacts[j]), 1);
-        }
-    }
-    // lopuksi päivitetään sivun teksti
-    updateInventory()
-}
 
 const fightdiv = document.createElement('div');
 fightdiv.id="fightdiv";

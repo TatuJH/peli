@@ -660,7 +660,8 @@ def get_event():
         "time_costs" : tcosts,
         "artefacts_costs" : acosts
     }
-    print(thing)
+    #debug
+    #print(thing)
     return thing
 
 def get_event_result(numero, choice):
