@@ -199,8 +199,16 @@ def fight(action, enemy):
     fight['guarding'] = False
     return fight
 
-@app.route('/airport', methods=['GET', 'POST'])
-def airport():
-    return testi.get_airport()
+@app.route('/airport/<action>/<airport>/<country>', methods=['GET', 'POST'])
+def airport(action, airport, country):
+    if action == "get":
+        return testi.get_airport()
+    elif action == "depart":
+        airport = airport
+        country = country
+        return {
+            "airport": airport,
+            "country": country
+        }
 
 app.run(use_reloader=True, host='127.0.0.1', port=3000)

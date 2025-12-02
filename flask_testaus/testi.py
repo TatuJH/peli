@@ -19,6 +19,7 @@ class Artefact:
 
 uncompleted_events = []
 money_modifier = 1
+current_airport = 'Helsinki Vantaa Airport'
 eventit = {
         1:{
             "event":f"You are given an investment opportunity on the street by a man in a trench coat. He says that by giving him ${int(round(100*money_modifier))} you could make ${int(round(300*money_modifier))}." ,
@@ -711,20 +712,26 @@ def start_fight(amount):
     }
 
 def get_airport():
-    sql = '(SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="small_airport" AND airport.continent="NA" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="large_airport" AND airport.continent="NA" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="medium_airport" AND airport.continent="NA" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="small_airport" AND airport.continent="SA" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="large_airport" AND airport.continent="SA" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="medium_airport" AND airport.continent="SA" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="small_airport" AND airport.continent="EU" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="large_airport" AND airport.continent="EU" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="medium_airport" AND airport.continent="EU" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="small_airport" AND airport.continent="OC" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="large_airport" AND airport.continent="OC" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="medium_airport" AND airport.continent="OC" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="small_airport" AND airport.continent="AS" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="large_airport" AND airport.continent="AS" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="medium_airport" AND airport.continent="AS" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="small_airport" AND airport.continent="AF" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="large_airport" AND airport.continent="AF" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="medium_airport" AND airport.continent="AF" AND country.iso_country = airport.iso_country ORDER BY RAND() LIMIT 1)'
-    cursor = conn.cursor()
-    cursor.execute(sql)
-    data = cursor.fetchall()
-    desc = cursor.description
+    global current_airport
     airport_list = []
-
-    for row in data:
-        current_row = {}
-        for i in range(len(row)):
-            key = desc[i][0]
-            value = row[i]
-            current_row[key] = value
-        airport_list.append(current_row)
-
+    data = []
+    desc = []
+    cursor = conn.cursor()
+    sql = f'SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE airport.name="{current_airport}" AND country.iso_country = airport.iso_country'
+    cursor.execute(sql)
+    data.append(cursor.fetchmany(3))
+    for cont in ['NA', 'EU', 'AS', 'SA', 'OC', 'AF']:
+        sql = f'(SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="small_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country AND airport.name NOT LIKE "%/%" ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="large_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country AND airport.name NOT LIKE "%/%" ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="medium_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country AND airport.name NOT LIKE "%/%" ORDER BY RAND() LIMIT 1)'
+        cursor.execute(sql)
+        data.append(cursor.fetchmany(3))
+    for i in range(len(cursor.description)):
+        desc.append(cursor.description[i][0])
+    for group in data:
+        for row in group:
+            airport = {}
+            for i in range(len(desc)):
+                airport[desc[i]] = row[i]
+            airport_list.append(airport)
     return airport_list
+
 
