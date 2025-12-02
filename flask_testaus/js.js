@@ -40,10 +40,10 @@ getmapbtn.addEventListener('click', async() => {
     const circle = L.circleMarker(
         [data[i].latitude, data[i].longitude],
         {
-            color: color,
+            opacity: 0,
             fillColor: color,
             fillOpacity: 1,
-            radius: 8
+            radius: 15
         }
     ).addTo(map);
 
@@ -67,6 +67,23 @@ getmapbtn.addEventListener('click', async() => {
       text.textContent = `Airport: ${data[i]['aname']}, country: ${data[i]['cname']}, size: ${data[i]['type']}, latitude: ${data[i]['latitude']}, longitude: ${data[i]['longitude']}, ICAO: ${data[i]['icao']}, continent: ${data[i]['continent']}`;
       div2.appendChild(text);
       div2.appendChild(departbtn);
+    });
+    circle.on('mouseover', () => {
+      circle.setStyle({fillOpacity : 0.5});
+    });
+    circle.on('mouseout', () => {
+      circle.setStyle({fillOpacity : 1});
+    });
+    circle.bindTooltip(`${data[i].aname}`, {
+    permanent: false,
+    direction: 'top',
+    sticky: true
+    });
+    } else {
+      circle.bindTooltip(`You are currently in ${data[i].aname}`, {
+      permanent: false,
+      direction: 'top',
+      sticky: true
     });
     }
   }
