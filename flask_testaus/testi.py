@@ -440,7 +440,7 @@ eventit = {
             "menettää": {
                 "cost": {"money": 0, "time": 0, "artefacts": 0},
                 "results": {
-                    1: {"money": 0, "time": 0, "artefacts": 0,
+                    1: {"money": 0, "time": 0, "artefacts": -1,
                         "text": "ok otin sulta yhen"}
                 }
             },
@@ -641,7 +641,7 @@ def get_event():
         for eve in eventit:
             uncompleted_events.append(eve)
     # TESTI EVENT
-    numero = 14
+    #numero = 14
     choices = []
     mcosts = []
     tcosts = []
