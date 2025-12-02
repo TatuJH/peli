@@ -4,6 +4,7 @@ import flask
 from flask import Flask, render_template, request, session, jsonify
 from flask_cors import CORS
 import testi
+
 import data
 
 
@@ -73,19 +74,36 @@ def score():
 def getevent(action, number, choice):
     global money
     global time
+    global artefacts
+    removables = list()
 
     if action == "get":
         response = testi.get_event()
         response['money'] = money
         response['time'] = time
+        response["artefacts"] = len(artefacts)
+
 
         return response
 
     if action == "result":
-        money -= testi.eventit[number]['choices'][choice]['cost']['money']
-        time -= testi.eventit[number]['choices'][choice]['cost']['time']
-
+        costs = testi.eventit[number]['choices'][choice]['cost']
+        money -= costs['money']
+        time -= costs['time']
         response = testi.get_event_result(number, choice)
+        # pelaajan maksama artefakti HINTA
+        if costs['artefacts'] > 0:
+            # lisää poistettavat artefaktit omaan listaan
+            removables.extend(testi.remove_artefacts(artefacts, cont, costs['artefacts']))
+            print("pelaaja MAKSOI seuraavilla artefakteilla")
+            print(removables)
+            # tee artefaktilista uudestaan siten että poistettavia ei lisätä
+            artefacts = [art for art in artefacts if art not in removables]
+            jason = json.dumps([art.__dict__ for art in removables])
+            
+
+
+
 
         money += response['money']
         time += response['time']
@@ -97,15 +115,32 @@ def getevent(action, number, choice):
         response['money'] = money
         response['time'] = time
 
-
         if response["artefact_count"] > 0:
             # extend lisää pelkästään annetun listan jäsenet eikä itse listaa
-            newarts = testi.add_artefact(artefacts, cont, response["artefact_count"])
+            newarts = testi.add_artefacts(artefacts, cont, response["artefact_count"])
             artefacts.extend(newarts)
+            print("artefakti lista nyt")
+            print(artefacts)
             jayson = json.dumps([art.__dict__ for art in newarts])
             response["items"] = jayson
 
             print(jayson)
+        # jos negatiivinen arvo niin poistetaan se määrä ja passitetaan tieto eteenpäin
+        elif response["artefact_count"] < 0:
+            # ainoastaan poista artefakti jos SELLAINEN ON
+            if len(artefacts) > 0:
+                removables.extend(testi.remove_artefacts(artefacts, cont, abs(response["artefact_count"])))
+                jason = json.dumps([art.__dict__ for art in removables])
+                print("pelaajalta POISTETTU SEURAAVAT")
+                print(jason)
+                response["removables"] = jason
+            else:
+                print("pelaajalla EI artefaktia jota poistaa q_q")
+
+
+
+
+
         print(response)
         return response
 

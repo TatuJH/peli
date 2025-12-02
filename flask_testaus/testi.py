@@ -425,8 +425,42 @@ eventit = {
                     }
                 }
             }
+        },
+    14: {
+        "event": "Haluaisitko saada tai menettää artefaktin",
+        "input": "debug",
+        "choices": {
+            "saada": {
+                "cost": {"money": 0, "time": 0, "artefacts": 0},
+                "results": {
+                    1: {"money": 0, "time": 0, "artefacts": 1,
+                        "text": "ok saat yhen"}
+                }
+            },
+            "menettää": {
+                "cost": {"money": 0, "time": 0, "artefacts": 0},
+                "results": {
+                    1: {"money": 0, "time": 0, "artefacts": 0,
+                        "text": "ok otin sulta yhen"}
+                }
+            },
+            "menettää maksamalla": {
+                "cost": {"money": 0, "time": 0, "artefacts": 1},
+                "results": {
+                    1: {"money": 0, "time": 0, "artefacts": 0,
+                        "text": "kiitti bro"}
+                }
+            },
+            "maksaa 1 saada 2": {
+                "cost": {"money": 0, "time": 0, "artefacts": 1},
+                "results": {
+                    1: {"money": 0, "time": 0, "artefacts": 2,
+                        "text": "ok saat 2 takas"}
+                }
+            }
         }
     }
+}
 
 kysymykset = {
     "NA": {
@@ -528,9 +562,7 @@ start()
 
 # tää returnaa nyt listan uusista artefakteista
 # parametreina nykyiset artefaktit, nykyinen manner ja annettava määrä
-def add_artefact(artefacts,cont, count = 1):
-
-
+def add_artefacts(artefacts, cont, count = 1):
     #global artefacts_earned
     #artefacts_earned += count
 
@@ -572,6 +604,32 @@ def add_artefact(artefacts,cont, count = 1):
 
     return new_artefacts
 
+# tälle annetaan artefaktilista sekä nykyinen manner sekä annettu indeksi (jos myydään artefakti, -1 meinaa ei myydä)
+def remove_artefacts(artefacts, cont, count = 1, index = -1):
+
+    # Poista tältä mantereelta kotoisin artefakti ekana
+    priority = list()
+    removables = list()
+
+    for a in artefacts:
+        if a.continent == cont:
+            priority.append(a)
+    # Tee randomilla jos ei anneta indeksiä (eli jos jokin event ottaa pelaajalta)
+    if index == -1:
+        for a in range(0,count):
+            if len(priority) > 0:
+                removables.append(artefacts[random.randint(0, len(priority)-1)])
+            else:
+                removables.append(artefacts[random.randint(0, len(artefacts)-1)])
+    else:
+        removables.append(artefacts[index])
+
+    # palautetaan artefakti, joka poistetaan
+    return removables
+
+
+
+
 def get_event():
     global uncompleted_events
 
@@ -582,7 +640,8 @@ def get_event():
     if len(uncompleted_events) == 0:
         for eve in eventit:
             uncompleted_events.append(eve)
-
+    # TESTI EVENT
+    numero = 14
     choices = []
     mcosts = []
     tcosts = []
@@ -593,7 +652,7 @@ def get_event():
         tcosts.append(eventit[numero]["choices"][choice]['cost']['time'])
         acosts.append(eventit[numero]["choices"][choice]['cost']['artefacts'])
 
-    return {
+    thing = {
         "number" : numero,
         "text" : eventit[numero]["event"],
         "question" : eventit[numero]["input"],
@@ -602,6 +661,8 @@ def get_event():
         "time_costs" : tcosts,
         "artefacts_costs" : acosts
     }
+    print(thing)
+    return thing
 
 def get_event_result(numero, choice):
     result = random.randint(1, len(eventit[numero]["choices"][choice]["results"]))

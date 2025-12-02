@@ -3,6 +3,8 @@ let data = "";
 const div = document.getElementById("div");
 const div2 = document.getElementById('div2');
 
+let invArray = []
+
 const getmapbtn = document.createElement('button');
 getmapbtn.classList.add('button');
 getmapbtn.id = 'map';
@@ -140,7 +142,7 @@ eventbtn.addEventListener('click', async function(evt) {
         eventbutton.setAttribute('artefacts', data['artefacts_costs'][i]);
         eventbutton.addEventListener('click', async function(evt) {
             evt.preventDefault();
-            if (data['money'] >= eventbutton.getAttribute('money') && data['time'] >= eventbutton.getAttribute('time'))
+            if (data['money'] >= eventbutton.getAttribute('money') && data['time'] >= eventbutton.getAttribute('time') && data['artefacts'] >= eventbutton.getAttribute('artefacts'))
             {
                 eventdiv.innerHTML = '';
 
@@ -159,10 +161,13 @@ eventbtn.addEventListener('click', async function(evt) {
 
                 // tää on ainoastaan olemassa jos pelaaja saa artefakteja
                 if("items" in data)
-                {
                     // kannattaa parsettaa se data koska se muuten on vaan vitun pitkä stringi :D
                     addArtefacts(JSON.parse(data["items"]))
-                }
+
+                // tää on ainoastaan olemassa jos pelaaja MENETTÄÄ aarteita
+                else if("removables" in data)
+                    removeArtefacts(JSON.parse(data["removables"]))
+
             } else {
                 const error = document.createElement('p');
                 error.textContent = 'Not enough resources';
@@ -173,8 +178,7 @@ eventbtn.addEventListener('click', async function(evt) {
     }
 });
 
-
-function addArtefacts(arts)
+function updateInventory(arts)
 {
     let artdiv;
     let artp;
@@ -187,6 +191,38 @@ function addArtefacts(arts)
         invdiv.appendChild(artdiv)
         artdiv.appendChild(artp)
         artp.textContent = `Artefact name: ${arts[i]["name"]} Value: ${arts[i]["value"]} Continent: ${arts[i]["continent"]}`
+    }
+}
+
+function addArtefacts(arts)
+{
+    let artdiv;
+    let artp;
+    let art = {};
+    for (let i = 0; i < arts.length; i++)
+    {
+        artdiv = document.createElement('div');
+        artp = document.createElement("p");
+        artdiv.id = "artefact"
+        artp.id = "text_artefact"
+        invdiv.appendChild(artdiv)
+        artdiv.appendChild(artp)
+        artp.textContent = `Artefact name: ${arts[i]["name"]} Value: ${arts[i]["value"]} Continent: ${arts[i]["continent"]}`
+        art = {name: arts[i]["name"], value: arts[i]["value"], continent: arts[i]["continent"]}
+    }
+}
+// tälle annetaan lista jossa on poistettavat artefaktit
+function removeArtefacts(arts)
+{
+    for (let i = 0; i < arts.length; i++)
+    {
+        // etsitään dokumentista poistettavan artefaktin elementti
+        for (const a of document.querySelectorAll("p")) {
+            if (a.textContent.includes(`${arts[i]["name"]}`)) {
+                a.textContent = `ARTEFACT NAMED ${arts[i]["name"]} GONE`;
+
+            }
+        }
     }
 }
 
