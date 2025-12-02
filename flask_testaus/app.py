@@ -75,7 +75,7 @@ def getevent(action, number, choice):
     global money
     global time
     global artefacts
-    removables = list()
+
 
     if action == "get":
         response = testi.get_event()
@@ -87,21 +87,23 @@ def getevent(action, number, choice):
         return response
 
     if action == "result":
+        removables = list()
+        artcost = list()
+
         costs = testi.eventit[number]['choices'][choice]['cost']
         money -= costs['money']
         time -= costs['time']
         response = testi.get_event_result(number, choice)
         # pelaajan maksama artefakti HINTA
         if costs['artefacts'] > 0:
-            # lisää poistettavat artefaktit omaan listaan
-            removables.extend(testi.remove_artefacts(artefacts, cont, costs['artefacts']))
-            print("pelaaja MAKSOI seuraavilla artefakteilla")
-            print(removables)
-            # tee artefaktilista uudestaan siten että poistettavia ei lisätä
-            artefacts = [art for art in artefacts if art not in removables]
-            jason = json.dumps([art.__dict__ for art in removables])
-            
 
+            artcost.extend(testi.remove_artefacts(artefacts, cont, costs['artefacts']))
+            print("pelaaja MAKSOI seuraavalla")
+            print(artcost[0].name)
+            # tee artefaktilista uudestaan siten että poistettavia ei lisätä
+            artefacts = [art for art in artefacts if art not in artcost]
+            jason = json.dumps([art.__dict__ for art in artcost])
+            response["artcost"] = jason
 
 
 
@@ -119,9 +121,12 @@ def getevent(action, number, choice):
             # extend lisää pelkästään annetun listan jäsenet eikä itse listaa
             newarts = testi.add_artefacts(artefacts, cont, response["artefact_count"])
             artefacts.extend(newarts)
-            print("artefakti lista nyt")
-            print(artefacts)
+
             jayson = json.dumps([art.__dict__ for art in newarts])
+            print("Pelaaja sai artefakteja. uusi lista on NYT")
+            for ar in artefacts:
+                print(ar.name)
+
             response["items"] = jayson
 
             print(jayson)
@@ -131,14 +136,15 @@ def getevent(action, number, choice):
             if len(artefacts) > 0:
                 removables.extend(testi.remove_artefacts(artefacts, cont, abs(response["artefact_count"])))
                 jason = json.dumps([art.__dict__ for art in removables])
-                print("pelaajalta POISTETTU SEURAAVAT")
+                print("pelaaja menetti seuraavat artefaktit")
                 print(jason)
                 response["removables"] = jason
             else:
                 print("pelaajalla EI artefaktia jota poistaa q_q")
 
 
-
+        # tehää artefaktilista uudestaan toisen poiston jälkeen
+        artefacts = [art for art in artefacts if art not in removables or artcost]
 
 
         print(response)

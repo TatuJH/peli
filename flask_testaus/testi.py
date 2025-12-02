@@ -443,7 +443,7 @@ eventit = {
             "menettää": {
                 "cost": {"money": 0, "time": 0, "artefacts": 0},
                 "results": {
-                    1: {"money": 0, "time": 0, "artefacts": 0,
+                    1: {"money": 0, "time": 0, "artefacts": -1,
                         "text": "ok otin sulta yhen"}
                 }
             },
@@ -632,16 +632,16 @@ def remove_artefacts(artefacts, cont, count = 1, index = -1):
 
 def get_event():
     global uncompleted_events
-
-    numero = random.choice(uncompleted_events)
-    uncompleted_events.remove(numero)
-
     # testausta varten laitetaan lista täyteen taas jos se on tyhjä
     if len(uncompleted_events) == 0:
         for eve in eventit:
             uncompleted_events.append(eve)
+    numero = random.choice(uncompleted_events)
+    uncompleted_events.remove(numero)
+
+
     # TESTI EVENT
-    numero = 14
+    #numero = 14
     choices = []
     mcosts = []
     tcosts = []
