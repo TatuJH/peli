@@ -2,22 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Peli</title>
+    <title>Title</title>
     <link rel="stylesheet" href="css/stylemain.css">
-    <script src="../java/script1.js" defer></script>
+    <script src="/flask_testaus/js.js" defer></script>
+    <style>
+    .hp-text {
+        color: red;
+    }
+    .spd-text {
+        color: orange;
+    }
+    .ptn-text {
+        color: forestgreen;
+    }
+    #div {
+        height: 500px;
+        width: 500px;
+    }
+</style>
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+ <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
 </head>
+
+
 <body>
 
-    <!-- koko yläpalkki -->
     <header class="main_header">
         <!-- raha ja aika samassa vasemmalla, reppunappi oikealla-->
         <nav class="main_nav">
-            <p>Raha : </p>
-            <p>Aika : </p>
+            <p id="money">Money: 1000</p>
+            <p id="time">Time: 365</p>
         </nav>
         <button id="backpack_button">Avaa reppu</button>
     </header>
 
+<div id="div">
+
+</div>
+
+<div id="div2">
+
+</div>
+
+
+<div id="inventory">
+
+    <p id="art">INVENTORY</p>
+
+</div>
 
 </body>
 </html>
