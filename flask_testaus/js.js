@@ -98,6 +98,9 @@ getmapbtn.addEventListener('click', async() => {
         div.innerHTML = '';
         div.className = '';
         div2.innerHTML = '';
+        div.appendChild(eventbtn);
+        div.appendChild(fightbtn);
+        div.appendChild(getmapbtn);
       });
       const text = document.createElement('p');
       text.textContent = `Airport: ${data[i]['aname']}, country: ${data[i]['cname']}, size: ${data[i]['type']}, latitude: ${data[i]['latitude']}, longitude: ${data[i]['longitude']}, ICAO: ${data[i]['icao']}, continent: ${data[i]['continent']}`;
@@ -360,9 +363,15 @@ fightbtn.addEventListener('click', async function(evt) {
             }
             if (data['player_hp'] <= 0) {
                 fightdiv.innerHTML = '';
+                eventdiv.appendChild(eventbtn);
+                fightdiv.appendChild(fightbtn);
+                div.appendChild(getmapbtn);
             }
             if (data['amount'] <= 0) {
                 fightdiv.innerHTML = '';
+                eventdiv.appendChild(eventbtn);
+                fightdiv.appendChild(fightbtn);
+                div.appendChild(getmapbtn);
             }
         })
         fightdiv.appendChild(fight);
