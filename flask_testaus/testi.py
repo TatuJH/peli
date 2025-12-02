@@ -5,7 +5,7 @@ import data
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demogame',
+    database='demokanta',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -556,9 +556,7 @@ def scores():
         for scoretemp in range(len(scorelist)):
             scorelist2[scorelist[scoretemp][0]] = scorelist[scoretemp][1]
         return scorelist2
-
-scores()
-start()
+    return {}
 
 # tää returnaa nyt listan uusista artefakteista
 # parametreina nykyiset artefaktit, nykyinen manner ja annettava määrä
