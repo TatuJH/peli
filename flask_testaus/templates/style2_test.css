@@ -36,3 +36,28 @@ body {
     background-color: hotpink;
     padding : 1rem;
 }
+
+/*#boxes {*/
+/*  flex-wrap: wrap;*/
+/*  justify-content: space-evenly;*/
+
+/*  gap: 1rem;*/
+/*}*/
+/*#inventory {*/
+/*  display: flex;*/
+/*  flex-wrap: wrap;*/
+/*  justify-content: space-evenly;*/
+/*  gap: 1rem;*/
+/*}*/
+
+/*.art {*/
+/*  width: calc(100% / 3 - 2rem);*/
+/*  box-sizing: border-box;*/
+/*  cursor: pointer;*/
+/*  border: 1px #ccc solid;*/
+/*  padding: 1rem;*/
+/*  border-radius: 6px;*/
+/*  box-shadow: 3px 6px 6px #ccc;*/
+/*  transition: all 0.2s ease-in-out;*/
+/*    z-index: 5;*/
+/*}*/

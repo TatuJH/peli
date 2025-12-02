@@ -1,4 +1,3 @@
-'use strict';
 let response;
 let response2;
 let data;
@@ -48,11 +47,11 @@ getmapbtn.addEventListener('click', async() => {
 	// attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
   // }).addTo(map);
 
-  L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.{ext}', {
-	minZoom: 0,
-	maxZoom: 20,
-	ext: 'png'
-  }).addTo(map);
+L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.{ext}', {
+    minZoom: 0,
+    maxZoom: 20,
+    ext: 'png'
+}).addTo(map);
 
   response = await fetch('http://127.0.0.1:3000/airport/get/0/0');
   data = await response.json();
@@ -168,8 +167,10 @@ div.appendChild(getmapbtn);
 // //     stats.textContent = 'Money: ' + info['money'];
 // // }
 
-const eventdiv = document.createElement('div');
 const invdiv = document.getElementById("inventory")
+const invbutton = document.getElementById("inventory_button")
+
+const eventdiv = document.createElement('div');
 eventdiv.id = "eventdiv";
 div.appendChild(eventdiv);
 const stats = document.getElementById("stats");
@@ -183,6 +184,12 @@ const stats_time = document.getElementById('time')
 eventdiv.appendChild(geteventbtn);
 
 const eventbtn = document.getElementById("event");
+
+invbutton.addEventListener("click", async function(evt)
+{
+    //todo visibility of inventory
+});
+
 
 eventbtn.addEventListener('click', async function(evt) {
     evt.preventDefault();
@@ -224,14 +231,10 @@ eventbtn.addEventListener('click', async function(evt) {
                 text.textContent = data['text'];
                 eventdiv.appendChild(text);
 
-                stats_money.textContent = `Money: ${data['money']}`;
-
-                stats_time.textContent = `Time: ${data['time']}`;
-
                 eventdiv.appendChild(eventbtn);
 
                 // lisää reppunäkymään aarteet - muista parsettaa
-                updateInventory(JSON.parse(data["all_artefacts"]))
+                updateInventory(data)
 
             } else {
                 const error = document.createElement('p');
@@ -244,8 +247,11 @@ eventbtn.addEventListener('click', async function(evt) {
 });
 
 // käy läpi kaikki reppupaikat ja lisää artefaktin mikäli sellainen ON
-function updateInventory(arts)
+function updateInventory(data)
 {
+    stats_money.textContent = `Money: ${data['money']}`;
+    stats_time.textContent = `Time: ${data['time']}`;
+    let arts = JSON.parse(data["all_artefacts"])
     for (let i = 0; i < art_p_elements.length; i++)
     {
         if(arts[i])
