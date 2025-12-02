@@ -1467,36 +1467,35 @@ def winning():
     global total_distance
     global achieved
 
+    money = 1000
+    time = 50
+    total_distance = 36000
+    visited_countries = ["Finland, Sweden, Norway, Denmark"]
+
     score = 0
 
     score += money
     score += total_distance // 60
     score += time * 10
 
-    color_temp = [f"\033[31m{c}\033[0m" for c in visited_countries]
-    text = ", ".join(color_temp[:-1]) + " and " + color_temp[-1]
-    print(
-        "You arrive at the Ancient Chamber well in time."
-        "It's finally time to complete the ritual. You reach for your backpack and pull out the artefacts you have collected."
-        "Beside each candle in the circle, there is a small slot. You place the artefacts in the slots, one by one, and feel everything start to gradually shake.\n"
-        "The chamber fills with fog, and you see something blurry in front of you. Or rather, someone.\n"
-        "A figure steps through the fog, the chamber echoing with his footsteps. Your god stands before you, fully materialized.\n"
-        '"Congratulations", the voice says, "you have done me proud." The divine being touches you, and you ascend to a higher state of being.'
-    )
-    print("----")
-    print("You got the following achievements:")
-    for ach in achieved:
-        print(ach)
-    print("----")
-    print(
-        "Along your journey you visited " + text + f", and travelled a total of \033[36m{total_distance} km\033[0m, rewarding you", (total_distance // 60), "points.\n"
-        f"You had \033[32m${money}\033[0m rewarding you", money, f"points and \033[34m{time} days\033[0m rewarding you", (time * 10), "points.\n"
-        f"Your total score was {score}."
-    )
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO scores (score) VALUES (%s)", (score,))
-    conn.commit()
-    game_over = True
+    result = {
+        "achievements": achieved,
+        "visited_countries": visited_countries,
+        "total_distance": total_distance,
+        "money": money,
+        "time": time,
+        "score": score,
+        "money_score": money,
+        "time_score": time * 10,
+        "distance_score": total_distance // 60
+    }
+
+    #cursor = conn.cursor()
+    #cursor.execute("INSERT INTO scores (score) VALUES (%s)", (score,))
+    #conn.commit()
+    #game_over = True
+
+    return result
 
 def choose_airport(new_cont, an):
     global airport
@@ -1898,4 +1897,3 @@ def all_artefacts_test():
 #
 #game_loop()
 
-scores()

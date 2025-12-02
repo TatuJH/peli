@@ -19,4 +19,13 @@ def score():
 
      return answer
 
+@app.route('/endscreen', methods=['GET'])
+def winning():
+
+     winning_stats = new_main.winning()
+
+     answer = jsonify(winning_stats)
+
+     return answer
+
 app.run(use_reloader=True, host='127.0.0.1', port=3000)
