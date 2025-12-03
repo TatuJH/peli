@@ -170,6 +170,8 @@ div.appendChild(getmapbtn);
 const invdiv = document.getElementById("inventory")
 const invbutton = document.getElementById("inventory_button")
 
+const shopbutton = document.getElementById("shop_button")
+
 const eventdiv = document.createElement('div');
 eventdiv.id = "eventdiv";
 div.appendChild(eventdiv);
@@ -233,7 +235,7 @@ eventbtn.addEventListener('click', async function(evt) {
 
                 eventdiv.appendChild(eventbtn);
 
-                // lisää reppunäkymään aarteet - muista parsettaa
+                // laita annettu data statseihin ja reppuun
                 updateInventory(data)
 
             } else {
@@ -246,7 +248,7 @@ eventbtn.addEventListener('click', async function(evt) {
     }
 });
 
-// käy läpi kaikki reppupaikat ja lisää artefaktin mikäli sellainen ON
+// Tämä päivittää statsit sekä pelaajan aarteet repussa
 function updateInventory(data)
 {
     stats_money.textContent = `Money: ${data['money']}`;

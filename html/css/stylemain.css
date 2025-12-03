@@ -49,13 +49,56 @@ body {
     color: forestgreen;
 }
 
-#container {
-    display: flex;
-    width: 100vw;
-    height: 80vh;
+
+/* jutut yläpalkissa */
+.main_header p {
+    display: inline-block;
+    color: #f2f2f2;
+    text-align: center;
+    text-decoration: none;
+    font-size: 30px;
+
+    background-color: #669ee8;
+    padding: 1rem;
+    border-radius: 5px;
 }
 
-.main_div {
-    flex: 1;
-    border: 1px solid black;
+/* Yläpalkki */
+.main_header {
+    background-color: #32659B;
+    display: flex;
+    align-items: center;
+    /* tää laittaa tilaa keskelle*/
+    justify-content: space-between;
+    /* pysyy aina ylhäällä */
+    position: sticky;
+    /* vähemmän paddingia yläs ja alas */
+    padding : 0.1rem 0.5rem 0.1rem 0.5rem;
+    z-index: 1000;
 }
+
+/* backpack_button */
+#inventory_button {
+    background-color: hotpink;
+    padding : 2rem;
+    border-radius: 5px;
+
+    font-size: 25px;
+
+}
+
+
+.hp-text {
+    color: red;
+}
+.spd-text {
+    color: orange;
+}
+.ptn-text {
+    color: forestgreen;
+}
+
+.hidden {
+    display:none;
+}
+

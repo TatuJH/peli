@@ -2,35 +2,88 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="style2_test.css">
+    <title>Peli</title>
     <script src="/flask_testaus/js.js" defer></script>
+
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+         crossorigin=""/>
+     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+         crossorigin=""></script>
+    <link rel="stylesheet" href="style2_test.css">
+
+    <!--
+    legit vaan helpompi jos se on tässä
+    tässä on css joka tekee kaksi laatikkoa vierekkäin
+     -->
     <style>
-    .hp-text {
-        color: red;
-    }
-    .spd-text {
-        color: orange;
-    }
-    .ptn-text {
-        color: forestgreen;
-    }
-    #div {
-        height: 500px;
-        width: 700px;
-    }
-</style>
- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-     crossorigin=""/>
- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-     crossorigin=""></script>
+
+
+        html {
+            height: 100%;
+            margin: 0;
+            /* ei nyt mitään times new romania */
+            font-family: "Comic Sans MS";
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Grid container */
+        #main {
+            display: grid;
+
+            /* Sivuttainen tila */
+            grid-template-columns: 1fr 1fr;
+            /* niiden välinen tila */
+            gap: 5rem;
+            /* mikä vittu edes on vh? */
+            height: calc(100vh - 80px);
+            /* jos halutaan paddingia niin tähän vaan
+             sivujen järjestys on myötäpäivään alkaen ylhäältä*/
+            padding: 0px 0px 0px 0px;
+            background-color: #32659B;
+
+        }
+
+
+        /*vas ja oikee */
+        .main_div {
+            background-color: #f1f1f1;
+            border: 5px solid #ccc;
+            border-radius: 5px;
+            padding: 1rem;
+            min-height: 400px;
+        }
+
+        /* reppulista */
+        #inv {
+            display: grid;
+            list-style: none;
+            padding: 0;
+            grid-template-columns: 1fr 1fr;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        /*yksittäiset esineet listalla */
+        #inv li {
+            background-color: #db9d4d;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 20px;
+
+        }
+
+    </style>
+
 </head>
 
 
 <body>
-
     <header class="main_header">
         <!-- raha ja aika samassa vasemmalla, reppunappi oikealla-->
         <nav class="main_nav">
@@ -40,36 +93,39 @@
         <button id="inventory_button">Avaa reppu</button>
     </header>
 
-<div id="div">
+<div id="main">
+
+    <div id="div" class="main_div">
+
+    </div>
+
+    <div id="div2" class="main_div">
+
+        <div id="inventory">
+            <h2>REPPU</h2>
+            <ul id="inv">
+
+            <!-- 12 reppuslottia lol todo laita tekstiin eri värit kuten ekassa pelissä-->
+            <li class ="art">backpack slot :p</li>
+            <li class ="art">backpack slot :p</li>
+            <li class ="art">backpack slot :p</li>
+            <li class ="art">backpack slot :p</li>
+            <li class ="art">backpack slot :p</li>
+            <li class ="art">backpack slot :p</li>
+            <li class ="art">backpack slot :p</li>
+            <li class ="art">backpack slot :p</li>
+            <li class ="art">backpack slot :p</li>
+            <li class ="art">backpack slot :p</li>
+            <li class ="art">backpack slot :p</li>
+            <li class ="art">backpack slot :p</li>
+
+            </ul>
+
+        </div>
+    </div>
 
 </div>
 
-<div id="div2">
-
-</div>
-
-
-<div id="inventory">
-
-    <p id="inv">INVENTORY</p>
-
-    <!-- 12 reppuslottia lol -->
-    <p class ="art">backpack slot :p</p>
-    <p class ="art">backpack slot :p</p>
-    <p class ="art">backpack slot :p</p>
-    <p class ="art">backpack slot :p</p>
-    <p class ="art">backpack slot :p</p>
-    <p class ="art">backpack slot :p</p>
-    <p class ="art">backpack slot :p</p>
-    <p class ="art">backpack slot :p</p>
-    <p class ="art">backpack slot :p</p>
-    <p class ="art">backpack slot :p</p>
-    <p class ="art">backpack slot :p</p>
-    <p class ="art">backpack slot :p</p>
-
-
-
-</div>
 
 </body>
 </html>

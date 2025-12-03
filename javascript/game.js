@@ -6,9 +6,55 @@ let map = null;
 
 const left_div = document.getElementById('left_div');
 const right_div = document.getElementById('right_div');
+const main_buttons = document.getElementById('main_buttons');
+const event_buttons = document.getElementById('event_buttons');
+
+
+// Miksi näihin pitää lisätä classit?
+const getworkbtn = document.createElement('button');
+getworkbtn.classList.add('button');
+getworkbtn.textContent = 'WORK';
+
+const getmapbtn = document.createElement('button');
+getmapbtn.classList.add('button');
+getmapbtn.textContent = 'MAP';
+
+const geteventbtn = document.createElement('button');
+geteventbtn.classList.add('button');
+geteventbtn.textContent = 'EVENT';
+
+const getfightbtn = document.createElement('button');
+getfightbtn.classList.add('button');
+getfightbtn.textContent = 'FIGHT';
+
+main_buttons.appendChild(getworkbtn)
+main_buttons.appendChild(getmapbtn)
+main_buttons.appendChild(geteventbtn)
+main_buttons.appendChild(getfightbtn)
+
+
+const btn = document.createElement('button');
+btn.classList.add('button');
+btn.textContent = 'buton';
+btn.classList.toggle("hidden", true)
+right_div.appendChild(btn)
 
 const stats_money = document.getElementById('money')
 const stats_time = document.getElementById('time')
+
+const invdiv = document.getElementById("inventory")
+const invbutton = document.getElementById("inventory_button")
+
+// tehdään nää vaan kerran
+let event_div = document.getElementById("event_div")
+let event_text = document.createElement('p');
+let event_question = document.createElement('p');
+
+event_div.appendChild(event_text);
+event_div.appendChild(event_question);
+
+
+
 
 // repun tekstielementit
 let art_p_elements = [];
@@ -17,13 +63,11 @@ let art_p_elements = [];
 art_p_elements = document.getElementsByClassName("art");
 
 //Initialize map
-const getmapbtn = document.createElement('button');
-getmapbtn.classList.add('button');
-getmapbtn.textContent = 'MAP';
 getmapbtn.addEventListener('click', async() => {
 
-    right_div.innerHTML = '';
-    left_div.innerHTML = '';
+
+    hideAll(right_div)
+    hideAll(left_div)
 
     if (map) {
         map.remove();
@@ -66,7 +110,8 @@ getmapbtn.addEventListener('click', async() => {
     //Fetch list of airports from database via Flask
     response = await fetch('http://127.0.0.1:3000/airport/get/0/0');
     data = await response.json();
-
+    const text = document.createElement('p');
+    right_div.appendChild(text)
     //Add each airport to map
     for (let i = 0; i < data.length; i++) {
 
@@ -100,33 +145,26 @@ getmapbtn.addEventListener('click', async() => {
         if (i !== 0) {
           circle.addEventListener('click', () => {
 
-          right_div.innerHTML = '';
-
-          //Initialize depart button
-          const departbtn = document.createElement('button');
-          departbtn.classList.add('button');
-          departbtn.textContent = 'DEPART';
-          departbtn.addEventListener('click', async() => {
+          btn.textContent = "DEPART"
+          btn.addEventListener('click', async() => {
 
               //Let Flask know where user departed
               update = await fetch(`http://127.0.0.1:3000/airport/depart/${data[i].aname}/${data[i].cname}`);
 
               //Clear divs and reinitialize
-              left_div.innerHTML = '';
+              hideAll(left_div)
               left_div.className = '';
               left_div.classList.add('main_div');
-              right_div.innerHTML = '';
-              right_div.appendChild(geteventbtn);
-              right_div.appendChild(getfightbtn);
-              right_div.appendChild(getmapbtn);
-
-          });
+              hideAll(right_div)
+              text.classList.toggle("hidden", true)
+              btn.classList.toggle("hidden",true)
+              toggleVisibility(main_buttons, true)
+          },{ once: true });
+          btn.classList.toggle("hidden", false)
 
           // TODO: placeholder !!!
-          const text = document.createElement('p');
           text.textContent = `Airport: ${data[i]['aname']}, country: ${data[i]['cname']}, size: ${data[i]['type']}, latitude: ${data[i]['latitude']}, longitude: ${data[i]['longitude']}, ICAO: ${data[i]['icao']}, continent: ${data[i]['continent']}`;
-          right_div.appendChild(text);
-          right_div.appendChild(departbtn);
+
           });
 
           //Add effects to circlemarker
@@ -156,40 +194,53 @@ getmapbtn.addEventListener('click', async() => {
 
 });
 
-right_div.appendChild(getmapbtn);
 
-//TODO nää pitää kattoo
 
-// const invdiv = document.getElementById("inventory")
-// const invbutton = document.getElementById("inventory_button")
-// invbutton.addEventListener("click", async function(evt)
-// {
-//     //todo visibility of inventory
-// });
+// todo inventory ja saavutukset tulee muiden PÄÄLLE, niin ei tarvii pitää kirjaa mitä niiden alla on
+invbutton.addEventListener("click", async function(evt)
+{
+    toggleVisibility(invdiv)
+});
 
-//Initialize events
-const geteventbtn = document.createElement('button');
-geteventbtn.classList.add('button');
-geteventbtn.textContent = 'EVENT';
+// anna tälle DIV jonka haluat piilottaa tai näyttää
+// true laittaa näkyviin, false piiloon, ei mitään tekee siitä togglen
+function toggleVisibility(div, bool = undefined)
+{
+    if(bool === true)
+        div.classList.toggle('hidden', false);
+    else if (bool === false)
+        div.classList.toggle('hidden', true);
+    else
+        div.classList.toggle('hidden');
+}
+
+// piilota KAIKKI annetun divin sisältö
+function hideAll(div)
+{
+    const children = div.querySelectorAll("div");
+    children.forEach(div => {
+        div.classList.toggle('hidden', true);
+    })
+}
+
+
 geteventbtn.addEventListener('click', async() => {
 
     //Clear divs
-    left_div.innerHTML = '';
-    right_div.innerHTML = '';
+    hideAll(left_div)
+    hideAll(right_div)
+
 
     //Fetch random event from Python via Flask
     response = await fetch('http://127.0.0.1:3000/events/get/0/x');
     data = await response.json();
 
-    //Display event text
-    const event_text = document.createElement('p');
+    // yksinkertaisesti muutetaan teksti ja laitetaan näkyville
     event_text.textContent = data.text;
-    left_div.appendChild(event_text);
-
-    //Display event question
-    const event_question = document.createElement('p');
     event_question.textContent = data.question;
-    left_div.appendChild(event_question);
+
+    toggleVisibility(event_div, true)
+    toggleVisibility(event_buttons, true)
 
     //Get choices and create button for each one
     for (let i = 0; i < data.choices.length; i++) {
@@ -197,59 +248,53 @@ geteventbtn.addEventListener('click', async() => {
         const eventbutton = document.createElement('button');
         eventbutton.textContent = data.choices[i];
         eventbutton.classList.add('button');
+        event_buttons.appendChild(eventbutton)
 
         eventbutton.addEventListener('click', async() => {
 
+            // jos eventti menee läpi
             if (data.money >= data.money_costs[i] && data.time >= data.time_costs[i] && data.artefacts >= data.artefacts_costs[i]) {
-                left_div.innerHTML = '';
+
 
                 //Fetch event results from Python via Flask
                 response = await fetch(`http://127.0.0.1:3000/events/result/${data.number}/${data.choices[i]}`);
                 data = await response.json();
 
+                // kyssäri ja napit vittuun
+                toggleVisibility(event_question, false)
+                toggleVisibility(event_buttons, false)
+
                 event_text.textContent = data.text;
-                left_div.appendChild(event_text);
 
                 //Ok button takes back to menu
-                const ok_button = document.createElement('button');
-                ok_button.textContent = 'OK';
-                ok_button.classList.add('button');
-                ok_button.addEventListener('click', () => {
+
+                btn.textContent = 'OK';
+                btn.classList.toggle("hidden", false)
+                btn.addEventListener('click', () => {
 
                     //Clear divs and reinitialize
-                    left_div.innerHTML = '';
-                    left_div.className = '';
-                    left_div.classList.add('main_div');
-                    right_div.innerHTML = '';
-                    right_div.appendChild(geteventbtn);
-                    right_div.appendChild(getfightbtn);
-                    right_div.appendChild(getmapbtn);
-
-                });
-
-                right_div.innerHTML = '';
-                right_div.appendChild(ok_button);
+                    event_buttons.innerHTML = ""
+                    btn.classList.toggle("hidden", true)
+                    hideAll(left_div)
+                    // todo kaupunkimaisema lol
+                    toggleVisibility(main_buttons, true)
+                // KUN KÄYTETÄÄN NAPPEJA UUSIKSI, LISÄÄ ONCE : TRUE
+                },{ once: true });
 
                 // lisää reppunäkymään aarteet - muista parsettaa
                 updateInventory(data)
 
             } else {
-
-                const error = document.createElement('p');
-                error.textContent = 'Not enough resources';
-                left_div.appendChild(error);
-
+                event_text.innerHTML += '<br>Not enough resources';
             }
 
         });
 
-        right_div.appendChild(eventbutton);
 
     }
 
 });
 
-right_div.appendChild(geteventbtn);
 
 // käy läpi kaikki reppupaikat ja lisää artefaktin mikäli sellainen ON
 function updateInventory(data)
@@ -270,10 +315,7 @@ function updateInventory(data)
 
 }
 
-//Initialize fights
-const getfightbtn = document.createElement('button');
-getfightbtn.classList.add('button');
-getfightbtn.textContent = 'FIGHT';
+// TODO PÄIVITÄ TÄÄ UUTEEN SYSTEEMIIN
 getfightbtn.addEventListener('click', async() => {
 
     function updateFight() {
@@ -422,4 +464,3 @@ getfightbtn.addEventListener('click', async() => {
 
 });
 
-right_div.appendChild(getfightbtn);
