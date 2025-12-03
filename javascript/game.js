@@ -2,6 +2,8 @@ let response;
 let data;
 let update;
 
+let map = null;
+
 const left_div = document.getElementById('left_div');
 const right_div = document.getElementById('right_div');
 
@@ -23,22 +25,26 @@ getmapbtn.addEventListener('click', async() => {
     right_div.innerHTML = '';
     left_div.innerHTML = '';
 
-    var map = L.map('left_div', {
+    if (map) {
+        map.remove();
+    }
+
+    map = L.map('left_div', {
         worldCopyJump: false,
         minZoom: 2,
         maxZoom: 20
     }).setView([0, 0], 2);
 
-    map.setMaxBounds([
-        [-90, -180],
-        [90, 180]
-    ]);
-    map.on('drag', ()=> {
-        map.panInsideBounds([
-            [-90, -180],
-            [90, 180]
-        ], { animate: false });
-    });
+    // map.setMaxBounds([
+    //     [-90, -180],
+    //     [90, 180]
+    // ]);
+    // map.on('drag', ()=> {
+    //     map.panInsideBounds([
+    //         [-90, -180],
+    //         [90, 180]
+    //     ], { animate: false });
+    // });
 
       // map styles
 
@@ -69,7 +75,7 @@ getmapbtn.addEventListener('click', async() => {
 
         if (i === 0) {
           color = "red";
-        } else if (i === 1) {
+        } else if (i === 1 && data.length !== 19) {
           color = '#7CFC00';
         } else if (data[i].type === "large_airport") {
           color = "navy";

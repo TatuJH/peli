@@ -14,8 +14,8 @@ cont = "EU"
 # kaikki mantereet
 conts = []
 # airport
-airport = ""
-country = ""
+airport = "Helsinki Vantaa Airport"
+country = "Finland"
 size = ""
 money = 1000
 time = 365
@@ -186,13 +186,14 @@ def fight(action, enemy):
     fight['guarding'] = False
     return fight
 
-@app.route('/airport/<action>/<airport>/<country>', methods=['GET', 'POST'])
-def airport(action, airport, country):
+@app.route('/airport/<action>/<atarget>/<ctarget>', methods=['GET', 'POST'])
+def airport(action, atarget, ctarget):
+    global airport, country
     if action == "get":
-        return testi.get_airport()
+        return testi.get_airport(airport)
     elif action == "depart":
-        airport = airport
-        country = country
+        airport = atarget
+        country = ctarget
         return {
             "airport": airport,
             "country": country
