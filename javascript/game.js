@@ -215,6 +215,7 @@ function toggleVisibility(div, bool = undefined)
 }
 
 // piilota KAIKKI annetun divin sisältö
+// todo laita tää piilottamaan kaikki muutkin kuin divit
 function hideAll(div)
 {
     const children = div.querySelectorAll("div");
