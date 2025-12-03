@@ -17,9 +17,8 @@ conts = []
 airport = ""
 country = ""
 size = ""
-money = 0
+money = 1000
 time = 365
-
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -97,9 +96,6 @@ def getevent(action, number, choice):
         # pelaajan maksama artefakti HINTA
         if costs['artefacts'] > 0:
             removables.extend(testi.remove_artefacts(artefacts, cont, costs['artefacts']))
-
-
-
 
         money += response['money']
         time += response['time']

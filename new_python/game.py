@@ -640,7 +640,7 @@ for eve in events:
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demokanta',
+    database='demogame',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -733,7 +733,6 @@ def scores():
         for scoretemp in range(len(scorelist)):
             scorelist2[scorelist[scoretemp][0]] = scorelist[scoretemp][1]
         return scorelist2
-    return {}
 
 def print_all():
     print(money, time, cont, country, size, airport, artefacts, uncompleted_events, latlong, total_distance, visited_countries)
