@@ -10,7 +10,6 @@ const main_buttons = document.getElementById('main_buttons');
 const event_buttons = document.getElementById('event_buttons');
 
 
-// Miksi näihin pitää lisätä classit?
 const getworkbtn = document.createElement('button');
 getworkbtn.classList.add('button');
 getworkbtn.textContent = 'WORK';
@@ -32,7 +31,7 @@ main_buttons.appendChild(getmapbtn)
 main_buttons.appendChild(geteventbtn)
 main_buttons.appendChild(getfightbtn)
 
-
+// tää on nappi jota käytetään moneen eri asiaan o_O
 const btn = document.createElement('button');
 btn.classList.add('button');
 btn.textContent = 'buton';
@@ -202,16 +201,16 @@ invbutton.addEventListener("click", async function(evt)
     toggleVisibility(invdiv)
 });
 
-// anna tälle DIV jonka haluat piilottaa tai näyttää
+// anna tälle elementti jonka haluat piilottaa tai näyttää
 // true laittaa näkyviin, false piiloon, ei mitään tekee siitä togglen
-function toggleVisibility(div, bool = undefined)
+function toggleVisibility(thing, bool = undefined)
 {
     if(bool === true)
-        div.classList.toggle('hidden', false);
+        thing.classList.toggle('hidden', false);
     else if (bool === false)
-        div.classList.toggle('hidden', true);
+        thing.classList.toggle('hidden', true);
     else
-        div.classList.toggle('hidden');
+        thing.classList.toggle('hidden');
 }
 
 // piilota KAIKKI annetun divin sisältö
