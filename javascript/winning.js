@@ -7,7 +7,7 @@ async function win_screen() {
     const total_score_p = document.getElementById('total_score');
 
     //Fetch stats from database via Flask
-    response = await fetch('http://127.0.0.1:3000/winning');
+    response = await fetch('http://127.0.0.1:3000/win_screen');
     data = await response.json();
 
     //Change p element to show user's run's stats

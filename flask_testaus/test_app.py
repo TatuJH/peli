@@ -19,6 +19,9 @@ country = "Finland"
 size = ""
 money = 1000
 time = 365
+achieved = ["Digger", "Builder"]
+total_distance = 50000
+visited_countries = ["Finland, Sweden, Norway, Denmark"]
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -198,5 +201,16 @@ def airport(action, atarget, ctarget):
             "airport": airport,
             "country": country
         }
+
+@app.route('/win_screen', methods=['GET'])
+def win_screen():
+    global money
+    global time
+    global total_distance
+    global achieved
+
+    winning_stats = testi.winning(money, time, total_distance, achieved, visited_countries)
+
+    return jsonify(winning_stats)
 
 app.run(use_reloader=True, host='127.0.0.1', port=3000)

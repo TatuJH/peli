@@ -739,4 +739,21 @@ def get_airport(current_airport):
             airport_list.append(airport)
     return airport_list
 
+def winning(money, time, total_distance, achieved, visited_countries):
 
+    score = 0
+    score += money
+    score += total_distance // 60
+    score += time * 10
+
+    return {
+        "achievements": achieved,
+        "visited_countries": visited_countries,
+        "total_distance": total_distance,
+        "money": money,
+        "time": time,
+        "score": score,
+        "money_score": money,
+        "time_score": time * 10,
+        "distance_score": total_distance // 60
+    }
