@@ -540,25 +540,71 @@ kysymykset = {
     }
 }
 
+achievements = {
+    "distance":[
+        (10000,"\033[1mFirst Steps\033[0m for travelling \033[36m10000 km\033[0m",50),
+        (30000,"\033[1mBeginner Traveler\033[0m for travelling \033[36m30000 km\033[0m",75),
+        (60000,"\033[1mIntermediate Traveler\033[0m for travelling \033[36m60000 km\033[0m",100),
+        (80000,"\033[1mAdvanced Traveler\033[0m for travelling \033[36m80000 km\033[0m",150),
+        (125000,"\033[1mMaster Traveler\033[0m for travelling \033[36m125000 km\033[0m",300),
+        (175000,"\033[1mBusiness Class\033[0m for travelling \033[175000 km\033[0m",400),
+        (200000,"\033[1mFirst Class\033[0m for travelling \033[36m200000 km\033[0m",500),
+        (250000,"\033[1mApostle\033[0m for travelling \033[36m250000 km\033[0m",500),
+        (9999999999999999999999,"error",999999999999)
+    ],
+    "countries":[
+        (3,"\033[1mSightseer\033[0m for visiting 4 countries",75),
+        (6,"\033[1mTourist\033[0m for visiting 6 countries",100),
+        (10,"\033[1mRegular\033[0m for visiting 10 countries",150),
+        (13,"\033[1mDual Citizenship\033[0m for visiting 13 countries",200),
+        (18, "\033[1mMissionary\033[0m for visiting 18 countries", 350),
+        (9999999999999999999999,"error",9999999999)
+    ],
+    "money":[
+        (300,"\033[1mIntern\033[0m for earning \033[32m$300\033[0m",50),
+        (600,"\033[1mHard Worker\033[0m for earning \033[32m$600\033[0m",100),
+        (1200,"\033[1mBusinessman\033[0m for earning \033[32m$1200\033[0m",150),
+        (2000,"\033[1mCEO\033[0m for earning \033[32m$2000\033[0m",200),
+        (3000, "\033[1mTithe\033[0m for earning \033[32m$3000\033[0m", 300),
+        (4000, "\033[1mPeter's Pence\033[0m for earning \033[32m$4000\033[0m", 300),
+        (99999999999999999999999999,"error",9999999999999999)
+    ],
+    "artefacts":[
+        (1,"\033[1mExplorer\033[0m for finding your first artefact",50),
+        (3,"\033[1mTreasure Hunter\033[0m for finding 3 artefacts",100),
+        (8,"\033[1mCulture Preserver\033[0m for finding 8 artefacts",150),
+        (12,"\033[1mIndiana Jones\033[0m for finding 12 artefacts",200),
+        (9999999999999999999999,"error",9999999999999)
+    ],
+    "events":[
+        (3,"\033[1mRisk-taker\033[0m for completing 2 events",75),
+        (6,"\033[1mLucky Guy\033[0m for completing 6 events",125),
+        (10,"\033[1mTrue Adventurer\033[0m for completing 10 events",150),
+        (16,"\033[1mFortuna\033[0m for completing 16 events",300),
+        (999999999999999999999,"error",9999999999999)
+    ],
+    "convert":[
+        (1,"\033[1mBeliever\033[0m for converting heretics once",100),
+        (2,"\033[1mFaithful\033[0m for converting heretics 2 times",150),
+        (4,"\033[1mDevotee\033[0m for converting heretics 4 times",200),
+        (7,"\033[1mChosen One\033[0m for converting heretics 7 times",300),
+        (10,"\033[1mMandate from Heaven\033[0m for converting heretics 10 times",400),
+        (999999999999999999999,"error",99999999)
+    ]
+}
+
 def start():
     for eve in eventit:
         uncompleted_events.append(eve)
 
 def scores():
-    global cursor
-    sql = "SELECT id, score FROM scores WHERE score IN (SELECT MAX(score) FROM scores);"
-    cursor.execute(sql)
-    highest = cursor.fetchall()
+    cursor.execute("SELECT id, score FROM scores;")
+    scores = cursor.fetchall()
 
-    if len(highest) > 0:
-        sql = "SELECT * FROM scores;"
-        cursor.execute(sql)
-        scorelist = cursor.fetchall()
-        scorelist2 = {}
-        for scoretemp in range(len(scorelist)):
-            scorelist2[scorelist[scoretemp][0]] = scorelist[scoretemp][1]
-        return scorelist2
-    return {}
+    if scores:
+        return {score[0]: score[1] for score in scores}
+    else:
+        return {}
 
 # tää returnaa nyt listan uusista artefakteista
 # parametreina nykyiset artefaktit, nykyinen manner ja annettava määrä
@@ -606,7 +652,6 @@ def add_artefacts(artefacts, cont, count = 1):
 
 # tälle annetaan artefaktilista sekä nykyinen manner sekä annettu indeksi (jos myydään artefakti, -1 meinaa ei myydä)
 def remove_artefacts(artefacts, cont, count = 1, index = -1):
-
     # Poista tältä mantereelta kotoisin artefakti ekana
     priority = list()
     removables = list()
@@ -627,9 +672,6 @@ def remove_artefacts(artefacts, cont, count = 1, index = -1):
     # palautetaan artefakti, joka poistetaan
     return removables
 
-
-
-
 def get_event():
     global uncompleted_events
     # testausta varten laitetaan lista täyteen taas jos se on tyhjä
@@ -638,6 +680,27 @@ def get_event():
             uncompleted_events.append(eve)
     numero = random.choice(uncompleted_events)
     uncompleted_events.remove(numero)
+
+    choices = []
+    mcosts = []
+    tcosts = []
+    acosts = []
+
+    for choice in eventit[numero]["choices"]:
+        choices.append(choice)
+        mcosts.append(eventit[numero]["choices"][choice]['cost']['money'])
+        tcosts.append(eventit[numero]["choices"][choice]['cost']['time'])
+        acosts.append(eventit[numero]["choices"][choice]['cost']['artefacts'])
+
+    return {
+        "number": numero,
+        "text": eventit[numero]["event"],
+        "question": eventit[numero]["input"],
+        "choices": choices,
+        "money_costs": mcosts,
+        "time_costs": tcosts,
+        "artefacts_costs": acosts
+    }
 
 def work():
     max_money = int(round(200 * money_modifier))
@@ -650,32 +713,6 @@ def work():
         "money":moneygain,
         "time":15
     }
-
-
-    # TESTI EVENT
-    #numero = 14
-    choices = []
-    mcosts = []
-    tcosts = []
-    acosts = []
-    for choice in eventit[numero]["choices"]:
-        choices.append(choice)
-        mcosts.append(eventit[numero]["choices"][choice]['cost']['money'])
-        tcosts.append(eventit[numero]["choices"][choice]['cost']['time'])
-        acosts.append(eventit[numero]["choices"][choice]['cost']['artefacts'])
-
-    thing = {
-        "number" : numero,
-        "text" : eventit[numero]["event"],
-        "question" : eventit[numero]["input"],
-        "choices" : choices,
-        "money_costs" : mcosts,
-        "time_costs" : tcosts,
-        "artefacts_costs" : acosts
-    }
-    #debug
-    #print(thing)
-    return thing
 
 def get_event_result(numero, choice):
     result = random.randint(1, len(eventit[numero]["choices"][choice]["results"]))
@@ -691,30 +728,26 @@ def start_fight(amount):
     player_hp = 10 + 5 * amount
     player_heals = 0 + amount // 2
 
-    # hp, dmg, dodge, speed
     types = {
         "Bulwark": [16, 7, 1, 3],
         "Warden": [10, 4, 2.5, 2],
         "Vessel": [7, 2, 4, 0],
         "Zealot": [12, 3, 3, 1]
     }
+
     enemies_in_fight = {}
     for i in range(amount):
-        enemies_in_fight[int(i)] = {
-            "type": "",
-            "hp": 0,
-            "dmg": 0,
-            "ddg": 0,
-            "spd": 0,
-            "d_spd": 0,
+        enemy = random.choice(list(types.keys()))
+        stats = types[enemy]
+
+        enemies_in_fight[i] = {
+            "type": enemy,
+            "hp": stats[0],
+            "dmg": stats[1],
+            "ddg": stats[2],
+            "spd": stats[3],
+            "d_spd": stats[3]
         }
-    for enemy in range(amount):
-        enemies_in_fight[enemy]["type"] = random.choice(list(types.keys()))
-        enemies_in_fight[enemy]["hp"] = types[enemies_in_fight[enemy]["type"]][0]
-        enemies_in_fight[enemy]["dmg"] = types[enemies_in_fight[enemy]["type"]][1]
-        enemies_in_fight[enemy]["ddg"] = types[enemies_in_fight[enemy]["type"]][2]
-        enemies_in_fight[enemy]["spd"] = types[enemies_in_fight[enemy]["type"]][3]
-        enemies_in_fight[enemy]["d_spd"] = types[enemies_in_fight[enemy]["type"]][3]
 
     return {
         "text": f"You find a group of {amount} robed men. You prepare to convert them, no matter the cost.",
@@ -733,28 +766,104 @@ def get_airport(current_airport):
     sql = f'SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE airport.name="{current_airport}" AND country.iso_country = airport.iso_country'
     cursor.execute(sql)
     data.append(cursor.fetchmany(3))
+
     if current_airport != "Ancient Chamber":
         sql = f'SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE airport.continent="AN" AND country.iso_country = airport.iso_country'
         cursor.execute(sql)
         data.append(cursor.fetchmany(3))
+
     for cont in ['NA', 'EU', 'AS', 'SA', 'OC', 'AF']:
         sql = f'(SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="small_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country AND airport.name NOT LIKE "%/%" ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="large_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country AND airport.name NOT LIKE "%/%" ORDER BY RAND() LIMIT 1) UNION ALL (SELECT airport.name AS aname, country.name AS cname, latitude_deg AS latitude, longitude_deg AS longitude, airport.continent AS continent, ident AS icao, type  FROM airport, country WHERE type="medium_airport" AND airport.continent="{cont}" AND country.iso_country = airport.iso_country AND airport.name NOT LIKE "%/%" ORDER BY RAND() LIMIT 1)'
         cursor.execute(sql)
         data.append(cursor.fetchmany(3))
+
     for i in range(len(cursor.description)):
         desc.append(cursor.description[i][0])
+
     for group in data:
         for row in group:
             airport = {}
             for i in range(len(desc)):
                 airport[desc[i]] = row[i]
             airport_list.append(airport)
+
     return airport_list
 
+def achievement():
+    global visited_countries, money_earned, total_distance, artefacts_earned, events_completed, countries_index
+    global money_index, artefacts_index, events_index, money, achieved, converted_amount, converted_index
+
+    msgs = []
+
+    # jokaisessa kohdassa tarkistetaan että indeksi on taulukon sisällä
+    if countries_index < len(achievements.get("countries", [])) and \
+       len(visited_countries) >= achievements["countries"][countries_index][0]:
+        name = achievements["countries"][countries_index][1]
+        reward = achievements["countries"][countries_index][2]
+        msgs.append(f"You've achieved {name} and earned ${reward}.")
+        msgs.append("----")
+        money += reward
+        achieved.append(name)
+        countries_index += 1
+
+    if money_index < len(achievements.get("money", [])) and \
+       money_earned >= achievements["money"][money_index][0]:
+        name = achievements["money"][money_index][1]
+        reward = achievements["money"][money_index][2]
+        msgs.append(f"You've achieved {name} and earned ${reward}.")
+        msgs.append("----")
+        money += reward
+        achieved.append(name)
+        money_index += 1
+
+    if distance_index < len(achievements.get("distance", [])) and \
+       total_distance >= achievements["distance"][distance_index][0]:
+        name = achievements["distance"][distance_index][1]
+        reward = achievements["distance"][distance_index][2]
+        msgs.append(f"You've achieved {name} and earned ${reward}.")
+        msgs.append("----")
+        money += reward
+        achieved.append(name)
+        distance_index += 1
+
+    if artefacts_index < len(achievements.get("artefacts", [])) and \
+       artefacts_earned >= achievements["artefacts"][artefacts_index][0]:
+        name = achievements["artefacts"][artefacts_index][1]
+        reward = achievements["artefacts"][artefacts_index][2]
+        msgs.append(f"You've achieved {name} and earned ${reward}.")
+        msgs.append("----")
+        money += reward
+        achieved.append(name)
+        artefacts_index += 1
+
+    if events_index < len(achievements.get("events", [])) and \
+       events_completed >= achievements["events"][events_index][0]:
+        name = achievements["events"][events_index][1]
+        reward = achievements["events"][events_index][2]
+        msgs.append(f"You've achieved {name} and earned ${reward}.")
+        msgs.append("----")
+        money += reward
+        achieved.append(name)
+        events_index += 1
+
+    if convert_index < len(achievements.get("convert", [])) and \
+       converted_amount >= achievements["convert"][convert_index][0]:
+        name = achievements["convert"][convert_index][1]
+        reward = achievements["convert"][convert_index][2]
+        msgs.append(f"You've achieved {name} and earned ${reward}.")
+        msgs.append("----")
+        money += reward
+        achieved.append(name)
+        convert_index += 1
+
+    return msgs
+
 def winning(money, time, total_distance, achieved, visited_countries):
+    global cursor
 
     score = money + total_distance // 60 + time * 10
 
+    #lisää score databaseen, testauksen aikana ei käytössä
     #cursor = conn.cursor()
     #cursor.execute("INSERT INTO scores (score) VALUES (%s)", (score,))
     #conn.commit()

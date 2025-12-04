@@ -4,6 +4,8 @@ import flask
 from flask import Flask, render_template, request, session, jsonify
 from flask_cors import CORS
 import testi
+from testi import achievements
+
 
 import data
 
@@ -17,13 +19,25 @@ conts = []
 airport = "Helsinki Vantaa Airport"
 country = "Finland"
 size = ""
-money = 1000
+money = 100
 time = 365
-achieved = ["Digger", "Builder"]
-total_distance = 50000
-visited_countries = ["Finland, Sweden, Norway, Denmark"]
+achieved = []
+total_distance = 0
+visited_countries = []
 actions_left = 1
 reason = "no_time"
+
+money_earned = 1000000
+artefacts_earned = 0
+events_completed = 0
+converted_amount = 0
+
+countries_index = 0
+money_index = 0
+distance_index = 0
+artefacts_index = 0
+events_index = 0
+convert_index = 0
 
 
 app = flask.Flask(__name__)
@@ -47,33 +61,12 @@ CORS(app)
 #
 @app.route('/scores', methods=['GET'])
 def score():
+
      scores = testi.scores()
 
-     answer = {
+     return {
          "scores" : scores
      }
-
-     return answer
-
-# @app.route('/event/<nr>', methods=['GET', 'POST'])
-# def event(nr):
-#     global money
-#     nr = int(nr)
-#     if nr == 0:
-#         nr = random.randint(1, len(testi.eventit))
-#
-#
-#
-#     teksti = testi.events(nr)
-#     money += 10
-#
-#     answer = {
-#         "text" : teksti,
-#         "money" : money
-#     }
-#     return answer
-
-
 
 @app.route('/events/<action>/<int:number>/<choice>', methods=['GET', 'POST'])
 def getevent(action, number, choice):
@@ -127,15 +120,12 @@ def getevent(action, number, choice):
             if art in removables:
                 artefacts.remove(art)
 
-
         # heitetään vaan koko lista js puolelle
         response["all_artefacts"] = json.dumps([art.__dict__ for art in artefacts])
 
         # debug
         print(response)
         return response
-
-
 
 @app.route('/fight/<action>/<int:enemy>', methods=['GET', 'POST'])
 def fight(action, enemy):
@@ -233,6 +223,75 @@ def work():
     response["all_artefacts"] = json.dumps([art.__dict__ for art in artefacts])
 
     return response
+
+
+
+def achievement():
+    global visited_countries, money_earned, total_distance, artefacts_earned, events_completed, countries_index, money_index
+    global artefacts_index, events_index, distance_index, money, achieved, converted_amount, convert_index
+
+    new_achievements = []
+
+    if len(visited_countries) >= achievements["countries"][countries_index][0]:
+        name = achievements["countries"][countries_index][1]
+        reward = achievements["countries"][countries_index][2]
+        money += reward
+        achieved.append(name)
+        countries_index += 1
+        new_achievements.append({"category": "countries", "name": name, "reward": reward})
+
+    if money_earned >= achievements["money"][money_index][0]:
+        name = achievements["money"][money_index][1]
+        reward = achievements["money"][money_index][2]
+        money += reward
+        achieved.append(name)
+        money_index += 1
+        new_achievements.append({"category": "money", "name": name, "reward": reward})
+
+    if total_distance >= achievements["distance"][distance_index][0]:
+        name = achievements["distance"][distance_index][1]
+        reward = achievements["distance"][distance_index][2]
+        money += reward
+        achieved.append(name)
+        distance_index += 1
+        new_achievements.append({"category": "distance", "name": name, "reward": reward})
+
+    if artefacts_earned >= achievements["artefacts"][artefacts_index][0]:
+        name = achievements["artefacts"][artefacts_index][1]
+        reward = achievements["artefacts"][artefacts_index][2]
+        money += reward
+        achieved.append(name)
+        artefacts_index += 1
+        new_achievements.append({"category": "artefacts", "name": name, "reward": reward})
+
+    if events_completed >= achievements["events"][events_index][0]:
+        name = achievements["events"][events_index][1]
+        reward = achievements["events"][events_index][2]
+        money += reward
+        achieved.append(name)
+        events_index += 1
+        new_achievements.append({"category": "events", "name": name, "reward": reward})
+
+    if converted_amount >= achievements["convert"][convert_index][0]:
+        name = achievements["convert"][convert_index][1]
+        reward = achievements["convert"][convert_index][2]
+        money += reward
+        achieved.append(name)
+        convert_index += 1
+        new_achievements.append({"category": "convert", "name": name, "reward": reward})
+
+    return new_achievements
+
+print(achievement())
+
+@app.route("/achievements", methods=["GET"])
+def get_achievements():
+    new_achievements = achievement()
+
+    return {
+        "new_achievements": new_achievements,
+        "money": money
+    }
 
 @app.route('/win_screen', methods=['GET'])
 def win_screen():
