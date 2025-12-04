@@ -22,6 +22,7 @@ time = 365
 achieved = ["Digger", "Builder"]
 total_distance = 50000
 visited_countries = ["Finland, Sweden, Norway, Denmark"]
+actions_left = 1
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -74,17 +75,15 @@ def score():
 
 @app.route('/events/<action>/<int:number>/<choice>', methods=['GET', 'POST'])
 def getevent(action, number, choice):
-    global money
-    global time
-    global artefacts
-
+    global money, time, artefacts, actions_left
 
     if action == "get":
+        actions_left -= 1
         response = testi.get_event()
         response['money'] = money
         response['time'] = time
         response["artefacts"] = len(artefacts)
-
+        response["actions"] = actions_left
 
         return response
 
@@ -138,10 +137,12 @@ def getevent(action, number, choice):
 
 @app.route('/fight/<action>/<int:enemy>', methods=['GET', 'POST'])
 def fight(action, enemy):
-    global fight, enemy_amount
+    global fight, enemy_amount, actions_left
     if action == "start":
+        actions_left -= 1
         enemy_amount = random.randint(2, 4)
         fight = testi.start_fight(enemy_amount)
+        fight["actions"] = actions_left
         return fight
 
     if action == "strike":
@@ -187,20 +188,49 @@ def fight(action, enemy):
                 fight["enemies_in_fight"][i]["spd"] = fight["enemies_in_fight"][i]["spd"] - 1
 
     fight['guarding'] = False
+    fight["actions"] = actions_left
     return fight
 
 @app.route('/airport/<action>/<atarget>/<ctarget>', methods=['GET', 'POST'])
 def airport(action, atarget, ctarget):
-    global airport, country
+    global airport, country, actions_left
     if action == "get":
-        return testi.get_airport(airport)
+        response = {}
+        actions_left -= 1
+        response["airports"] = testi.get_airport(airport)
+        response["actions"] = actions_left
+        response["money"] = money
+        response["time"] = time
+        response["all_artefacts"] = json.dumps([art.__dict__ for art in artefacts])
+
+        return response
     elif action == "depart":
         airport = atarget
         country = ctarget
+        actions_left = 3
         return {
             "airport": airport,
-            "country": country
+            "country": country,
+            "actions": actions_left,
+            "money": money,
+            "time": time,
+            "all_artefacts": json.dumps([art.__dict__ for art in artefacts])
         }
+
+@app.route('/work')
+def work():
+    global money, time, actions_left
+
+    response = testi.work()
+    money += response['money']
+    time -= response['time']
+    actions_left -= 1
+    response["actions"] = actions_left
+    response["time"] = time
+    response["money"] = money
+    response["all_artefacts"] = json.dumps([art.__dict__ for art in artefacts])
+
+    return response
 
 @app.route('/win_screen', methods=['GET'])
 def win_screen():

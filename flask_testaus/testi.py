@@ -5,7 +5,7 @@ import data
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demokanta',
+    database='demogame',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -638,6 +638,18 @@ def get_event():
             uncompleted_events.append(eve)
     numero = random.choice(uncompleted_events)
     uncompleted_events.remove(numero)
+
+def work():
+    max_money = int(round(200 * money_modifier))
+    min_money = int(round(100 * money_modifier))
+    jobs = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher","cucumber quality inspector", "tree doctor", "farmer's assistant","professional supermarket greeter"]
+    moneygain = random.randint(min_money, max_money)
+
+    return {
+        "text":f"You decide to work as a {random.choice(jobs)}. You earn ${moneygain}, but lose 10 days.",
+        "money":moneygain,
+        "time":15
+    }
 
 
     # TESTI EVENT

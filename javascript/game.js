@@ -38,8 +38,9 @@ btn.textContent = 'buton';
 btn.classList.toggle("hidden", true)
 right_div.appendChild(btn)
 
-const stats_money = document.getElementById('money')
-const stats_time = document.getElementById('time')
+const stats_money = document.getElementById('money');
+const stats_time = document.getElementById('time');
+const stats_actions = document.getElementById('actions');
 
 const invdiv = document.getElementById("inventory")
 const invbutton = document.getElementById("inventory_button")
@@ -52,8 +53,7 @@ let event_question = document.createElement('p');
 event_div.appendChild(event_text);
 event_div.appendChild(event_question);
 
-
-
+const text = document.createElement('p');
 
 // repun tekstielementit
 let art_p_elements = [];
@@ -63,7 +63,6 @@ art_p_elements = document.getElementsByClassName("art");
 
 //Initialize map
 getmapbtn.addEventListener('click', async() => {
-
 
     hideAll(right_div)
     hideAll(left_div)
@@ -109,29 +108,31 @@ getmapbtn.addEventListener('click', async() => {
     //Fetch list of airports from database via Flask
     response = await fetch('http://127.0.0.1:3000/airport/get/0/0');
     data = await response.json();
-    const text = document.createElement('p');
+
+    updateInventory(data);
+
     right_div.appendChild(text)
     //Add each airport to map
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.airports.length; i++) {
 
         //Set colors for different airport types
         let color;
 
         if (i === 0) {
           color = "red";
-        } else if (i === 1 && data.length !== 19) {
+        } else if (i === 1 && data.airports.length !== 19) {
           color = '#7CFC00';
-        } else if (data[i].type === "large_airport") {
+        } else if (data.airports[i].type === "large_airport") {
           color = "navy";
-        } else if (data[i].type === "medium_airport") {
+        } else if (data.airports[i].type === "medium_airport") {
           color = "dodgerblue";
-        } else if (data[i].type === "small_airport") {
+        } else if (data.airports[i].type === "small_airport") {
           color = "lightskyblue";
         }
 
         //Initialize circlemarker AKA individual airport
         const circle = L.circleMarker(
-            [data[i].latitude, data[i].longitude],
+            [data.airports[i].latitude, data.airports[i].longitude],
             {
                 opacity: 0,
                 fillColor: color,
@@ -148,7 +149,10 @@ getmapbtn.addEventListener('click', async() => {
           btn.addEventListener('click', async() => {
 
               //Let Flask know where user departed
-              update = await fetch(`http://127.0.0.1:3000/airport/depart/${data[i].aname}/${data[i].cname}`);
+              response = await fetch(`http://127.0.0.1:3000/airport/depart/${data.airports[i].aname}/${data.airports[i].cname}`);
+              data = await response.json();
+
+              updateInventory(data);
 
               //Clear divs and reinitialize
               hideAll(left_div)
@@ -162,7 +166,7 @@ getmapbtn.addEventListener('click', async() => {
           btn.classList.toggle("hidden", false)
 
           // TODO: placeholder !!!
-          text.textContent = `Airport: ${data[i]['aname']}, country: ${data[i]['cname']}, size: ${data[i]['type']}, latitude: ${data[i]['latitude']}, longitude: ${data[i]['longitude']}, ICAO: ${data[i]['icao']}, continent: ${data[i]['continent']}`;
+          text.textContent = `Airport: ${data.airports[i]['aname']}, country: ${data.airports[i]['cname']}, size: ${data.airports[i]['type']}, latitude: ${data.airports[i]['latitude']}, longitude: ${data.airports[i]['longitude']}, ICAO: ${data.airports[i]['icao']}, continent: ${data.airports[i]['continent']}`;
 
           });
 
@@ -173,7 +177,7 @@ getmapbtn.addEventListener('click', async() => {
           circle.on('mouseout', () => {
               circle.setStyle({fillOpacity : 1});
           });
-          circle.bindTooltip(`${data[i].aname}`, {
+          circle.bindTooltip(`${data.airports[i].aname}`, {
               permanent: false,
               direction: 'top',
               sticky: true
@@ -181,7 +185,7 @@ getmapbtn.addEventListener('click', async() => {
 
         } else {
 
-            circle.bindTooltip(`You are currently in ${data[i].aname}`, {
+            circle.bindTooltip(`You are currently in ${data.airports[i].aname}`, {
                 permanent: false,
                 direction: 'top',
                 sticky: true
@@ -301,6 +305,8 @@ function updateInventory(data)
 {
     stats_money.textContent = `Money: ${data.money}`;
     stats_time.textContent = `Time: ${data.time}`;
+    stats_actions.textContent = `Actions left: ${data.actions}`
+
     let arts = JSON.parse(data.all_artefacts)
 
     for (let i = 0; i < art_p_elements.length; i++) {
@@ -464,3 +470,30 @@ getfightbtn.addEventListener('click', async() => {
 
 });
 
+getworkbtn.addEventListener('click', async() => {
+
+  hideAll(right_div);
+  hideAll(left_div);
+
+  response = await fetch('http://127.0.0.1:3000/work');
+  data = await response.json();
+
+  updateInventory(data);
+
+  text.textContent = data.text;
+  left_div.appendChild(text);
+
+  btn.textContent = 'OK';
+  btn.classList.toggle("hidden", false)
+  btn.addEventListener('click', () => {
+
+      //Clear divs and reinitialize
+      hideAll(left_div)
+      btn.classList.toggle("hidden", true)
+      // todo kaupunkimaisema lol
+      toggleVisibility(main_buttons, true)
+
+  // KUN KÄYTETÄÄN NAPPEJA UUSIKSI, LISÄÄ ONCE : TRUE
+  },{ once: true });
+
+});
