@@ -200,7 +200,7 @@ getmapbtn.addEventListener('click', async() => {
 
 
 // todo inventory ja saavutukset tulee muiden PÄÄLLE, niin ei tarvii pitää kirjaa mitä niiden alla on
-invbutton.addEventListener("click", async function(evt)
+invbutton.addEventListener("click", async function()
 {
     toggleVisibility(invdiv)
 });
@@ -217,13 +217,13 @@ function toggleVisibility(thing, bool = undefined)
         thing.classList.toggle('hidden');
 }
 
-// piilota KAIKKI annetun divin sisältö
-// todo laita tää piilottamaan kaikki muutkin kuin divit
+// tää piilottaa jokaikisen lapsen divissä (käytännössä nollaa näkymän)
 function hideAll(div)
 {
+    //const children = div.querySelectorAll("div");
     const children = div.querySelectorAll("div");
-    children.forEach(div => {
-        div.classList.toggle('hidden', true);
+    children.forEach(thing => {
+        thing.classList.toggle('hidden', true);
     })
 }
 
@@ -239,10 +239,11 @@ geteventbtn.addEventListener('click', async() => {
     response = await fetch('http://127.0.0.1:3000/events/get/0/x');
     data = await response.json();
 
-    // yksinkertaisesti muutetaan teksti ja laitetaan näkyville
+    // yksinkertaisesti muutetaan teksti
     event_text.textContent = data.text;
     event_question.textContent = data.question;
 
+    // laitetaan näkyville vasta kun info on muutettu
     toggleVisibility(event_div, true)
     toggleVisibility(event_buttons, true)
 
@@ -273,12 +274,12 @@ geteventbtn.addEventListener('click', async() => {
                 //Ok button takes back to menu
 
                 btn.textContent = 'OK';
-                btn.classList.toggle("hidden", false)
+                toggleVisibility(btn, true)
                 btn.addEventListener('click', () => {
 
                     //Clear divs and reinitialize
                     event_buttons.innerHTML = ""
-                    btn.classList.toggle("hidden", true)
+                    toggleVisibility(btn, false)
                     hideAll(left_div)
                     // todo kaupunkimaisema lol
                     toggleVisibility(main_buttons, true)
@@ -300,7 +301,7 @@ geteventbtn.addEventListener('click', async() => {
 });
 
 
-// käy läpi kaikki reppupaikat ja lisää artefaktin mikäli sellainen ON
+// Tavoitteena olisi aina käyttää tätä datan päivitykseen sivulle
 function updateInventory(data)
 {
     stats_money.textContent = `Money: ${data.money}`;
@@ -340,8 +341,12 @@ getfightbtn.addEventListener('click', async() => {
 
     }
 
-    left_div.innerHTML = '';
-    right_div.innerHTML = '';
+
+    hideAll(left_div)
+    hideAll(right_div)
+
+    const fight = document.getElementById("fight_div")
+    const buttons = document.getElementById("fight_buttons")
 
     //Fetch a fight starting position from Python via Flask
     response = await fetch('http://127.0.0.1:3000/fight/start/0');
@@ -351,13 +356,13 @@ getfightbtn.addEventListener('click', async() => {
     const fight_text = document.createElement('p');
     fight_text.id="fighttxt";
     fight_text.textContent = data.text;
-    left_div.appendChild(fight_text);
+    fight.appendChild(fight_text);
 
     //Create p element for tracking user
     const player = document.createElement('p');
     player.id="player";
     player.innerHTML = `HP: <span class="hp-text">${data.player_hp}</span>, remaining heals: <span class="ptn-text">${data.player_heals}</span>`;
-    left_div.appendChild(player);
+    fight.appendChild(player);
 
     //Create p elements for each enemy
     for (let i = 0; i < Object.keys(data.enemies_in_fight).length; i++) {
@@ -365,7 +370,7 @@ getfightbtn.addEventListener('click', async() => {
         const enemy = document.createElement('p');
         enemy.id=`fightenemy${i}`
         enemy.innerHTML = `Enemy ${i + 1}: ${data.enemies_in_fight[i].type} <span class="hp-text">${data.enemies_in_fight[i].hp}</span> <span class="spd-text">(charging for ${data.enemies_in_fight[i].spd} turns)</span>`;
-        left_div.appendChild(enemy);
+        fight.appendChild(enemy);
 
     }
 
@@ -375,6 +380,7 @@ getfightbtn.addEventListener('click', async() => {
         const strike = document.createElement('button');
         strike.textContent = `Strike enemy ${i + 1} (${data.enemies_in_fight[i].type})`
         strike.classList.add('button');
+        buttons.appendChild(strike)
 
         strike.addEventListener('click', async() => {
 
@@ -387,8 +393,8 @@ getfightbtn.addEventListener('click', async() => {
             //Remove enemy if defeated
             if (data.enemies_in_fight[i].hp <= 0) {
 
-                left_div.removeChild(document.getElementById(`fightenemy${i}`));
-                right_div.removeChild(strike);
+                fight.removeChild(document.getElementById(`fightenemy${i}`));
+                buttons.removeChild(strike);
 
             }
 
@@ -397,8 +403,8 @@ getfightbtn.addEventListener('click', async() => {
 
                 //Clear divs and reinitialize
                 left_div.innerHTML = '';
-                left_div.className = '';
-                left_div.classList.add('main_div');
+                //left_div.className = '';
+                //left_div.classList.add('main_div');
                 right_div.innerHTML = '';
                 right_div.appendChild(geteventbtn);
                 right_div.appendChild(getfightbtn);
@@ -411,8 +417,8 @@ getfightbtn.addEventListener('click', async() => {
 
                 //Clear divs and reinitialize
                 left_div.innerHTML = '';
-                left_div.className = '';
-                left_div.classList.add('main_div');
+                //left_div.className = '';
+                //left_div.classList.add('main_div');
                 right_div.innerHTML = '';
                 right_div.appendChild(geteventbtn);
                 right_div.appendChild(getfightbtn);
@@ -421,8 +427,6 @@ getfightbtn.addEventListener('click', async() => {
             }
 
         });
-
-        right_div.appendChild(strike);
 
     }
 
@@ -443,12 +447,12 @@ getfightbtn.addEventListener('click', async() => {
 
             //Remove heal button if user has no potions
             if (data['player_heals'] <= 0) {
-                right_div.removeChild(heal);
+                buttons.removeChild(heal);
             }
 
         });
 
-        right_div.appendChild(heal);
+        buttons.appendChild(heal);
 
     }
 
@@ -466,7 +470,8 @@ getfightbtn.addEventListener('click', async() => {
 
     });
 
-    right_div.appendChild(guard);
+    toggleVisibility(fight, true);
+    toggleVisibility(buttons, true);
 
 });
 
@@ -484,14 +489,15 @@ getworkbtn.addEventListener('click', async() => {
   left_div.appendChild(text);
 
   btn.textContent = 'OK';
-  btn.classList.toggle("hidden", false)
+  toggleVisibility(btn,true)
   btn.addEventListener('click', () => {
 
       //Clear divs and reinitialize
       hideAll(left_div)
-      btn.classList.toggle("hidden", true)
+      toggleVisibility(btn, false)
       // todo kaupunkimaisema lol
       toggleVisibility(main_buttons, true)
+      left_div.removeChild(text);
 
   // KUN KÄYTETÄÄN NAPPEJA UUSIKSI, LISÄÄ ONCE : TRUE
   },{ once: true });
