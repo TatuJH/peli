@@ -6,16 +6,9 @@ from flask_cors import CORS
 import testi
 from testi import achievements
 
-
-import data
-
-
 artefacts = list()
-# nykyinen manner
 cont = "EU"
-# kaikki mantereet
 conts = []
-# airport
 airport = "Helsinki Vantaa Airport"
 country = "Finland"
 size = ""
@@ -26,12 +19,10 @@ total_distance = 0
 visited_countries = []
 actions_left = 1
 reason = "no_time"
-
 money_earned = 1000000
 artefacts_earned = 0
 events_completed = 0
 converted_amount = 0
-
 countries_index = 0
 money_index = 0
 distance_index = 0
@@ -43,22 +34,6 @@ convert_index = 0
 app = flask.Flask(__name__)
 CORS(app)
 
-# @app.route('/intro_text', methods=['GET', 'POST'])
-# def introduction():
-#
-#     teksti = testi.intro_text()
-#
-#
-#
-#     answer = {
-#         "text" : teksti,
-#         "money" : 0
-#     }
-#
-#
-#     return answer
-#
-#
 @app.route('/scores', methods=['GET'])
 def score():
 
@@ -231,8 +206,6 @@ def work():
     print(response)
 
     return response
-
-
 
 def achievement():
     global visited_countries, money_earned, total_distance, artefacts_earned, events_completed, countries_index, money_index

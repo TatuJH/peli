@@ -5,7 +5,7 @@ import data
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demogame',
+    database='demokanta',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -21,7 +21,6 @@ class Artefact:
 
 uncompleted_events = []
 money_modifier = 1
-
 eventit = {
         1:{
             "event":f"You are given an investment opportunity on the street by a man in a trench coat. He says that by giving him ${int(round(100*money_modifier))} you could make ${int(round(300*money_modifier))}." ,
@@ -465,81 +464,6 @@ eventit = {
     }
 }
 
-kysymykset = {
-    "NA": {
-        1:{"kysymys":"What is the highest mountain in North America? _____  ________",
-           "vastaus":"mount mckinley"},
-        2:{"kysymys":"Who was the first president of the United States? ______  __________",
-           "vastaus":"george washington"},
-        3:{"kysymys":"Which country colonized Canada before it became independent? The ______  _______",
-           "vastaus":"united kingdom"},
-        4:{"kysymys":"How many states are there in the United States of America? __",
-           "vastaus":"50"},
-        5:{"kysymys":"What is the largest city in North America by population? ______  ____",
-           "vastaus":"mexico city"}
-    },
-    "SA": {
-        1:{"kysymys":"What is the largest country in South America by area? _______",
-           "vastaus":"brazil"},
-        2:{"kysymys":"The tango dance originated in which South American country? _________",
-           "vastaus":"argentina"},
-        3:{"kysymys":"Which South American country has coastlines on both the Pacific Ocean and the Caribbean Sea? ________",
-           "vastaus":"colombia"},
-        4:{"kysymys":"In which city is the famous statue 'Christ the Redeemer' located? ___  __  ______",
-           "vastaus":"rio de janeiro"},
-        5:{"kysymys":"What is the longest river in South America? The ______  _____",
-           "vastaus":"amazon river"}
-    },
-    "EU": {
-        1:{"kysymys":"Which European country is famous for inventing pizza and pasta? _____",
-           "vastaus":"italy"},
-        2:{"kysymys":"What is the smallest country in Europe, by both population and area? _______  ____",
-           "vastaus":"vatican city"},
-        3:{"kysymys":"What is the longest river in Europe? The _____  _____",
-           "vastaus":"volga river"},
-        4:{"kysymys":"What mountain range separates Europe and Asia? The ____  ________",
-           "vastaus":"ural mountains"},
-        5:{"kysymys":"Which year did the Soviet Union collapse? ____",
-           "vastaus":"1991"}
-    },
-    "AS": {
-        1:{"kysymys":"What is the highest mountain in Asia? _____  _______",
-           "vastaus":"mount everest"},
-        2:{"kysymys":"In which country is the longest river in Asia located? _____",
-           "vastaus":"china"},
-        3:{"kysymys":"Who was the founder of the Mongol Empire? _______  ____",
-           "vastaus":"genghis khan"},
-        4:{"kysymys":"Which city is the most populous in Asia? _____",
-           "vastaus":"tokyo"},
-        5:{"kysymys":"In which country can you ride the world’s fastest train, the Maglev? _____",
-           "vastaus":"china"}
-    },
-    "OC": {
-        1:{"kysymys":"What is the largest city in Australia by population? ______",
-           "vastaus":"sydney"},
-        2:{"kysymys":"Which reef system, visible from space, lies off the coast of Queensland? The _____  _______  ____",
-           "vastaus":"great barrier reef"},
-        3:{"kysymys":"What is the national animal of Australia? The ________",
-           "vastaus":"kangaroo"},
-        4:{"kysymys":"How many states are there in Australia? _",
-           "vastaus":"6"},
-        5:{"kysymys":"What is the capital city of Australia? _______",
-           "vastaus":"canberra"}
-    },
-    "AF": {
-        1:{"kysymys":"What is the longest river in Africa? The ____  _____",
-           "vastaus":"nile river"},
-        2:{"kysymys":"What is the largest desert in Africa? The ______  ______",
-           "vastaus":"sahara desert"},
-        3:{"kysymys":"What is the only African country that was never colonized? _______",
-           "vastaus":"ethiopia"},
-        4:{"kysymys":"What is the most populous country in Africa? _______",
-           "vastaus":"nigeria"},
-        5:{"kysymys":"What is the highest mountain in Africa? _____  __________",
-           "vastaus":"mount kilimanjaro"}
-    }
-}
-
 achievements = {
     "distance":[
         (10000,"\033[1mFirst Steps\033[0m for travelling \033[36m10000 km\033[0m",50),
@@ -794,75 +718,6 @@ def get_airport(current_airport):
             airport_list.append(airport)
 
     return airport_list
-
-# def achievement():
-#     global visited_countries, money_earned, total_distance, artefacts_earned, events_completed, countries_index
-#     global money_index, artefacts_index, events_index, money, achieved, converted_amount, converted_index
-#
-#     msgs = []
-#
-#     # jokaisessa kohdassa tarkistetaan että indeksi on taulukon sisällä
-#     if countries_index < len(achievements.get("countries", [])) and \
-#        len(visited_countries) >= achievements["countries"][countries_index][0]:
-#         name = achievements["countries"][countries_index][1]
-#         reward = achievements["countries"][countries_index][2]
-#         msgs.append(f"You've achieved {name} and earned ${reward}.")
-#         msgs.append("----")
-#         money += reward
-#         achieved.append(name)
-#         countries_index += 1
-#
-#     if money_index < len(achievements.get("money", [])) and \
-#        money_earned >= achievements["money"][money_index][0]:
-#         name = achievements["money"][money_index][1]
-#         reward = achievements["money"][money_index][2]
-#         msgs.append(f"You've achieved {name} and earned ${reward}.")
-#         msgs.append("----")
-#         money += reward
-#         achieved.append(name)
-#         money_index += 1
-#
-#     if distance_index < len(achievements.get("distance", [])) and \
-#        total_distance >= achievements["distance"][distance_index][0]:
-#         name = achievements["distance"][distance_index][1]
-#         reward = achievements["distance"][distance_index][2]
-#         msgs.append(f"You've achieved {name} and earned ${reward}.")
-#         msgs.append("----")
-#         money += reward
-#         achieved.append(name)
-#         distance_index += 1
-#
-#     if artefacts_index < len(achievements.get("artefacts", [])) and \
-#        artefacts_earned >= achievements["artefacts"][artefacts_index][0]:
-#         name = achievements["artefacts"][artefacts_index][1]
-#         reward = achievements["artefacts"][artefacts_index][2]
-#         msgs.append(f"You've achieved {name} and earned ${reward}.")
-#         msgs.append("----")
-#         money += reward
-#         achieved.append(name)
-#         artefacts_index += 1
-#
-#     if events_index < len(achievements.get("events", [])) and \
-#        events_completed >= achievements["events"][events_index][0]:
-#         name = achievements["events"][events_index][1]
-#         reward = achievements["events"][events_index][2]
-#         msgs.append(f"You've achieved {name} and earned ${reward}.")
-#         msgs.append("----")
-#         money += reward
-#         achieved.append(name)
-#         events_index += 1
-#
-#     if convert_index < len(achievements.get("convert", [])) and \
-#        converted_amount >= achievements["convert"][convert_index][0]:
-#         name = achievements["convert"][convert_index][1]
-#         reward = achievements["convert"][convert_index][2]
-#         msgs.append(f"You've achieved {name} and earned ${reward}.")
-#         msgs.append("----")
-#         money += reward
-#         achieved.append(name)
-#         convert_index += 1
-#
-#     return msgs
 
 def winning(money, time, total_distance, achieved, visited_countries):
     global cursor
