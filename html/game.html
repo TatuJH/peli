@@ -25,28 +25,33 @@
         body {
             display: flex;
             flex-direction: column;
+            background-color: #32659B;
         }
 
         /* Grid container */
-        #main {
+        #main_div {
             display: grid;
 
             /* Sivuttainen tila */
             grid-template-columns: 1fr 1fr;
             /* niiden välinen tila */
-            gap: 5rem;
+            gap: 2rem;
             /* mikä vittu edes on vh? */
-            height: calc(100vh - 80px);
+            height: calc(100vh - 9rem);
             /* jos halutaan paddingia niin tähän vaan
              sivujen järjestys on myötäpäivään alkaen ylhäältä*/
             padding: 0px 0px 0px 0px;
-            background-color: #32659B;
 
+        }
+
+        #map_div {
+            width: 100%;
+            height: 100%;
         }
 
 
         /*vas ja oikee */
-        .main_div {
+        .split_screen {
             background-color: #f1f1f1;
             border: 5px solid #ccc;
             border-radius: 5px;
@@ -84,9 +89,9 @@
 
         <nav class="main_nav">
 
-            <p id="money">Money: 1000</p>
-            <p id="time">Time: 365</p>
-            <p id="actions">Actions left: 1</p>
+            <p id="money_display">Money: 1000</p>
+            <p id="time_display">Time: 365</p>
+            <p id="actions_display">Actions left: 1</p>
 
         </nav>
 
@@ -95,38 +100,52 @@
 
     </header>
 
-    <div id="main">
+    <div id="main_div">
 
-        <div id="left_div" class="main_div">
+        <div id="left_div" class="split_screen">
 
-            <div id="event_div">
-
-            </div>
-
-            <div id="fight_div">
+            <div id="event_div" class="hidden">
 
             </div>
 
-        </div>
+            <div id="fight_div" class="hidden">
 
-        <div id="right_div" class="main_div">
-            <!--kun ollaan kaupungissa -->
+            </div>
+
+            <div id="work_div" class="hidden">
+
+            </div>
+
+            <div id="map_div" class="hidden">
+
+            </div>
+
+            <div id="shop_div" class="hidden">
+
+            </div>
+
+            </div>
+
+        <div id="right_div" class="split_screen">
+
             <div id="main_buttons">
 
-            </div>
-
-            <div id="event_buttons">
-
-            </div>
-
-            <div id="fight_buttons">
+                <button class="button" id="work_button">WORK</button>
+                <button class="button" id="map_button">MAP</button>
+                <button class="button" id="event_button">EVENT</button>
+                <button class="button" id="fight_button">FIGHT</button>
 
             </div>
 
+            <div class="hidden" id="action_buttons">
 
-        <div id="inventory">
+                <button class="button hidden" id="universal_button"></button>
+
+            </div>
+
+        <div class="hidden" id="inventory_div">
             <h2>REPPU</h2>
-            <ul id="inv">
+            <ul id="inventory_list">
 
             <!-- 12 reppuslottia lol todo laita tekstiin eri värit kuten ekassa pelissä-->
             <li class ="art">backpack slot :p</li>

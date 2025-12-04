@@ -5,7 +5,7 @@ import data
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demokanta',
+    database='demogame',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -681,6 +681,8 @@ def get_event():
     numero = random.choice(uncompleted_events)
     uncompleted_events.remove(numero)
 
+    # TESTI EVENT
+    # numero = 14
     choices = []
     mcosts = []
     tcosts = []
@@ -701,6 +703,9 @@ def get_event():
         "time_costs": tcosts,
         "artefacts_costs": acosts
     }
+    # debug
+    # print(thing)
+    return thing
 
 def work():
     max_money = int(round(200 * money_modifier))
@@ -728,6 +733,7 @@ def start_fight(amount):
     player_hp = 10 + 5 * amount
     player_heals = 0 + amount // 2
 
+    # hp, dmg, dodge, speed
     types = {
         "Bulwark": [16, 7, 1, 3],
         "Warden": [10, 4, 2.5, 2],
@@ -789,74 +795,74 @@ def get_airport(current_airport):
 
     return airport_list
 
-def achievement():
-    global visited_countries, money_earned, total_distance, artefacts_earned, events_completed, countries_index
-    global money_index, artefacts_index, events_index, money, achieved, converted_amount, converted_index
-
-    msgs = []
-
-    # jokaisessa kohdassa tarkistetaan että indeksi on taulukon sisällä
-    if countries_index < len(achievements.get("countries", [])) and \
-       len(visited_countries) >= achievements["countries"][countries_index][0]:
-        name = achievements["countries"][countries_index][1]
-        reward = achievements["countries"][countries_index][2]
-        msgs.append(f"You've achieved {name} and earned ${reward}.")
-        msgs.append("----")
-        money += reward
-        achieved.append(name)
-        countries_index += 1
-
-    if money_index < len(achievements.get("money", [])) and \
-       money_earned >= achievements["money"][money_index][0]:
-        name = achievements["money"][money_index][1]
-        reward = achievements["money"][money_index][2]
-        msgs.append(f"You've achieved {name} and earned ${reward}.")
-        msgs.append("----")
-        money += reward
-        achieved.append(name)
-        money_index += 1
-
-    if distance_index < len(achievements.get("distance", [])) and \
-       total_distance >= achievements["distance"][distance_index][0]:
-        name = achievements["distance"][distance_index][1]
-        reward = achievements["distance"][distance_index][2]
-        msgs.append(f"You've achieved {name} and earned ${reward}.")
-        msgs.append("----")
-        money += reward
-        achieved.append(name)
-        distance_index += 1
-
-    if artefacts_index < len(achievements.get("artefacts", [])) and \
-       artefacts_earned >= achievements["artefacts"][artefacts_index][0]:
-        name = achievements["artefacts"][artefacts_index][1]
-        reward = achievements["artefacts"][artefacts_index][2]
-        msgs.append(f"You've achieved {name} and earned ${reward}.")
-        msgs.append("----")
-        money += reward
-        achieved.append(name)
-        artefacts_index += 1
-
-    if events_index < len(achievements.get("events", [])) and \
-       events_completed >= achievements["events"][events_index][0]:
-        name = achievements["events"][events_index][1]
-        reward = achievements["events"][events_index][2]
-        msgs.append(f"You've achieved {name} and earned ${reward}.")
-        msgs.append("----")
-        money += reward
-        achieved.append(name)
-        events_index += 1
-
-    if convert_index < len(achievements.get("convert", [])) and \
-       converted_amount >= achievements["convert"][convert_index][0]:
-        name = achievements["convert"][convert_index][1]
-        reward = achievements["convert"][convert_index][2]
-        msgs.append(f"You've achieved {name} and earned ${reward}.")
-        msgs.append("----")
-        money += reward
-        achieved.append(name)
-        convert_index += 1
-
-    return msgs
+# def achievement():
+#     global visited_countries, money_earned, total_distance, artefacts_earned, events_completed, countries_index
+#     global money_index, artefacts_index, events_index, money, achieved, converted_amount, converted_index
+#
+#     msgs = []
+#
+#     # jokaisessa kohdassa tarkistetaan että indeksi on taulukon sisällä
+#     if countries_index < len(achievements.get("countries", [])) and \
+#        len(visited_countries) >= achievements["countries"][countries_index][0]:
+#         name = achievements["countries"][countries_index][1]
+#         reward = achievements["countries"][countries_index][2]
+#         msgs.append(f"You've achieved {name} and earned ${reward}.")
+#         msgs.append("----")
+#         money += reward
+#         achieved.append(name)
+#         countries_index += 1
+#
+#     if money_index < len(achievements.get("money", [])) and \
+#        money_earned >= achievements["money"][money_index][0]:
+#         name = achievements["money"][money_index][1]
+#         reward = achievements["money"][money_index][2]
+#         msgs.append(f"You've achieved {name} and earned ${reward}.")
+#         msgs.append("----")
+#         money += reward
+#         achieved.append(name)
+#         money_index += 1
+#
+#     if distance_index < len(achievements.get("distance", [])) and \
+#        total_distance >= achievements["distance"][distance_index][0]:
+#         name = achievements["distance"][distance_index][1]
+#         reward = achievements["distance"][distance_index][2]
+#         msgs.append(f"You've achieved {name} and earned ${reward}.")
+#         msgs.append("----")
+#         money += reward
+#         achieved.append(name)
+#         distance_index += 1
+#
+#     if artefacts_index < len(achievements.get("artefacts", [])) and \
+#        artefacts_earned >= achievements["artefacts"][artefacts_index][0]:
+#         name = achievements["artefacts"][artefacts_index][1]
+#         reward = achievements["artefacts"][artefacts_index][2]
+#         msgs.append(f"You've achieved {name} and earned ${reward}.")
+#         msgs.append("----")
+#         money += reward
+#         achieved.append(name)
+#         artefacts_index += 1
+#
+#     if events_index < len(achievements.get("events", [])) and \
+#        events_completed >= achievements["events"][events_index][0]:
+#         name = achievements["events"][events_index][1]
+#         reward = achievements["events"][events_index][2]
+#         msgs.append(f"You've achieved {name} and earned ${reward}.")
+#         msgs.append("----")
+#         money += reward
+#         achieved.append(name)
+#         events_index += 1
+#
+#     if convert_index < len(achievements.get("convert", [])) and \
+#        converted_amount >= achievements["convert"][convert_index][0]:
+#         name = achievements["convert"][convert_index][1]
+#         reward = achievements["convert"][convert_index][2]
+#         msgs.append(f"You've achieved {name} and earned ${reward}.")
+#         msgs.append("----")
+#         money += reward
+#         achieved.append(name)
+#         convert_index += 1
+#
+#     return msgs
 
 def winning(money, time, total_distance, achieved, visited_countries):
     global cursor

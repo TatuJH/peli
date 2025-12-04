@@ -19,7 +19,7 @@ conts = []
 airport = "Helsinki Vantaa Airport"
 country = "Finland"
 size = ""
-money = 100
+money = 1000
 time = 365
 achieved = []
 total_distance = 0
@@ -123,18 +123,22 @@ def getevent(action, number, choice):
         # heitetään vaan koko lista js puolelle
         response["all_artefacts"] = json.dumps([art.__dict__ for art in artefacts])
 
+        response["actions"] = actions_left
+
         # debug
         print(response)
         return response
 
 @app.route('/fight/<action>/<int:enemy>', methods=['GET', 'POST'])
 def fight(action, enemy):
-    global fight, enemy_amount, actions_left
+    global fight, enemy_amount, actions_left, money, time
     if action == "start":
         actions_left -= 1
         enemy_amount = random.randint(2, 4)
         fight = testi.start_fight(enemy_amount)
         fight["actions"] = actions_left
+        fight['money'] = money
+        fight['time'] = time
         return fight
 
     if action == "strike":
@@ -181,10 +185,12 @@ def fight(action, enemy):
 
     fight['guarding'] = False
     fight["actions"] = actions_left
+    fight['money'] = money
+    fight['time'] = time
     return fight
 
 @app.route('/airport/<action>/<atarget>/<ctarget>', methods=['GET', 'POST'])
-def get_airport(action, atarget, ctarget):
+def airports(action, atarget, ctarget):
     global airport, country, actions_left
     if action == "get":
         response = {}
@@ -221,6 +227,8 @@ def work():
     response["time"] = time
     response["money"] = money
     response["all_artefacts"] = json.dumps([art.__dict__ for art in artefacts])
+
+    print(response)
 
     return response
 

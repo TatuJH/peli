@@ -1,104 +1,151 @@
+//Removed obsolete variables, functions, etc.
+//Added permanent elements instead of initializing them in JS; check HTML
+//universal_button for simple tasks (OK-button, etc.)
+//When adding eventListener to universal_button, use {once: true}
+//Don't use classList.toggle, use either .add or .remove
+//hideAll() hides all elements from right_div and left_div + additionally universal_button
+//removeActions() removes all non-permanent action buttons (like event choices)
+//updateInventory() now updateStats() for clarity
+//Everything related to inventory (artefacts etc.) unchanged
+//updateStats() after every fetch request
+
+//--------------Variables--------------
+
+//Initialize all Flask variables first so they can be referenced everywhere
 let response;
 let data;
-let update;
-
-let map = null;
-
-const left_div = document.getElementById('left_div');
-const right_div = document.getElementById('right_div');
-const main_buttons = document.getElementById('main_buttons');
-const event_buttons = document.getElementById('event_buttons');
-
-
-const getworkbtn = document.createElement('button');
-getworkbtn.classList.add('button');
-getworkbtn.textContent = 'WORK';
-
-const getmapbtn = document.createElement('button');
-getmapbtn.classList.add('button');
-getmapbtn.textContent = 'MAP';
-
-const geteventbtn = document.createElement('button');
-geteventbtn.classList.add('button');
-geteventbtn.textContent = 'EVENT';
-
-const getfightbtn = document.createElement('button');
-getfightbtn.classList.add('button');
-getfightbtn.textContent = 'FIGHT';
-
-main_buttons.appendChild(getworkbtn)
-main_buttons.appendChild(getmapbtn)
-main_buttons.appendChild(geteventbtn)
-main_buttons.appendChild(getfightbtn)
-
-// tää on nappi jota käytetään moneen eri asiaan o_O
-const btn = document.createElement('button');
-btn.classList.add('button');
-btn.textContent = 'buton';
-btn.classList.toggle("hidden", true)
-right_div.appendChild(btn)
-
-const stats_money = document.getElementById('money');
-const stats_time = document.getElementById('time');
-const stats_actions = document.getElementById('actions');
-
-const invdiv = document.getElementById("inventory")
-const invbutton = document.getElementById("inventory_button")
-
-// tehdään nää vaan kerran
-let event_div = document.getElementById("event_div")
-let event_text = document.createElement('p');
-let event_question = document.createElement('p');
-
-event_div.appendChild(event_text);
-event_div.appendChild(event_question);
-
-const text = document.createElement('p');
-
-// repun tekstielementit
-let art_p_elements = [];
-
-// laita ne kaikki vaan heti listaan
-art_p_elements = document.getElementsByClassName("art");
+let sub_data; //<--- Just in case
 
 //Initialize map
-getmapbtn.addEventListener('click', async() => {
+let map = null;
 
-    hideAll(right_div)
-    hideAll(left_div)
+//--------------------------------------------------------
 
+//--------------Functions--------------
+
+//Hides all relevant elements
+function hideAll() {
+    right_div.querySelectorAll('div').forEach(child => {
+        child.classList.add('hidden');
+    });
+
+    left_div.querySelectorAll('div').forEach(child => {
+        child.classList.add('hidden');
+    });
+    left_div.className = '';
+    left_div.classList.add('split_screen');
+
+    universal_button.classList.add("hidden");
+
+}
+
+//Removes action buttons
+function removeActions() {
+
+    action_buttons.querySelectorAll('button').forEach(child => {
+
+        if (child.id !== 'universal_button') {
+            child.remove();
+        }
+
+    });
+
+}
+
+//Updates all user stats on the page
+function updateStats() {
+    money_display.textContent = `Money: ${data.money}`;
+    time_display.textContent = `Time: ${data.time}`;
+    actions_display.textContent = `Actions left: ${data.actions}`
+
+    //TODO en tiiä miten inventory toimii nii tätä varmaa pitää kehittää
+
+    // let arts = JSON.parse(data.all_artefacts)
+    //
+    // for (let i = 0; i < art_p_elements.length; i++) {
+    //
+    //     if(arts[i]) {
+    //         art_p_elements[i].textContent = `Artefact name: ${arts[i]["name"]} Value: $${arts[i]["value"]} Continent: ${arts[i]["continent"]}`
+    //     } else {
+    //         art_p_elements[i].textContent = "tyhjä repputila :D"
+    //     }
+    //
+    // }
+
+}
+
+//--------------------------------------------------------
+
+//--------------Permanent elements--------------
+
+const main_div = document.getElementById("main");
+const left_div = document.getElementById('left_div');
+const right_div = document.getElementById('right_div');
+const event_div = document.getElementById('event_div');
+const fight_div = document.getElementById('fight_div');
+const work_div = document.getElementById('work_div');
+const map_div = document.getElementById('map_div');
+const shop_div = document.getElementById('shop_div');
+const main_buttons = document.getElementById('main_buttons');
+const work_button = document.getElementById('work_button');
+const event_button = document.getElementById('event_button');
+const fight_button = document.getElementById('fight_button');
+const map_button = document.getElementById('map_button');
+const money_display = document.getElementById('money_display');
+const time_display = document.getElementById('time_display');
+const actions_display = document.getElementById('actions_display');
+const inv_button = document.getElementById('inventory_button');
+const inv_div = document.getElementById('inventory_div');
+const inv_list = document.getElementById('inventory_list');
+const universal_button = document.getElementById('universal_button');
+const action_buttons = document.getElementById('action_buttons');
+
+//--------------------------------------------------------
+
+//--------------Permanent eventListeners--------------
+
+//Initialize functionality for map button
+map_button.addEventListener('click', async() => {
+
+    hideAll()
+    map_div.classList.remove('hidden');
+
+    //Make sure map is reset
     if (map) {
         map.remove();
     }
 
-    map = L.map('left_div', {
+    //Initialize map element
+    map = L.map('map_div', {
         worldCopyJump: false,
         minZoom: 2,
         maxZoom: 20
     }).setView([0, 0], 2);
 
-    // map.setMaxBounds([
-    //     [-90, -180],
-    //     [90, 180]
-    // ]);
-    // map.on('drag', ()=> {
-    //     map.panInsideBounds([
-    //         [-90, -180],
-    //         [90, 180]
-    //     ], { animate: false });
-    // });
+    //Stop map from scrolling too much
+    map.setMaxBounds([
+        [-90, -180],
+        [90, 180]
+    ]);
+    map.on('drag', ()=> {
+        map.panInsideBounds([
+            [-90, -180],
+            [90, 180]
+        ], { animate: false });
+    });
 
-      // map styles
+    // map styles
 
-      // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      //     maxZoom: 19,
-      //     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright"></a>'
-      // }).addTo(map);
+    // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //     maxZoom: 19,
+    //     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright"></a>'
+    // }).addTo(map);
 
-      // L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        // attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-      // }).addTo(map);
+    // L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    // attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    // }).addTo(map);
 
+    //Add the "map" part to the map element
     L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.{ext}', {
         minZoom: 0,
         maxZoom: 20,
@@ -109,10 +156,9 @@ getmapbtn.addEventListener('click', async() => {
     response = await fetch('http://127.0.0.1:3000/airport/get/0/0');
     data = await response.json();
 
-    updateInventory(data);
+    updateStats();
 
-    right_div.appendChild(text)
-    //Add each airport to map
+    //Add a circle to the map for each airport
     for (let i = 0; i < data.airports.length; i++) {
 
         //Set colors for different airport types
@@ -145,37 +191,33 @@ getmapbtn.addEventListener('click', async() => {
         if (i !== 0) {
           circle.addEventListener('click', () => {
 
-          btn.textContent = "DEPART"
-          btn.addEventListener('click', async() => {
+              //Initialize depart button with the universal button element
+              universal_button.textContent = "DEPART"
+              universal_button.addEventListener('click', async () => {
 
-              //Let Flask know where user departed
-              response = await fetch(`http://127.0.0.1:3000/airport/depart/${data.airports[i].aname}/${data.airports[i].cname}`);
-              data = await response.json();
+                  //Let Flask know where user departed
+                  response = await fetch(`http://127.0.0.1:3000/airport/depart/${data.airports[i].aname}/${data.airports[i].cname}`);
+                  data = await response.json();
 
-              updateInventory(data);
+                  updateStats();
 
-              //Clear divs and reinitialize
-              hideAll(left_div)
-              left_div.className = '';
-              left_div.classList.add('main_div');
-              hideAll(right_div)
-              text.classList.toggle("hidden", true)
-              btn.classList.toggle("hidden",true)
-              toggleVisibility(main_buttons, true)
-          },{ once: true });
-          btn.classList.toggle("hidden", false)
+                  //Clear divs and reinitialize
+                  hideAll();
+                  universal_button.classList.add("hidden");
+                  main_buttons.classList.remove("hidden");
 
-          // TODO: placeholder !!!
-          text.textContent = `Airport: ${data.airports[i]['aname']}, country: ${data.airports[i]['cname']}, size: ${data.airports[i]['type']}, latitude: ${data.airports[i]['latitude']}, longitude: ${data.airports[i]['longitude']}, ICAO: ${data.airports[i]['icao']}, continent: ${data.airports[i]['continent']}`;
+
+              }, {once: true});
+              universal_button.classList.remove("hidden");
 
           });
 
           //Add effects to circlemarker
           circle.on('mouseover', () => {
-              circle.setStyle({fillOpacity : 0.5});
+              circle.setStyle({fillOpacity: 0.5});
           });
           circle.on('mouseout', () => {
-              circle.setStyle({fillOpacity : 1});
+              circle.setStyle({fillOpacity: 1});
           });
           circle.bindTooltip(`${data.airports[i].aname}`, {
               permanent: false,
@@ -195,99 +237,57 @@ getmapbtn.addEventListener('click', async() => {
 
     }
 
+    action_buttons.classList.remove('hidden');
+
 });
 
+//Initialize functionality for event button
+event_button.addEventListener('click', async() => {
 
-
-// todo inventory ja saavutukset tulee muiden PÄÄLLE, niin ei tarvii pitää kirjaa mitä niiden alla on
-invbutton.addEventListener("click", async function()
-{
-    toggleVisibility(invdiv)
-});
-
-// anna tälle elementti jonka haluat piilottaa tai näyttää
-// true laittaa näkyviin, false piiloon, ei mitään tekee siitä togglen
-function toggleVisibility(thing, bool = undefined)
-{
-    if(bool === true)
-        thing.classList.toggle('hidden', false);
-    else if (bool === false)
-        thing.classList.toggle('hidden', true);
-    else
-        thing.classList.toggle('hidden');
-}
-
-// tää piilottaa jokaikisen lapsen divissä (käytännössä nollaa näkymän)
-function hideAll(div)
-{
-    //const children = div.querySelectorAll("div");
-    const children = div.querySelectorAll("div");
-    children.forEach(thing => {
-        thing.classList.toggle('hidden', true);
-    })
-}
-
-
-geteventbtn.addEventListener('click', async() => {
-
-    //Clear divs
-    hideAll(left_div)
-    hideAll(right_div)
-
+    hideAll();
 
     //Fetch random event from Python via Flask
     response = await fetch('http://127.0.0.1:3000/events/get/0/x');
     data = await response.json();
 
-    // yksinkertaisesti muutetaan teksti
-    event_text.textContent = data.text;
-    event_question.textContent = data.question;
+    //Initialize non-permanent text element for events
+    const event_text = document.createElement('p');
+    event_text.innerHTML = `${data.text}<br><br>${data.question}`;
+    event_div.appendChild(event_text);
 
-    // laitetaan näkyville vasta kun info on muutettu
-    toggleVisibility(event_div, true)
-    toggleVisibility(event_buttons, true)
-
-    //Get choices and create button for each one
+    //Get choices and create non-permanent button for each one
     for (let i = 0; i < data.choices.length; i++) {
 
-        const eventbutton = document.createElement('button');
-        eventbutton.textContent = data.choices[i];
-        eventbutton.classList.add('button');
-        event_buttons.appendChild(eventbutton)
+        const choice_button = document.createElement('button');
+        choice_button.textContent = data.choices[i];
+        choice_button.classList.add('button');
+        choice_button.addEventListener('click', async() => {
 
-        eventbutton.addEventListener('click', async() => {
-
-            // jos eventti menee läpi
+            //Check whether user has enough resources
             if (data.money >= data.money_costs[i] && data.time >= data.time_costs[i] && data.artefacts >= data.artefacts_costs[i]) {
-
 
                 //Fetch event results from Python via Flask
                 response = await fetch(`http://127.0.0.1:3000/events/result/${data.number}/${data.choices[i]}`);
                 data = await response.json();
 
-                // kyssäri ja napit vittuun
-                toggleVisibility(event_question, false)
-                toggleVisibility(event_buttons, false)
+                updateStats();
 
+                removeActions();
+
+                //Update event text
                 event_text.textContent = data.text;
 
-                //Ok button takes back to menu
+                //Initialize universal button for going back
+                universal_button.textContent = 'OK';
+                universal_button.classList.remove('hidden');
+                universal_button.addEventListener('click', () => {
 
-                btn.textContent = 'OK';
-                toggleVisibility(btn, true)
-                btn.addEventListener('click', () => {
+                    hideAll()
+                    event_text.remove();
 
-                    //Clear divs and reinitialize
-                    event_buttons.innerHTML = ""
-                    toggleVisibility(btn, false)
-                    hideAll(left_div)
-                    // todo kaupunkimaisema lol
-                    toggleVisibility(main_buttons, true)
-                // KUN KÄYTETÄÄN NAPPEJA UUSIKSI, LISÄÄ ONCE : TRUE
-                },{ once: true });
+                    main_buttons.classList.remove('hidden');
 
-                // lisää reppunäkymään aarteet - muista parsettaa
-                updateInventory(data)
+                }, {once: true});
 
             } else {
                 event_text.innerHTML += '<br>Not enough resources';
@@ -295,134 +295,111 @@ geteventbtn.addEventListener('click', async() => {
 
         });
 
+        action_buttons.appendChild(choice_button);
 
     }
+
+    //Show everything
+    action_buttons.classList.remove('hidden');
+    event_div.classList.remove('hidden');
 
 });
 
-
-// Tavoitteena olisi aina käyttää tätä datan päivitykseen sivulle
-function updateInventory(data)
-{
-    stats_money.textContent = `Money: ${data.money}`;
-    stats_time.textContent = `Time: ${data.time}`;
-    stats_actions.textContent = `Actions left: ${data.actions}`
-
-    let arts = JSON.parse(data.all_artefacts)
-
-    for (let i = 0; i < art_p_elements.length; i++) {
-
-        if(arts[i]) {
-            art_p_elements[i].textContent = `Artefact name: ${arts[i]["name"]} Value: $${arts[i]["value"]} Continent: ${arts[i]["continent"]}`
-        } else {
-            art_p_elements[i].textContent = "tyhjä repputila :D"
-        }
-
-    }
-
-}
-
-// TODO PÄIVITÄ TÄÄ UUTEEN SYSTEEMIIN
-getfightbtn.addEventListener('click', async() => {
+//Initialize functionality for fight button
+fight_button.addEventListener('click', async() => {
 
     function updateFight() {
 
         //Update page with new data
-        document.getElementById('fighttxt').textContent = data.text;
+        fight_text.innerHTML = `${data.text}<br><br>HP: <span class="hp-text">${data.player_hp}</span>, remaining heals: <span class="ptn-text">${data.player_heals}</span><br>`;
         for (let i = 0; i < Object.keys(data.enemies_in_fight).length; i++) {
 
             if (data.enemies_in_fight[i].hp > 0) {
-                    document.getElementById(`fightenemy${i}`).innerHTML = `Enemy ${i + 1}: ${data.enemies_in_fight[i].type} <span class="hp-text">${data.enemies_in_fight[i].hp}</span> <span class="spd-text">(charging for ${data.enemies_in_fight[i].spd} turns)</span>`;
+                fight_text.innerHTML += `<br>Enemy ${i + 1}: ${data.enemies_in_fight[i].type} <span class="hp-text">${data.enemies_in_fight[i].hp}</span> <span class="spd-text">(charging for ${data.enemies_in_fight[i].spd} turns)</span>`;
             }
 
         }
 
-        document.getElementById('player').innerHTML = `HP: <span class="hp-text">${data.player_hp}</span>, remaining heals: <span class="ptn-text">${data.player_heals}</span>`;
-
     }
 
-
-    hideAll(left_div)
-    hideAll(right_div)
-
-    const fight = document.getElementById("fight_div")
-    const buttons = document.getElementById("fight_buttons")
+    hideAll();
 
     //Fetch a fight starting position from Python via Flask
     response = await fetch('http://127.0.0.1:3000/fight/start/0');
     data = await response.json();
 
-    //Create p element for tracking fight events
+    updateStats();
+
+    //Create non-permanent p element for tracking fight status
     const fight_text = document.createElement('p');
-    fight_text.id="fighttxt";
-    fight_text.textContent = data.text;
-    fight.appendChild(fight_text);
-
-    //Create p element for tracking user
-    const player = document.createElement('p');
-    player.id="player";
-    player.innerHTML = `HP: <span class="hp-text">${data.player_hp}</span>, remaining heals: <span class="ptn-text">${data.player_heals}</span>`;
-    fight.appendChild(player);
-
-    //Create p elements for each enemy
+    fight_text.innerHTML = `${data.text}<br><br>HP: <span class="hp-text">${data.player_hp}</span>, remaining heals: <span class="ptn-text">${data.player_heals}</span><br>`;
     for (let i = 0; i < Object.keys(data.enemies_in_fight).length; i++) {
 
-        const enemy = document.createElement('p');
-        enemy.id=`fightenemy${i}`
-        enemy.innerHTML = `Enemy ${i + 1}: ${data.enemies_in_fight[i].type} <span class="hp-text">${data.enemies_in_fight[i].hp}</span> <span class="spd-text">(charging for ${data.enemies_in_fight[i].spd} turns)</span>`;
-        fight.appendChild(enemy);
+        fight_text.innerHTML += `<br>Enemy ${i + 1}: ${data.enemies_in_fight[i].type} <span class="hp-text">${data.enemies_in_fight[i].hp}</span> <span class="spd-text">(charging for ${data.enemies_in_fight[i].spd} turns)</span>`;
 
     }
+    fight_div.appendChild(fight_text);
 
-    //Create button for attacking each enemy
+    //Create non-permanent buttons for attacking each enemy
     for (let i = 0; i < Object.keys(data.enemies_in_fight).length; i++) {
 
-        const strike = document.createElement('button');
-        strike.textContent = `Strike enemy ${i + 1} (${data.enemies_in_fight[i].type})`
-        strike.classList.add('button');
-        buttons.appendChild(strike)
+        const strike_button = document.createElement('button');
+        strike_button.textContent = `Strike enemy ${i + 1} (${data.enemies_in_fight[i].type})`
+        strike_button.classList.add('button');
+        action_buttons.appendChild(strike_button);
 
-        strike.addEventListener('click', async() => {
+        strike_button.addEventListener('click', async() => {
 
             //Update ongoing fight on Python via Flask
             response = await fetch(`http://127.0.0.1:3000/fight/strike/${i}`);
             data = await response.json();
+
+            updateStats();
 
             updateFight();
 
             //Remove enemy if defeated
             if (data.enemies_in_fight[i].hp <= 0) {
 
-                fight.removeChild(document.getElementById(`fightenemy${i}`));
-                buttons.removeChild(strike);
+                action_buttons.removeChild(strike_button);
 
             }
 
             //TODO when player defeated, add text etc
             if (data.player_hp <= 0) {
 
-                //Clear divs and reinitialize
-                left_div.innerHTML = '';
-                //left_div.className = '';
-                //left_div.classList.add('main_div');
-                right_div.innerHTML = '';
-                right_div.appendChild(geteventbtn);
-                right_div.appendChild(getfightbtn);
-                right_div.appendChild(getmapbtn);
+                //Hides everything, takes user back to actions menu
+                hideAll();
+                removeActions();
+                fight_div.querySelectorAll('p').forEach(child => {
+
+                        child.remove();
+
+                });
+
+                updateStats();
+
+                //TODO päänäkymä / kaupunki
+                main_buttons.classList.remove('hidden');
 
             }
 
             //TODO when amount of enemies = 0, add text etc
             if (data.amount <= 0) {
 
-                //Clear divs and reinitialize
-                left_div.innerHTML = '';
-                //left_div.className = '';
-                //left_div.classList.add('main_div');
-                right_div.innerHTML = '';
-                right_div.appendChild(geteventbtn);
-                right_div.appendChild(getfightbtn);
-                right_div.appendChild(getmapbtn);
+                //Hides everything, takes user back to actions menu
+                hideAll();
+                removeActions();
+                fight_div.querySelectorAll('p').forEach(child => {
+
+                        child.remove();
+
+                });
+
+                updateStats();
+
+                //TODO päänäkymä / kaupunki
+                main_buttons.classList.remove('hidden');
 
             }
 
@@ -430,76 +407,109 @@ getfightbtn.addEventListener('click', async() => {
 
     }
 
-    //Add heal button if user has potions
+    //Add non-permanent heal button if user has potions
     if (data.player_heals > 0) {
 
-        const heal = document.createElement('button');
-        heal.textContent = 'Heal';
-        heal.classList.add('button');
-
-        heal.addEventListener('click', async() => {
+        const heal_button = document.createElement('button');
+        heal_button.textContent = 'Heal';
+        heal_button.classList.add('button');
+        heal_button.addEventListener('click', async() => {
 
             //Heal player, update Python via Flask
             response = await fetch(`http://127.0.0.1:3000/fight/heal/0`);
             data = await response.json();
 
+            updateStats();
+
             updateFight();
 
             //Remove heal button if user has no potions
             if (data['player_heals'] <= 0) {
-                buttons.removeChild(heal);
+
+                action_buttons.removeChild(heal_button);
+
             }
 
         });
 
-        buttons.appendChild(heal);
+        action_buttons.appendChild(heal_button);
 
     }
 
-    //Make button for guarding
-    const guard = document.createElement('button');
-    guard.textContent = 'Guard';
-    guard.classList.add('button');
-    guard.addEventListener('click', async() => {
+    //Make non-permanent button for guarding
+    const guard_button = document.createElement('button');
+    guard_button.textContent = 'Guard';
+    guard_button.classList.add('button');
+    guard_button.addEventListener('click', async() => {
 
         //Update fight in Python via Flask
         response = await fetch(`http://127.0.0.1:3000/fight/guard/0`);
         data = await response.json();
 
+        updateStats();
+
         updateFight();
 
     });
 
-    toggleVisibility(fight, true);
-    toggleVisibility(buttons, true);
+    action_buttons.appendChild(guard_button);
+
+    //Show everything
+    action_buttons.classList.remove('hidden');
+    fight_div.classList.remove('hidden');
+
 
 });
 
-getworkbtn.addEventListener('click', async() => {
+//Initialize functionality for work button
+work_button.addEventListener('click', async() => {
 
-  hideAll(right_div);
-  hideAll(left_div);
+    hideAll();
 
-  response = await fetch('http://127.0.0.1:3000/work');
-  data = await response.json();
+    //Fetch stats from working via Flask
+    response = await fetch('http://127.0.0.1:3000/work');
+    data = await response.json();
 
-  updateInventory(data);
+    updateStats();
 
-  text.textContent = data.text;
-  left_div.appendChild(text);
+    //Initialize non-permanent p element for work
+    const work_text = document.createElement('p');
+    work_text.textContent = data.text;
+    work_div.appendChild(work_text);
 
-  btn.textContent = 'OK';
-  toggleVisibility(btn,true)
-  btn.addEventListener('click', () => {
+    //Initialize non-permanent back button for work
+    universal_button.textContent = 'OK';
+    universal_button.classList.remove('hidden');
+    universal_button.addEventListener('click', () => {
 
-      //Clear divs and reinitialize
-      hideAll(left_div)
-      toggleVisibility(btn, false)
-      // todo kaupunkimaisema lol
-      toggleVisibility(main_buttons, true)
-      left_div.removeChild(text);
+        //Clear and reinitialize
+        hideAll()
+        work_text.remove();
+        universal_button.classList.add('hidden');
+        main_buttons.classList.remove('hidden');
 
-  // KUN KÄYTETÄÄN NAPPEJA UUSIKSI, LISÄÄ ONCE : TRUE
-  },{ once: true });
+    },{once: true});
+
+    //Show everything
+    action_buttons.classList.remove('hidden');
+    work_div.classList.remove('hidden');
 
 });
+
+//--------------------------------------------------------
+
+// //TODO EN KOSKENUT INVENTORYYN
+//
+// // repun tekstielementit
+// let art_p_elements = [];
+//
+// // laita ne kaikki vaan heti listaan
+// art_p_elements = document.getElementsByClassName("art");
+//
+// // todo inventory ja saavutukset tulee muiden PÄÄLLE, niin ei tarvii pitää kirjaa mitä niiden alla on
+// invbutton.addEventListener("click", async function()
+// {
+//     inv_div.classList.toggle('hidden');
+// });
+
+
