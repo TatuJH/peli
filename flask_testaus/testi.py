@@ -5,7 +5,7 @@ import data
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demogame',
+    database='demokanta',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -753,10 +753,11 @@ def get_airport(current_airport):
 
 def winning(money, time, total_distance, achieved, visited_countries):
 
-    score = 0
-    score += money
-    score += total_distance // 60
-    score += time * 10
+    score = money + total_distance // 60 + time * 10
+
+    #cursor = conn.cursor()
+    #cursor.execute("INSERT INTO scores (score) VALUES (%s)", (score,))
+    #conn.commit()
 
     return {
         "achievements": achieved,
@@ -768,16 +769,4 @@ def winning(money, time, total_distance, achieved, visited_countries):
         "money_score": money,
         "time_score": time * 10,
         "distance_score": total_distance // 60
-    }
-
-def losing(money, time, total_distance, artefacts, airport, country, visited_countries):
-
-    return {
-        "money": money,
-        "time": time,
-        "total_distance": total_distance,
-        "artefacts": artefacts,
-        "airport": airport,
-        "country": country,
-        "visited_countries": visited_countries,
     }

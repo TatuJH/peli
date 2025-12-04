@@ -23,6 +23,8 @@ achieved = ["Digger", "Builder"]
 total_distance = 50000
 visited_countries = ["Finland, Sweden, Norway, Denmark"]
 actions_left = 1
+reason = "no_time"
+
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -192,7 +194,7 @@ def fight(action, enemy):
     return fight
 
 @app.route('/airport/<action>/<atarget>/<ctarget>', methods=['GET', 'POST'])
-def airport(action, atarget, ctarget):
+def get_airport(action, atarget, ctarget):
     global airport, country, actions_left
     if action == "get":
         response = {}
@@ -236,16 +238,22 @@ def work():
 def win_screen():
     global money, time, total_distance, achieved
 
-    winning_stats = testi.winning(money, time, total_distance, achieved, visited_countries)
+    return testi.winning(money, time, total_distance, achieved, visited_countries)
 
-    return jsonify(winning_stats)
-
-@app.route('/win_screen', methods=['GET'])
+@app.route('/lose_screen', methods=['GET'])
 def lose_screen():
-    global money, time, total_distance, artefacts, airport, country, visited_countries
+    global money, time, total_distance, artefacts, airport, country, cont, visited_countries, reason
 
-    losing_stats = testi.winning(money, time, total_distance, achieved, visited_countries)
-
-    return jsonify(losing_stats)
+    return {
+        "money": money,
+        "time": time,
+        "total_distance": total_distance,
+        "artefacts": artefacts,
+        "airport": airport,
+        "country": country,
+        "cont": cont,
+        "visited_countries": visited_countries,
+        "reason": reason
+    }
 
 app.run(use_reloader=True, host='127.0.0.1', port=3000)
