@@ -769,3 +769,15 @@ def winning(money, time, total_distance, achieved, visited_countries):
         "time_score": time * 10,
         "distance_score": total_distance // 60
     }
+
+def losing(money, time, total_distance, artefacts, airport, country, visited_countries):
+
+    return {
+        "money": money,
+        "time": time,
+        "total_distance": total_distance,
+        "artefacts": artefacts,
+        "airport": airport,
+        "country": country,
+        "visited_countries": visited_countries,
+    }

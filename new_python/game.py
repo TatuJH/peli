@@ -1738,7 +1738,6 @@ def airport_actions():
                     else:
                         print(f"Backed into a corner, you find yourself with no way to escape the spirit.")
                         print("----")
-                        check_gameover(True)
                 # on aikaa - lähde lentokentältä
                 else:
                     print(
@@ -1747,48 +1746,11 @@ def airport_actions():
                     # takas loopin alkuun
                     continue
             choose_continent()
-            check_gameover(False)
             achievement()
             return
 
         # Onko pelaaja tulhannut kaiken ajan?
         remaining_actions -= 1
-        check_gameover(False)
-
-def check_gameover(nomoneyforairport):
-    global time
-    global remaining_actions
-    global game_over
-    global money
-
-    result = {
-        "game_over": False,
-        "reason": "",
-        "end_list": {}
-    }
-
-    if remaining_actions <= 0 or time <= 0 or nomoneyforairport:
-        result["game_over"] = True
-        game_over = True
-        if remaining_actions <= 0:
-            result["reason"] = "remaining_actions"
-        elif time <= 0:
-            result["reason"] = "time"
-        elif money < 100:
-            result["reason"] = "money"
-
-    if game_over == True:
-        result["end_list"] = {
-        "airport": airport,
-        "country": country,
-        "money": money,
-        "time": time,
-        "total_distance": total_distance,
-        "artefacts": artefacts,
-        "visited_countries": visited_countries,
-    }
-
-    return result
 
 def achievement():
     global visited_countries

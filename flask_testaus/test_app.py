@@ -234,13 +234,18 @@ def work():
 
 @app.route('/win_screen', methods=['GET'])
 def win_screen():
-    global money
-    global time
-    global total_distance
-    global achieved
+    global money, time, total_distance, achieved
 
     winning_stats = testi.winning(money, time, total_distance, achieved, visited_countries)
 
     return jsonify(winning_stats)
+
+@app.route('/win_screen', methods=['GET'])
+def lose_screen():
+    global money, time, total_distance, artefacts, airport, country, visited_countries
+
+    losing_stats = testi.winning(money, time, total_distance, achieved, visited_countries)
+
+    return jsonify(losing_stats)
 
 app.run(use_reloader=True, host='127.0.0.1', port=3000)
