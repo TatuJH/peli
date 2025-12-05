@@ -216,7 +216,7 @@ def achievement():
 
     if countries_index < len(achievements["countries"]) and len(visited_countries) >= achievements["countries"][countries_index][0]:
         name = achievements["countries"][countries_index][1]
-        reward = achievements["countries"][countries_index][3]  # reward on 4. elementti
+        reward = achievements["countries"][countries_index][3]
         money += reward
         achieved.append(name)
         countries_index += 1
@@ -269,9 +269,9 @@ def ach():
     new_achievements = achievement()
 
     achievements_info = []
-    for a in new_achievements:
-        category = a["category"]
-        name = a["name"]
+    for achievementti in new_achievements:
+        category = achievementti["category"]
+        name = achievementti["name"]
 
         description = ""
         for item in achievements[category]:
