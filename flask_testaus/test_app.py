@@ -15,12 +15,12 @@ size = ""
 money = 1000
 time = 365
 achieved = []
-total_distance = 0
+total_distance = 50000
 visited_countries = []
 actions_left = 1
 reason = "no_time"
 money_earned = 1000000
-artefacts_earned = 0
+artefacts_earned = 5
 events_completed = 0
 converted_amount = 0
 countries_index = 0
@@ -208,54 +208,55 @@ def work():
     return response
 
 def achievement():
-    global visited_countries, money_earned, total_distance, artefacts_earned, events_completed, countries_index, money_index
-    global artefacts_index, events_index, distance_index, money, achieved, converted_amount, convert_index
+    global visited_countries, money_earned, total_distance, artefacts_earned, events_completed
+    global countries_index, money_index, artefacts_index, events_index, distance_index, money, achieved
+    global converted_amount, convert_index
 
     new_achievements = []
 
-    if len(visited_countries) >= achievements["countries"][countries_index][0]:
+    if countries_index < len(achievements["countries"]) and len(visited_countries) >= achievements["countries"][countries_index][0]:
         name = achievements["countries"][countries_index][1]
-        reward = achievements["countries"][countries_index][2]
+        reward = achievements["countries"][countries_index][3]  # reward on 4. elementti
         money += reward
         achieved.append(name)
         countries_index += 1
         new_achievements.append({"category": "countries", "name": name, "reward": reward})
 
-    if money_earned >= achievements["money"][money_index][0]:
+    if money_index < len(achievements["money"]) and money_earned >= achievements["money"][money_index][0]:
         name = achievements["money"][money_index][1]
-        reward = achievements["money"][money_index][2]
+        reward = achievements["money"][money_index][3]
         money += reward
         achieved.append(name)
         money_index += 1
         new_achievements.append({"category": "money", "name": name, "reward": reward})
 
-    if total_distance >= achievements["distance"][distance_index][0]:
+    if distance_index < len(achievements["distance"]) and total_distance >= achievements["distance"][distance_index][0]:
         name = achievements["distance"][distance_index][1]
-        reward = achievements["distance"][distance_index][2]
+        reward = achievements["distance"][distance_index][3]
         money += reward
         achieved.append(name)
         distance_index += 1
         new_achievements.append({"category": "distance", "name": name, "reward": reward})
 
-    if artefacts_earned >= achievements["artefacts"][artefacts_index][0]:
+    if artefacts_index < len(achievements["artefacts"]) and artefacts_earned >= achievements["artefacts"][artefacts_index][0]:
         name = achievements["artefacts"][artefacts_index][1]
-        reward = achievements["artefacts"][artefacts_index][2]
+        reward = achievements["artefacts"][artefacts_index][3]
         money += reward
         achieved.append(name)
         artefacts_index += 1
         new_achievements.append({"category": "artefacts", "name": name, "reward": reward})
 
-    if events_completed >= achievements["events"][events_index][0]:
+    if events_index < len(achievements["events"]) and events_completed >= achievements["events"][events_index][0]:
         name = achievements["events"][events_index][1]
-        reward = achievements["events"][events_index][2]
+        reward = achievements["events"][events_index][3]
         money += reward
         achieved.append(name)
         events_index += 1
         new_achievements.append({"category": "events", "name": name, "reward": reward})
 
-    if converted_amount >= achievements["convert"][convert_index][0]:
+    if convert_index < len(achievements["convert"]) and converted_amount >= achievements["convert"][convert_index][0]:
         name = achievements["convert"][convert_index][1]
-        reward = achievements["convert"][convert_index][2]
+        reward = achievements["convert"][convert_index][3]
         money += reward
         achieved.append(name)
         convert_index += 1
@@ -263,14 +264,28 @@ def achievement():
 
     return new_achievements
 
-print(achievement())
-
-@app.route("/achievements", methods=["GET"])
-def get_achievements():
+@app.route("/ach", methods=["GET"])
+def ach():
     new_achievements = achievement()
 
+    achievements_info = []
+    for a in new_achievements:
+        category = a["category"]
+        name = a["name"]
+
+        description = ""
+        for item in achievements[category]:
+            if item[1] == name:
+                description = item[2]
+                break
+
+        achievements_info.append({
+            "name": name,
+            "description": description
+        })
+
     return {
-        "new_achievements": new_achievements,
+        "achievements": achievements_info,
         "money": money
     }
 

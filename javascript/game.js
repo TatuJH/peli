@@ -525,4 +525,22 @@ return_button.addEventListener("click", async function()
     show(main_buttons)
 });
 
+async function achievements() {
+    const achievements_list = document.getElementById('achievement_list');
+
+    let response = await fetch('http://127.0.0.1:3000/ach');
+    let data = await response.json();
+
+    achievements_list.innerHTML = "";
+
+    for (let i = 0; i < data.achievements.length; i++) {
+        const li = document.createElement('li');
+        li.textContent = data.achievements[i].name;
+        li.title = data.achievements[i].description;
+        li.className = "ach";
+        achievements_list.appendChild(li);
+    }
+}
+
+achievements()
 
