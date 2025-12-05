@@ -35,7 +35,11 @@ function hideAll() {
     left_div.className = '';
     left_div.classList.add('split_screen');
 
-    universal_button.classList.add("hidden");
+    // go through all the buttons
+    for (let i = 0; i < universal_buttons.length; i++)
+    {
+        hide(universal_buttons[i]);
+    }
 
 }
 
@@ -44,7 +48,7 @@ function removeActions() {
 
     action_buttons.querySelectorAll('button').forEach(child => {
 
-        if (child.id !== 'universal_button') {
+        if (!child.classList.contains('universal_button') && child.id !== "return_button") {
             child.remove();
         }
 
@@ -59,21 +63,30 @@ function updateStats() {
     actions_display.textContent = `Actions left: ${data.actions}`
 
 
+    if (data.all_artefacts) {
 
-    let arts = JSON.parse(data.all_artefacts)
+        let arts = JSON.parse(data.all_artefacts)
 
-    for (let i = 0; i < inv_list.length; i++) {
+        for (let i = 0; i < inv_list.length; i++) {
 
-        if(arts[i]) {
-            inv_list[i].textContent = `Artefact name: ${arts[i]["name"]} \nValue: $${arts[i]["value"]}\nContinent: ${arts[i]["continent"]}`
-        } else {
-            inv_list[i].textContent = "tyhjä repputila :D"
+            if (arts[i]) {
+                inv_list[i].textContent = `Artefact name: ${arts[i]["name"]} \nValue: $${arts[i]["value"]}\nContinent: ${arts[i]["continent"]}`
+            } else {
+                inv_list[i].textContent = "tyhjä repputila :D"
+            }
+
         }
-
     }
 
 }
 
+function hide(thing) {
+    thing.classList.add('hidden');
+}
+
+function show(thing) {
+    thing.classList.remove('hidden');
+}
 //--------------------------------------------------------
 
 //--------------Permanent elements--------------
@@ -86,19 +99,28 @@ const fight_div = document.getElementById('fight_div');
 const work_div = document.getElementById('work_div');
 const map_div = document.getElementById('map_div');
 const shop_div = document.getElementById('shop_div');
+const inv_div = document.getElementById('inventory_div');
+const achievement_div = document.getElementById('achievement_div');
+
+const action_buttons = document.getElementById('action_buttons');
 const main_buttons = document.getElementById('main_buttons');
 const work_button = document.getElementById('work_button');
 const event_button = document.getElementById('event_button');
 const fight_button = document.getElementById('fight_button');
 const map_button = document.getElementById('map_button');
+const inv_button = document.getElementById('inv_button');
+const return_button = document.getElementById("return_button");
+
+
+// its a list incase we need more than 1 of them o_O
+const universal_buttons = document.getElementsByClassName('universal_button');
+
 const money_display = document.getElementById('money_display');
 const time_display = document.getElementById('time_display');
 const actions_display = document.getElementById('actions_display');
-const inv_button = document.getElementById('inventory_button');
-const inv_div = document.getElementById('inventory_div');
+
+
 const inv_list = document.getElementsByClassName("art");
-const universal_button = document.getElementById('universal_button');
-const action_buttons = document.getElementById('action_buttons');
 
 //--------------------------------------------------------
 
@@ -108,7 +130,9 @@ const action_buttons = document.getElementById('action_buttons');
 map_button.addEventListener('click', async() => {
 
     hideAll()
-    map_div.classList.remove('hidden');
+
+    show(map_div)
+    show(return_button)
 
     //Make sure map is reset
     if (map) {
@@ -192,8 +216,8 @@ map_button.addEventListener('click', async() => {
           circle.addEventListener('click', () => {
 
               //Initialize depart button with the universal button element
-              universal_button.textContent = "DEPART"
-              universal_button.addEventListener('click', async () => {
+              universal_buttons[0].textContent = "DEPART"
+              universal_buttons[0].addEventListener('click', async () => {
 
                   //Let Flask know where user departed
                   response = await fetch(`http://127.0.0.1:3000/airport/depart/${data.airports[i].aname}/${data.airports[i].cname}`);
@@ -203,12 +227,12 @@ map_button.addEventListener('click', async() => {
 
                   //Clear divs and reinitialize
                   hideAll();
-                  universal_button.classList.add("hidden");
+                  universal_buttons[0].classList.add("hidden");
                   main_buttons.classList.remove("hidden");
 
 
               }, {once: true});
-              universal_button.classList.remove("hidden");
+              show(universal_buttons[0])
 
           });
 
@@ -278,14 +302,12 @@ event_button.addEventListener('click', async() => {
                 event_text.textContent = data.text;
 
                 //Initialize universal button for going back
-                universal_button.textContent = 'OK';
-                universal_button.classList.remove('hidden');
-                universal_button.addEventListener('click', () => {
-
-                    hideAll()
+                return_button.textContent = "OK";
+                show(return_button)
+                return_button.addEventListener('click', () => {
                     event_text.remove();
 
-                    main_buttons.classList.remove('hidden');
+                    show(main_buttons)
 
                 }, {once: true});
 
@@ -300,8 +322,8 @@ event_button.addEventListener('click', async() => {
     }
 
     //Show everything
-    action_buttons.classList.remove('hidden');
-    event_div.classList.remove('hidden');
+    show(action_buttons)
+    show(event_div)
 
 });
 
@@ -380,7 +402,7 @@ fight_button.addEventListener('click', async() => {
                 updateStats();
 
                 //TODO päänäkymä / kaupunki
-                main_buttons.classList.remove('hidden');
+                show(main_buttons)
 
             }
 
@@ -477,17 +499,11 @@ work_button.addEventListener('click', async() => {
     work_text.textContent = data.text;
     work_div.appendChild(work_text);
 
-    //Initialize non-permanent back button for work
-    universal_button.textContent = 'OK';
-    universal_button.classList.remove('hidden');
-    universal_button.addEventListener('click', () => {
 
-        //Clear and reinitialize
-        hideAll()
+    return_button.textContent = 'OK';
+    show(return_button)
+    return_button.addEventListener('click', () => {
         work_text.remove();
-        universal_button.classList.add('hidden');
-        main_buttons.classList.remove('hidden');
-
     },{once: true});
 
     //Show everything
@@ -496,11 +512,17 @@ work_button.addEventListener('click', async() => {
 
 });
 
-// todo inventory ja saavutukset tulee muiden PÄÄLLE, niin ei tarvii pitää kirjaa mitä niiden alla on
 inv_button.addEventListener("click", async function()
 {
-    inv_div.classList.toggle('hidden');
+    inv_div.classList.toggle("hidden");
     achievement_div.classList.toggle("hidden");
+});
+
+return_button.addEventListener("click", async function()
+{
+    hideAll()
+    hide(return_button)
+    show(main_buttons)
 });
 
 
