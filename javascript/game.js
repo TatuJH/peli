@@ -87,6 +87,7 @@ function hide(thing) {
 function show(thing) {
     thing.classList.remove('hidden');
 }
+
 //--------------------------------------------------------
 
 //--------------Permanent elements--------------
@@ -535,10 +536,20 @@ async function achievements() {
 
     for (let i = 0; i < data.achievements.length; i++) {
         const li = document.createElement('li');
+
         li.textContent = data.achievements[i].name;
-        li.title = data.achievements[i].description;
+
         li.className = "ach";
         achievements_list.appendChild(li);
+
+        li.addEventListener('mouseover', () =>{
+            li.textContent = data.achievements[i].description;
+        });
+
+        li.addEventListener('mouseout', () =>{
+            li.textContent = data.achievements[i].name;
+        });
+
     }
 }
 
