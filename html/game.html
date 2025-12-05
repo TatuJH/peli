@@ -19,13 +19,16 @@
             height: 100%;
             margin: 0;
             /* ei nyt mitään times new romania */
-            font-family: "Comic Sans MS";
+            font-family: "Comic Sans MS", serif;
         }
 
         body {
             display: flex;
             flex-direction: column;
             background-color: #32659B;
+            margin: 0;
+            padding: 0;
+
         }
 
         /* Grid container */
@@ -57,28 +60,88 @@
             border-radius: 5px;
             padding: 1rem;
             min-height: 400px;
+            position:relative;
+        }
+
+        .overlay{
+            position: absolute;
+            /*tää on kaiken päällä */
+            z-index: 1000;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 1% 5%;
+
+        }
+
+        /* todo paremmat värit lol */
+        #inventory_div {
+            background-color: rgb(77, 77, 105);
+            /*tää on oikealla*/
+            top: 0;
+            right: 0;
+        }
+
+        #achievement_div {
+            background-color: rgb(65, 85, 122);
+            /*tää on oikealla*/
+            top: 0;
+            left: 0;
         }
 
         /* reppulista */
-        #inv {
+        .overlay_list {
             display: grid;
             list-style: none;
             padding: 0;
             grid-template-columns: 1fr 1fr;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 25px;
+        }
+
+        /* yhtenevät tekijät molempien reppujuttujen alaotsikoiden välillä */
+        .overlay h2 {
+            text-align: center;
+            font-size: 40px;
+            padding: 15px 10px;
+            background-color: rgba(227, 162, 74, 0.36);
+            border: 4px solid #e29c46;
+            border-radius: 40px;
+        }
+        /*yhtenevät tekijät molempien listaesineiden välillä */
+        .overlay_list li {
+            border: 8px solid;
+            color: white;
+            padding: 20px 15px;
+            border-radius: 15px;
+            /*tää saa \n toimimaan linebreakkina */
+            white-space: pre-line;
         }
         /*yksittäiset esineet listalla */
-        #inv li {
-            background-color: #db9d4d;
+        #inventory_list li {
+            background-color: #b98a50;
+            border-color : #e29c46;
             color: white;
-            padding: 10px 15px;
+            padding: 20px 15px;
             border-radius: 15px;
             font-size: 20px;
+            /*tää saa \n toimimaan linebreakkina */
+            white-space: pre-line;
+            border-left-color: #f0b062;
+            border-top-color: #f0b062;
 
         }
 
-    </style></style>
+        /* todo tee tähän miten ikinä tehdäänkään saavutukset */
+        #achievement_list li {
+            font-size: 20px;
+            background-color: rgba(80, 140, 80, 0.72);
+            border-color: rgba(103, 189, 103, 0.72);
+
+        }
+
+
+    </style>
 
 
 </head>
@@ -94,9 +157,10 @@
             <p id="actions_display">Actions left: 1</p>
 
         </nav>
-
-        <button id="checkAchievementsBtn">Check Achievements</button>
-        <button id="inventory_button">Avaa reppu</button>
+        <div id="loota_artefakti_kountterille_sekä_reppunapille">
+            <p id="artefacts_display">Artefacts: 0/7</p>
+            <button id="inventory_button">Avaa reppu</button>
+        </div>
 
     </header>
 
@@ -123,8 +187,17 @@
             <div id="shop_div" class="hidden">
 
             </div>
+            <div class="hidden overlay" id="achievement_div">
+            <h2>SAAVUTUKSET</h2>
+                <ul class="overlay_list" id="achievement_list">
 
-            </div>
+                    <!-- todo laita saavutukset tänne -->
+                    <li class ="ach">olen saavutus :-)</li>
+
+                </ul>
+
+        </div>
+        </div>
 
         <div id="right_div" class="split_screen">
 
@@ -134,6 +207,8 @@
                 <button class="button" id="map_button">MAP</button>
                 <button class="button" id="event_button">EVENT</button>
                 <button class="button" id="fight_button">FIGHT</button>
+                <button class="button" id="shop_button">SHOP</button>
+                <button class="button" id="flight_button">DEPART</button>
 
             </div>
 
@@ -143,25 +218,25 @@
 
             </div>
 
-        <div class="hidden" id="inventory_div">
+        <div class="hidden overlay" id="inventory_div">
             <h2>REPPU</h2>
-            <ul id="inventory_list">
+                <ul class="overlay_list" id="inventory_list">
 
-            <!-- 12 reppuslottia lol todo laita tekstiin eri värit kuten ekassa pelissä-->
-            <li class ="art">backpack slot :p</li>
-            <li class ="art">backpack slot :p</li>
-            <li class ="art">backpack slot :p</li>
-            <li class ="art">backpack slot :p</li>
-            <li class ="art">backpack slot :p</li>
-            <li class ="art">backpack slot :p</li>
-            <li class ="art">backpack slot :p</li>
-            <li class ="art">backpack slot :p</li>
-            <li class ="art">backpack slot :p</li>
-            <li class ="art">backpack slot :p</li>
-            <li class ="art">backpack slot :p</li>
-            <li class ="art">backpack slot :p</li>
+                <!-- 12 reppuslottia lol todo laita tekstiin eri värit kuten ekassa pelissä-->
+                <li class ="art">backpack slot :p</li>
+                <li class ="art">backpack slot :p</li>
+                <li class ="art">backpack slot :p</li>
+                <li class ="art">backpack slot :p</li>
+                <li class ="art">backpack slot :p</li>
+                <li class ="art">backpack slot :p</li>
+                <li class ="art">backpack slot :p</li>
+                <li class ="art">backpack slot :p</li>
+                <li class ="art">backpack slot :p</li>
+                <li class ="art">backpack slot :p</li>
+                <li class ="art">backpack slot :p</li>
+                <li class ="art">backpack slot :p</li>
 
-            </ul>
+                </ul>
 
         </div>
         </div>

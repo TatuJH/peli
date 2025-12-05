@@ -58,19 +58,19 @@ function updateStats() {
     time_display.textContent = `Time: ${data.time}`;
     actions_display.textContent = `Actions left: ${data.actions}`
 
-    //TODO en tiiä miten inventory toimii nii tätä varmaa pitää kehittää
 
-    // let arts = JSON.parse(data.all_artefacts)
-    //
-    // for (let i = 0; i < art_p_elements.length; i++) {
-    //
-    //     if(arts[i]) {
-    //         art_p_elements[i].textContent = `Artefact name: ${arts[i]["name"]} Value: $${arts[i]["value"]} Continent: ${arts[i]["continent"]}`
-    //     } else {
-    //         art_p_elements[i].textContent = "tyhjä repputila :D"
-    //     }
-    //
-    // }
+
+    let arts = JSON.parse(data.all_artefacts)
+
+    for (let i = 0; i < inv_list.length; i++) {
+
+        if(arts[i]) {
+            inv_list[i].textContent = `Artefact name: ${arts[i]["name"]} \nValue: $${arts[i]["value"]}\nContinent: ${arts[i]["continent"]}`
+        } else {
+            inv_list[i].textContent = "tyhjä repputila :D"
+        }
+
+    }
 
 }
 
@@ -96,7 +96,7 @@ const time_display = document.getElementById('time_display');
 const actions_display = document.getElementById('actions_display');
 const inv_button = document.getElementById('inventory_button');
 const inv_div = document.getElementById('inventory_div');
-const inv_list = document.getElementById('inventory_list');
+const inv_list = document.getElementsByClassName("art");
 const universal_button = document.getElementById('universal_button');
 const action_buttons = document.getElementById('action_buttons');
 
@@ -496,20 +496,11 @@ work_button.addEventListener('click', async() => {
 
 });
 
-//--------------------------------------------------------
-
-// //TODO EN KOSKENUT INVENTORYYN
-//
-// // repun tekstielementit
-// let art_p_elements = [];
-//
-// // laita ne kaikki vaan heti listaan
-// art_p_elements = document.getElementsByClassName("art");
-//
-// // todo inventory ja saavutukset tulee muiden PÄÄLLE, niin ei tarvii pitää kirjaa mitä niiden alla on
-// invbutton.addEventListener("click", async function()
-// {
-//     inv_div.classList.toggle('hidden');
-// });
+// todo inventory ja saavutukset tulee muiden PÄÄLLE, niin ei tarvii pitää kirjaa mitä niiden alla on
+inv_button.addEventListener("click", async function()
+{
+    inv_div.classList.toggle('hidden');
+    achievement_div.classList.toggle("hidden");
+});
 
 

@@ -1,41 +1,6 @@
 
-/* otetaan margin vittuun tästä niin se palkki liimautuu sinne ylös kokonaan */
-body {
-  margin: 0;
-  padding: 0;
-}
 
-
-/* jutut yläpalkissa */
-.main_header p {
-    display: inline-block;
-    color: #f2f2f2;
-    text-align: center;
-    text-decoration: none;
-    font-size: 30px;
-    background-color: #669ee8;
-    padding: 1rem;
-}
-
-/* Yläpalkki */
-.main_header {
-    background-color: #32659B;
-    display: flex;
-    align-items: center;
-    /* tää laittaa tilaa keskelle*/
-    justify-content: space-between;
-    /* pysyy aina ylhäällä */
-    position: sticky;
-    /* vähemmän paddingia yläs ja alas */
-    padding : 0.1rem 0.5rem 0.1rem 0.5rem;
-    z-index: 1000;
-}
-
-/* backpack_button */
-#backpack_button {
-    background-color: hotpink;
-    padding : 1rem;
-}
+/* tääl on käytännössä vaan roska jota harvemmin muutetaan */
 
 .hp-text {
     color: red;
@@ -50,6 +15,7 @@ body {
 }
 
 
+
 /* jutut yläpalkissa */
 .main_header p {
     display: inline-block;
@@ -61,6 +27,7 @@ body {
     background-color: #669ee8;
     padding: 1rem;
     border-radius: 5px;
+
 }
 
 /* Yläpalkki */
@@ -73,30 +40,26 @@ body {
     /* pysyy aina ylhäällä */
     position: sticky;
     /* vähemmän paddingia yläs ja alas */
-    padding : 0.1rem 0.5rem 0.1rem 0.5rem;
-    z-index: 1000;
+    padding : 0.1rem 0.5rem;
+    z-index: 2000;
+
+}
+
+
+#artefacts_display {
+
 }
 
 /* backpack_button */
 #inventory_button {
-    background-color: hotpink;
-    padding : 2rem;
+    background-color: #ffb469;
     border-radius: 5px;
-
-    font-size: 25px;
+    border: 5px solid #cf9853;
+    font-size: 30px;
+    padding: 1rem;
 
 }
 
-
-.hp-text {
-    color: red;
-}
-.spd-text {
-    color: orange;
-}
-.ptn-text {
-    color: forestgreen;
-}
 
 .hidden {
     display:none;
