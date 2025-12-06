@@ -58,14 +58,14 @@ function removeActions() {
 
 //Updates all user stats on the page
 function updateStats() {
-    money_display.textContent = `Money: ${data.money}`;
-    time_display.textContent = `Time: ${data.time}`;
-    actions_display.textContent = `Actions left: ${data.actions}`
+    money_display.textContent = `Money: ${data.game_state.money}`;
+    time_display.textContent = `Time: ${data.game_state.time}`;
+    actions_display.textContent = `Actions left: ${data.game_state.actions}`
 
 
-    if (data.all_artefacts) {
+    if (data.game_state.all_artefacts) {
 
-        let arts = JSON.parse(data.all_artefacts)
+        let arts = JSON.parse(data.game_state.all_artefacts)
 
         for (let i = 0; i < inv_list.length; i++) {
 
@@ -184,26 +184,26 @@ map_button.addEventListener('click', async() => {
     updateStats();
 
     //Add a circle to the map for each airport
-    for (let i = 0; i < data.airports.length; i++) {
+    for (let i = 0; i < data.info[0].length; i++) {
 
         //Set colors for different airport types
         let color;
 
         if (i === 0) {
           color = "red";
-        } else if (i === 1 && data.airports.length !== 19) {
+        } else if (i === 1 && data.info[0].length !== 19) {
           color = '#7CFC00';
-        } else if (data.airports[i].type === "large_airport") {
+        } else if (data.info[0][i].type === "large_airport") {
           color = "navy";
-        } else if (data.airports[i].type === "medium_airport") {
+        } else if (data.info[0][i].type === "medium_airport") {
           color = "dodgerblue";
-        } else if (data.airports[i].type === "small_airport") {
+        } else if (data.info[0][i].type === "small_airport") {
           color = "lightskyblue";
         }
 
         //Initialize circlemarker AKA individual airport
         const circle = L.circleMarker(
-            [data.airports[i].latitude, data.airports[i].longitude],
+            [data.info[0][i].latitude, data.info[0][i].longitude],
             {
                 opacity: 0,
                 fillColor: color,
@@ -221,7 +221,7 @@ map_button.addEventListener('click', async() => {
               universal_buttons[0].addEventListener('click', async () => {
 
                   //Let Flask know where user departed
-                  response = await fetch(`http://127.0.0.1:3000/airport/depart/${data.airports[i].aname}/${data.airports[i].cname}`);
+                  response = await fetch(`http://127.0.0.1:3000/airport/depart/${data.info[0][i].aname}/${data.info[0][i].cname}`);
                   data = await response.json();
 
                   updateStats();
@@ -244,7 +244,7 @@ map_button.addEventListener('click', async() => {
           circle.on('mouseout', () => {
               circle.setStyle({fillOpacity: 1});
           });
-          circle.bindTooltip(`${data.airports[i].aname}`, {
+          circle.bindTooltip(`${data.info[0][i].aname}`, {
               permanent: false,
               direction: 'top',
               sticky: true
@@ -252,7 +252,7 @@ map_button.addEventListener('click', async() => {
 
         } else {
 
-            circle.bindTooltip(`You are currently in ${data.airports[i].aname}`, {
+            circle.bindTooltip(`You are currently in ${data.info[0][i].aname}`, {
                 permanent: false,
                 direction: 'top',
                 sticky: true
@@ -277,22 +277,22 @@ event_button.addEventListener('click', async() => {
 
     //Initialize non-permanent text element for events
     const event_text = document.createElement('p');
-    event_text.innerHTML = `${data.text}<br><br>${data.question}`;
+    event_text.innerHTML = `${data.info[0].text}<br><br>${data.info[0].question}`;
     event_div.appendChild(event_text);
 
     //Get choices and create non-permanent button for each one
-    for (let i = 0; i < data.choices.length; i++) {
+    for (let i = 0; i < data.info[0].choices.length; i++) {
 
         const choice_button = document.createElement('button');
-        choice_button.textContent = data.choices[i];
+        choice_button.textContent = data.info[0].choices[i];
         choice_button.classList.add('button');
         choice_button.addEventListener('click', async() => {
 
             //Check whether user has enough resources
-            if (data.money >= data.money_costs[i] && data.time >= data.time_costs[i] && data.artefacts >= data.artefacts_costs[i]) {
+            if (data.game_state.money >= data.info[0].money_costs[i] && data.game_state.time >= data.info[0].time_costs[i] && data.game_state.artefacts >= data.info[0].artefacts_costs[i]) {
 
                 //Fetch event results from Python via Flask
-                response = await fetch(`http://127.0.0.1:3000/events/result/${data.number}/${data.choices[i]}`);
+                response = await fetch(`http://127.0.0.1:3000/events/result/${data.info[0].number}/${data.info[0].choices[i]}`);
                 data = await response.json();
 
                 updateStats();
@@ -300,7 +300,7 @@ event_button.addEventListener('click', async() => {
                 removeActions();
 
                 //Update event text
-                event_text.textContent = data.text;
+                event_text.textContent = data.info[0].text;
 
                 //Initialize universal button for going back
                 return_button.textContent = "OK";
@@ -334,11 +334,11 @@ fight_button.addEventListener('click', async() => {
     function updateFight() {
 
         //Update page with new data
-        fight_text.innerHTML = `${data.text}<br><br>HP: <span class="hp-text">${data.player_hp}</span>, remaining heals: <span class="ptn-text">${data.player_heals}</span><br>`;
-        for (let i = 0; i < Object.keys(data.enemies_in_fight).length; i++) {
+        fight_text.innerHTML = `${data.info[0].text}<br><br>HP: <span class="hp-text">${data.info[0].player_hp}</span>, remaining heals: <span class="ptn-text">${data.info[0].player_heals}</span><br>`;
+        for (let i = 0; i < Object.keys(data.info[0].enemies_in_fight).length; i++) {
 
-            if (data.enemies_in_fight[i].hp > 0) {
-                fight_text.innerHTML += `<br>Enemy ${i + 1}: ${data.enemies_in_fight[i].type} <span class="hp-text">${data.enemies_in_fight[i].hp}</span> <span class="spd-text">(charging for ${data.enemies_in_fight[i].spd} turns)</span>`;
+            if (data.info[0].enemies_in_fight[i].hp > 0) {
+                fight_text.innerHTML += `<br>Enemy ${i + 1}: ${data.info[0].enemies_in_fight[i].type} <span class="hp-text">${data.info[0].enemies_in_fight[i].hp}</span> <span class="spd-text">(charging for ${data.info[0].enemies_in_fight[i].spd} turns)</span>`;
             }
 
         }
@@ -355,19 +355,19 @@ fight_button.addEventListener('click', async() => {
 
     //Create non-permanent p element for tracking fight status
     const fight_text = document.createElement('p');
-    fight_text.innerHTML = `${data.text}<br><br>HP: <span class="hp-text">${data.player_hp}</span>, remaining heals: <span class="ptn-text">${data.player_heals}</span><br>`;
-    for (let i = 0; i < Object.keys(data.enemies_in_fight).length; i++) {
+    fight_text.innerHTML = `${data.info[0].text}<br><br>HP: <span class="hp-text">${data.info[0].player_hp}</span>, remaining heals: <span class="ptn-text">${data.info[0].player_heals}</span><br>`;
+    for (let i = 0; i < Object.keys(data.info[0].enemies_in_fight).length; i++) {
 
-        fight_text.innerHTML += `<br>Enemy ${i + 1}: ${data.enemies_in_fight[i].type} <span class="hp-text">${data.enemies_in_fight[i].hp}</span> <span class="spd-text">(charging for ${data.enemies_in_fight[i].spd} turns)</span>`;
+        fight_text.innerHTML += `<br>Enemy ${i + 1}: ${data.info[0].enemies_in_fight[i].type} <span class="hp-text">${data.info[0].enemies_in_fight[i].hp}</span> <span class="spd-text">(charging for ${data.info[0].enemies_in_fight[i].spd} turns)</span>`;
 
     }
     fight_div.appendChild(fight_text);
 
     //Create non-permanent buttons for attacking each enemy
-    for (let i = 0; i < Object.keys(data.enemies_in_fight).length; i++) {
+    for (let i = 0; i < Object.keys(data.info[0].enemies_in_fight).length; i++) {
 
         const strike_button = document.createElement('button');
-        strike_button.textContent = `Strike enemy ${i + 1} (${data.enemies_in_fight[i].type})`
+        strike_button.textContent = `Strike enemy ${i + 1} (${data.info[0].enemies_in_fight[i].type})`
         strike_button.classList.add('button');
         action_buttons.appendChild(strike_button);
 
@@ -382,14 +382,14 @@ fight_button.addEventListener('click', async() => {
             updateFight();
 
             //Remove enemy if defeated
-            if (data.enemies_in_fight[i].hp <= 0) {
+            if (data.info[0].enemies_in_fight[i].hp <= 0) {
 
                 action_buttons.removeChild(strike_button);
 
             }
 
             //TODO when player defeated, add text etc
-            if (data.player_hp <= 0) {
+            if (data.info[0].player_hp <= 0) {
 
                 //Hides everything, takes user back to actions menu
                 hideAll();
@@ -408,7 +408,7 @@ fight_button.addEventListener('click', async() => {
             }
 
             //TODO when amount of enemies = 0, add text etc
-            if (data.amount <= 0) {
+            if (data.info[0].amount <= 0) {
 
                 //Hides everything, takes user back to actions menu
                 hideAll();
@@ -431,7 +431,7 @@ fight_button.addEventListener('click', async() => {
     }
 
     //Add non-permanent heal button if user has potions
-    if (data.player_heals > 0) {
+    if (data.info[0].player_heals > 0) {
 
         const heal_button = document.createElement('button');
         heal_button.textContent = 'Heal';
@@ -447,7 +447,7 @@ fight_button.addEventListener('click', async() => {
             updateFight();
 
             //Remove heal button if user has no potions
-            if (data['player_heals'] <= 0) {
+            if (data.info[0].player_heals <= 0) {
 
                 action_buttons.removeChild(heal_button);
 
@@ -497,7 +497,7 @@ work_button.addEventListener('click', async() => {
 
     //Initialize non-permanent p element for work
     const work_text = document.createElement('p');
-    work_text.textContent = data.text;
+    work_text.textContent = data.info[0].text;
     work_div.appendChild(work_text);
 
 
@@ -534,20 +534,20 @@ async function achievements() {
 
     achievements_list.innerHTML = "";
 
-    for (let i = 0; i < data.achievements.length; i++) {
+    for (let i = 0; i < data.info[0].length; i++) {
         const li = document.createElement('li');
 
-        li.textContent = data.achievements[i].name;
+        li.textContent = data.info[0][i].name;
 
         li.className = "ach";
         achievements_list.appendChild(li);
 
         li.addEventListener('mouseover', () =>{
-            li.textContent = data.achievements[i].description;
+            li.textContent = data.info[0][i].description;
         });
 
         li.addEventListener('mouseout', () =>{
-            li.textContent = data.achievements[i].name;
+            li.textContent = data.info[0][i].name;
         });
 
     }
