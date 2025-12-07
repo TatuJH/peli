@@ -19,6 +19,7 @@ async function scores() {
         for (let i = 0; i < Object.entries(data.scores).length; i++) {
             const li = document.createElement('li');
             li.textContent = `Game ${i + 1}: ${data.scores[i + 1]}`;
+            li.classList.add('score');
             ul.appendChild(li);
         }
 

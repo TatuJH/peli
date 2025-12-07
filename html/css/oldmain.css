@@ -1,0 +1,217 @@
+
+
+/* tääl on käytännössä vaan roska jota harvemmin muutetaan */
+
+.hp-text {
+    color: red;
+}
+
+.spd-text {
+    color: orange;
+}
+
+.ptn-text {
+    color: forestgreen;
+}
+
+/* jutut yläpalkissa */
+.main_header p {
+    display: inline-block;
+    color: #f2f2f2;
+    text-align: center;
+    text-decoration: none;
+    font-size: 30px;
+
+    background-color: #669ee8;
+    padding: 1rem;
+    border-radius: 5px;
+
+}
+
+/* Yläpalkki */
+.main_header {
+    background-color: #32659B;
+    display: flex;
+    align-items: center;
+    /* tää laittaa tilaa keskelle*/
+    justify-content: space-between;
+    /* pysyy aina ylhäällä */
+    position: sticky;
+    /* vähemmän paddingia yläs ja alas */
+    padding : 0.1rem 0.5rem;
+    z-index: 2000;
+
+}
+
+
+#artefacts_display {
+
+}
+
+/* backpack_button */
+#inv_button {
+    background-color: #3d74c8;
+    border-radius: 5px;
+    border: 5px solid #224b87;
+    padding: 1rem;
+
+}
+
+#inv_button:hover {
+    background-color: #5e94ed;
+}
+
+#inv_button:active {
+  transform: translateY(4px);
+}
+
+.hidden {
+    display:none;
+}
+
+html {
+    height: 100%;
+    margin: 0;
+    /* ei nyt mitään times new romania */
+    font-family: "Jersey 10", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: #32659B;
+    margin: 0;
+    padding: 0;
+
+}
+
+/* Grid container */
+#main_div {
+    display: grid;
+
+    /* Sivuttainen tila */
+    grid-template-columns: 1fr 1fr;
+    /* niiden välinen tila */
+    gap: 2rem;
+    /* mikä vittu edes on vh? */
+    height: calc(100vh - 9rem);
+    /* jos halutaan paddingia niin tähän vaan
+     sivujen järjestys on myötäpäivään alkaen ylhäältä*/
+    padding: 0px 0px 0px 0px;
+
+}
+
+#map_div {
+    width: 100%;
+    height: 100%;
+}
+
+
+/*vas ja oikee */
+.split_screen {
+    background-color: antiquewhite;
+    border: 5px solid #ccc;
+    border-radius: 5px;
+    padding: 1rem;
+    min-height: 400px;
+    position:relative;
+}
+
+.overlay{
+    position: absolute;
+    /*tää on kaiken päällä */
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 1% 5%;
+
+}
+
+/* todo paremmat värit lol */
+#inventory_div {
+    background-color: rgb(77, 77, 105);
+    /*tää on oikealla*/
+    top: 0;
+    right: 0;
+}
+
+#achievement_div {
+    background-color: rgb(65, 85, 122);
+    /*tää on vasemmalla*/
+    top: 0;
+    left: 0;
+}
+
+/* reppulista */
+.overlay_list {
+    display: grid;
+    list-style: none;
+    padding: 0;
+    grid-template-columns: 1fr 1fr;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+
+/* yhtenevät tekijät molempien reppujuttujen alaotsikoiden välillä */
+.overlay h2 {
+    text-align: center;
+    font-size: 40px;
+    padding: 15px 10px;
+    background-color: rgba(227, 162, 74, 0.36);
+    border: 4px solid #e29c46;
+    border-radius: 40px;
+}
+/*yhtenevät tekijät molempien listaesineiden välillä */
+.overlay_list li {
+    border: 8px solid;
+    color: white;
+    padding: 20px 15px;
+    border-radius: 15px;
+    /*tää saa \n toimimaan linebreakkina */
+    white-space: pre-line;
+}
+/*yksittäiset esineet listalla */
+#inventory_list li {
+    background-color: #b98a50;
+    border-color : #e29c46;
+    color: white;
+    padding: 20px 15px;
+    border-radius: 15px;
+    font-size: 20px;
+    /*tää saa \n toimimaan linebreakkina */
+    white-space: pre-line;
+    border-left-color: #fbbf76;
+    border-top-color: #fbbf76;
+
+}
+
+/* todo tee tähän miten ikinä tehdäänkään saavutukset */
+#achievement_list li {
+    font-size: 20px;
+    background-color: rgba(80, 140, 80, 0.72);
+    border-color: rgb(93, 182, 93);
+    border-left-color: rgb(146, 240, 146);
+    border-top-color: rgb(146, 240, 146);
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+#achievement_list li:hover {
+    background-color: rgba(93, 182, 93, 0.85);
+}
+
+#map_container {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+    height: 100%;
+}
+
+#map_div {
+    height: 100%;
+    width: 100%;
+}

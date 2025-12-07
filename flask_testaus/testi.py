@@ -26,7 +26,7 @@ eventit = {
             "event":f"You are given an investment opportunity on the street by a man in a trench coat. He says that by giving him ${int(round(100*money_modifier))} you could make ${int(round(300*money_modifier))}." ,
             "input":"Do you want to invest or decline the opportunity?",
             "choices":{
-                "invest":{
+                "Invest":{
                     f"cost":{"money":int(round(100*money_modifier)),"time":0,"artefacts":0},
                     "results":{
                         1:{f"money":int(round(300*money_modifier)),"time":0,"artefacts":0,"text":f"The opportunity actually paid out. You earned ${int(round(300*money_modifier))}."},
@@ -34,7 +34,7 @@ eventit = {
                         3:{"money":int(round(200*money_modifier)),"time":-10,"artefacts":0,"text":f"The man takes off running! You chase him and get your ${int(round(100*money_modifier))} back. You also manage to snatch ${int(round(100*money_modifier))} extra from him, but lose 10 days in the process."}
                     }
                 },
-                "decline":{
+                "Decline":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":0,"time":0,"artefacts":0,"text":"You decline the man's offer. It was probably a scam anyway."}
@@ -46,13 +46,13 @@ eventit = {
             "event":f"You meet a witch, who says she can buy you time. Literally. She offers you 10 days in exchange for $200.",
             "input":"Do you accept or decline the offer?",
             "choices":{
-                "accept":{
+                "Accept":{
                     "cost":{f"money":200,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":0,"time":15,"artefacts":0,"text":"You bought yourself some time. 10 days to be exact."}
                     }
                 },
-                "decline":{
+                "Decline":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":0,"time":-10,"artefacts":0,"text":"The witch gets mad at you declining her offer. She curses you, draining you of 10 days."}
@@ -64,19 +64,19 @@ eventit = {
             "event":"You get lost, somehow.",
             "input":"Would you like to turn left, right or continue straight?",
             "choices":{
-                "left":{
+                "Left":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":0,"time":-10,"artefacts":0,"text":"You get even more lost, losing 10 days in the process. Eventually, you find your way back."}
                     }
                 },
-                "right":{
+                "Right":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":0,"time":0,"artefacts":0,"text":"As you turn right, you notice that the airport is literally just there. Talk about luck."}
                     }
                 },
-                "straight":{
+                "Straight":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":50,"time":-10,"artefacts":0,"text":f"That wasn't the right way and you lose 10 days. On a positive note, you find ${int(round(50*money_modifier))} on the ground."},
@@ -90,7 +90,7 @@ eventit = {
             "event":"You stumble upon some sort of monument. There is a sign asking you to pray.",
             "input":"Do you pray on your knees, standing up or do you leave?",
             "choices":{
-                "knees":{
+                "Knees":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":0,"time":0,"artefacts":1,"text":"Something rumbles. A hatch opens underneath the monument, revealing an artefact. The gods must be pleased."},
@@ -99,14 +99,14 @@ eventit = {
 
                     }
                 },
-                "standing":{
+                "Standing":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":int(round(-100*money_modifier)),"time":-10,"artefacts":0,"text":f"The monument starts glowing red. The gods didn't seem to like your praying. You feel a curse sweeping through you, draining you of ${int(round(100*money_modifier))} and 10 days."},
                         2:{"money":int(round(100*money_modifier)),"time":0,"artefacts":0,"text":f"You feel a pleasant sensation. The gods must've been pleased with your praying. You notice you're carrying ${int(round(100*money_modifier))} more than before."}
                     }
                 },
-                "leave":{
+                "Leave":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":0,"time":0,"artefacts":0,"text":"You decide to not accidentally disrespect the gods."},
@@ -119,20 +119,20 @@ eventit = {
             "event":"You see a man in a suit strolling on the street. He seems to be giving money to some people he meets.",
             "input":'Do you greet him with a "hello", a "good evening sir" or do you do nothing?',
             "choices":{
-                "hello":{
+                "Hello":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":int(round(100*money_modifier)),"time":0,"artefacts":0,"text":f"The man replies and hands you ${int(round(100*money_modifier))}."}
                     }
                 },
-                "good evening":{
+                "Good evening":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":int(round(200*money_modifier)),"time":0,"artefacts":0,"text":f"The man seems happy and hands you ${int(round(200*money_modifier))}."},
                         2:{"money":int(round(300*money_modifier)),"time":0,"artefacts":0,"text":f"The man says how refreshing good manners are and hands you ${int(round(300*money_modifier))}."}
                     }
                 },
-                "nothing":{
+                "Nothing":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":0,"time":0,"artefacts":0,"text":"You pass him by. You don't need his pity money."}
@@ -156,7 +156,7 @@ eventit = {
                         1:{"money":0,"time":-5,"artefacts":0,"text":f"The man seems unimpressed. He looks you up and down, takes your ${int(round(100*money_modifier))} and pushes you to the ground. You lose  5 days."}
                     }
                 },
-                "refuse":{
+                "Refuse":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":int(round(-200*money_modifier)),"time":0,"artefacts":0,"text":f"The man seems outright outraged. He quickly reaches into your pocket and takes ${int(round(200*money_modifier))}."},
@@ -169,7 +169,7 @@ eventit = {
             "event":f'You notice a small well. A woman stands next to it, holding a cardboard sign. On it, she has written: "One coin = ${int(round(300*money_modifier))}." Must be a wishing well.',
             "input":f"Do you want to buy a coin for ${int(round(300*money_modifier))} or pass on the opportunity?",
             "choices":{
-                "buy":{
+                "Buy":{
                     "cost":{"money":int(round(300*money_modifier)),"time":0,"artefacts":0},
                     "results":{
                         1:{"money":int(round(300*money_modifier)),"time":0,"artefacts":0,"text":f"You toss the coin into the well and a bag of money falls from the sky. You're not sure how, but you also don't really care. Inside it you find ${int(round(300*money_modifier))}."},
@@ -180,7 +180,7 @@ eventit = {
                         6:{"money":0,"time":40,"artefacts":0,"text":"You toss the coin into the well and feel a surge of energy coursing through you. You receive 40 days."}
                     }
                 },
-                "pass":{
+                "Pass":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":0,"time":0,"artefacts":0,"text":"You? Superstitious? Like any normal person, you decide to save your money."}
@@ -192,14 +192,14 @@ eventit = {
             "event":"You hear sounds of metal hitting rock. Upon further inspection, you find a dig site, where a dozen men are swinging their pickaxes. One of the men offers you their position for 20 days.",
             "input":f"Do you accept it, pay the man ${int(round(200*money_modifier))} to dig for you or refuse?",
             "choices":{
-                "accept":{
+                "Accept":{
                     "cost":{"money":0,"time":20,"artefacts":0},
                     "results":{
                         1:{"money":0,"time":0,"artefacts":1,"text":"You dig and dig. Finally, your pickaxe strikes something softer. You frantically wipe away some dirt, revealing a slightly battered artefact."},
                         2:{"money":int(round(50*money_modifier)),"time":0,"artefacts":0,"text":f"You dig and dig. Finally, your pickaxe strikes something softer. Unfortunately, it's just a small gold nugget. Might be worth around ${int(round(50*money_modifier))}."}
                     }
                 },
-                "pay":{
+                "Pay":{
                     "cost":{"money":int(round(200*money_modifier)),"time":0,"artefacts":0},
                     "results":{
                         1:{"money":0,"time":0,"artefacts":1,"text":"The man digs and digs. Finally, his pickaxe strikes something softer. You rush to the scene, frantically wipe away some dirt and reveal a slightly battered artefact."},
@@ -208,7 +208,7 @@ eventit = {
                         4:{"money":int(round(150*money_modifier)),"time":0,"artefacts":0,"text":f"The man digs and digs. Finally, his pickaxe strikes something softer. Unfortunately, it's just a small gold nugget. Might be worth around ${int(round(150*money_modifier))}."}
                     }
                 },
-                "refuse":{
+                "Refuse":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":0,"time":0,"artefacts":0,"text":"You don't have the energy nor the money for this. What were they even digging for, stones?"}
@@ -220,13 +220,13 @@ eventit = {
             "event":"You hear a thunderstorm starting to build up. This wasn't in the weather forecasts. The only building you see nearby is some sort of motel.",
             "input":f"Do you rent a room for the night for ${int(round(50*money_modifier))} or try finding some makeshift shelter?",
             "choices":{
-                "rent":{
+                "Rent":{
                     "cost":{"money":int(round(50*money_modifier)),"time":0,"artefacts":0},
                     "results":{
                         1:{"money":0,"time":-10,"artefacts":0,"text":"You wait out the storm, losing 10 days. At least you leave the motel unscathed."}
                     }
                 },
-                "shelter":{
+                "Shelter":{
                     "cost":{"money":0,"time":0,"artefacts":0},
                     "results":{
                         1:{"money":int(round(-100*money_modifier)),"time":-15,"artefacts":0,"text":f"You find a small crevice and hole up inside. You're left unharmed by the storm, but lose 15 days and ${int(round(100*money_modifier))} for the arthritis you develop."},
@@ -240,7 +240,7 @@ eventit = {
             "event": "You see an old building in the distance. Walking closer to it, you become pretty sure it's abandoned.",
             "input": "Do you go inside the building, check its surroundings it, or walk away?",
             "choices": {
-                "inside": {
+                "Inside": {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 1,
@@ -251,7 +251,7 @@ eventit = {
                             "text": "You walk around the house, but find nothing inside. It seems the building was abandoned for a reason."}
                     }
                 },
-                "surroundings": {
+                "Surroundings": {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": -5, "artefacts": 1,
@@ -260,7 +260,7 @@ eventit = {
                             "text": "You don't really see anything after a walk around the building. You decide to just leave it be."}
                     }
                 },
-                "away": {
+                "Away": {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
@@ -273,7 +273,7 @@ eventit = {
             "event": "You explore the nearby wildlife sanctuary. Halfway through your trail, you notice a campsite full of people in indigenous clothing. Perhaps they have an artefact you could take?",
             "input": "Do you continue your relaxing walk or greet the tribesmen.. Or try stealing from them?",
             "choices": {
-                "walk": {
+                "Walk": {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": 20, "artefacts": 0,
@@ -285,7 +285,7 @@ eventit = {
                             "text": "You find the quickest way out of the trail and get back on your journey."},
                     }
                 },
-                "greet": {
+                "Greet": {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": -5, "artefacts": 1,
@@ -298,7 +298,7 @@ eventit = {
                             }
                     }
                 },
-                "steal": {
+                "Steal": {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
@@ -358,7 +358,7 @@ eventit = {
                                     f"The roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw. You're refunded ${int(round(400 * money_modifier))}."}
                     }
                 },
-                "artefact": {
+                "Artefact": {
                     "cost": {"money": 0, "time": 0, "artefacts": 1},
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
@@ -381,7 +381,7 @@ eventit = {
                                     "You're given an artefact from his collection."}
                     }
                 },
-                "leave": {
+                "Leave": {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
@@ -395,7 +395,7 @@ eventit = {
             "event": "You trek around for a while and decide to set up camp. You fall asleep, but suddenly hear ungodly noises outside your tent.",
             "input": "Do you check on the noises, try sleeping through them or hide?",
             "choices": {
-                "check": {
+                "Check": {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
@@ -406,7 +406,7 @@ eventit = {
                             "text": f"You crawl out of your tent, and see strangers looting your backpack. Before you manage to react, you see them running off with ${int(round(100 * money_modifier))}."}
                     }
                 },
-                "sleep": {
+                "Sleep": {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
@@ -417,7 +417,7 @@ eventit = {
                             "text": "You go back to sleep and see a vision of your god. He praises your faith and rewards you with 10 days' extra time."}
                     }
                 },
-                "hide": {
+                "Hide": {
                     "cost": {"money": 0, "time": 0, "artefacts": 0},
                     "results": {
                         1: {"money": 0, "time": -5, "artefacts": 0,
@@ -716,6 +716,22 @@ def get_airport(current_airport):
             for i in range(len(desc)):
                 airport[desc[i]] = row[i]
             airport_list.append(airport)
+
+    for airport in airport_list:
+        if airport["continent"] == "EU":
+            airport["alt_cont"] = "Europe"
+        elif airport["continent"] == "AS":
+            airport["alt_cont"] = "Asia"
+        elif airport["continent"] == "SA":
+            airport["alt_cont"] = "South America"
+        elif airport["continent"] == "OC":
+            airport["alt_cont"] = "Oceania"
+        elif airport["continent"] == "AF":
+            airport["alt_cont"] = "Africa"
+        elif airport["continent"] == "NA":
+            airport["alt_cont"] = "North America"
+        elif airport["continent"] == "AN":
+            airport["alt_cont"] = "Antarctica"
 
     return airport_list
 

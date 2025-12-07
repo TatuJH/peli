@@ -41,6 +41,10 @@ function hideAll() {
         hide(universal_buttons[i]);
     }
 
+    fight_div.querySelectorAll('p').forEach(child => {
+        child.remove();
+    });
+
 }
 
 //Removes action buttons
@@ -98,7 +102,9 @@ const right_div = document.getElementById('right_div');
 const event_div = document.getElementById('event_div');
 const fight_div = document.getElementById('fight_div');
 const work_div = document.getElementById('work_div');
+const map_container = document.getElementById('map_container');
 const map_div = document.getElementById('map_div');
+const map_text = document.getElementById('map_text');
 const shop_div = document.getElementById('shop_div');
 const inv_div = document.getElementById('inventory_div');
 const achievement_div = document.getElementById('achievement_div');
@@ -132,8 +138,11 @@ map_button.addEventListener('click', async() => {
 
     hideAll()
 
-    show(map_div)
-    show(return_button)
+    return_button.textContent = 'Return';
+    show(map_container);
+    show(map_div);
+    show(map_text);
+    show(return_button);
 
     //Make sure map is reset
     if (map) {
@@ -166,22 +175,31 @@ map_button.addEventListener('click', async() => {
     //     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright"></a>'
     // }).addTo(map);
 
-    // L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    // attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    }).addTo(map);
+
+    // L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.{ext}', {
+    //     minZoom: 0,
+    //     maxZoom: 20,
+    //     ext: 'png'
     // }).addTo(map);
 
     //Add the "map" part to the map element
-    L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.{ext}', {
-        minZoom: 0,
-        maxZoom: 20,
-        ext: 'png'
-    }).addTo(map);
+    // L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.{ext}', {
+	// minZoom: 1,
+	// maxZoom: 16,
+	// ext: 'jpg'
+    // }).addTo(map);
 
     //Fetch list of airports from database via Flask
     response = await fetch('http://127.0.0.1:3000/airport/get/0/0');
     data = await response.json();
 
     updateStats();
+
+    const maptext = document.createElement('p');
+    maptext.textContent = "Select airport. The darker the blue, the larger the airport."
+    map_text.appendChild(maptext);
 
     //Add a circle to the map for each airport
     for (let i = 0; i < data.info[0].length; i++) {
@@ -208,7 +226,7 @@ map_button.addEventListener('click', async() => {
                 opacity: 0,
                 fillColor: color,
                 fillOpacity: 1,
-                radius: 15
+                radius: 20
             }
         ).addTo(map);
 
@@ -217,7 +235,17 @@ map_button.addEventListener('click', async() => {
           circle.addEventListener('click', () => {
 
               //Initialize depart button with the universal button element
-              universal_buttons[0].textContent = "DEPART"
+              universal_buttons[0].textContent = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont})`;
+              universal_buttons[0].addEventListener('mouseover', () => {
+
+                  universal_buttons[0].textContent = "Depart";
+
+              });
+              universal_buttons[0].addEventListener('mouseout', () => {
+
+                  universal_buttons[0].textContent = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont})`;
+
+              });
               universal_buttons[0].addEventListener('click', async () => {
 
                   //Let Flask know where user departed
@@ -227,9 +255,10 @@ map_button.addEventListener('click', async() => {
                   updateStats();
 
                   //Clear divs and reinitialize
+                  map_text.removeChild(maptext);
                   hideAll();
-                  universal_buttons[0].classList.add("hidden");
-                  main_buttons.classList.remove("hidden");
+                  hide(universal_buttons[0]);
+                  show(main_buttons);
 
 
               }, {once: true});
@@ -240,29 +269,29 @@ map_button.addEventListener('click', async() => {
           //Add effects to circlemarker
           circle.on('mouseover', () => {
               circle.setStyle({fillOpacity: 0.5});
+              maptext.textContent = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont})`;
           });
           circle.on('mouseout', () => {
               circle.setStyle({fillOpacity: 1});
-          });
-          circle.bindTooltip(`${data.info[0][i].aname}`, {
-              permanent: false,
-              direction: 'top',
-              sticky: true
+              maptext.textContent = "Select airport. The darker the blue, the larger the airport."
           });
 
         } else {
 
-            circle.bindTooltip(`You are currently in ${data.info[0][i].aname}`, {
-                permanent: false,
-                direction: 'top',
-                sticky: true
+            circle.on('mouseover', () => {
+              circle.setStyle({fillOpacity: 0.5});
+              maptext.textContent = `You are currently in ${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont})`;
+            });
+            circle.on('mouseout', () => {
+              circle.setStyle({fillOpacity: 1});
+              maptext.textContent = "Select airport. The darker the blue, the larger the airport."
             });
 
         }
 
     }
 
-    action_buttons.classList.remove('hidden');
+    show(action_buttons);
 
 });
 
@@ -343,6 +372,44 @@ fight_button.addEventListener('click', async() => {
 
         }
 
+        if (data.info[0].player_hp <= 0) {
+
+            removeActions();
+            fight_div.querySelectorAll('p').forEach(child => {
+
+                    child.remove();
+
+            });
+
+            return_button.textContent = "OK";
+            show(return_button)
+
+            fight_text.textContent = "One of the heretics knocks you out."
+            fight_div.appendChild(fight_text);
+
+            updateStats();
+
+    }
+
+        if (data.info[0].amount <= 0) {
+
+            removeActions();
+            fight_div.querySelectorAll('p').forEach(child => {
+
+                    child.remove();
+
+            });
+
+            return_button.textContent = "OK";
+            show(return_button)
+
+            fight_text.textContent = "You convert all the heretics."
+            fight_div.appendChild(fight_text);
+
+            updateStats();
+
+        }
+
     }
 
     hideAll();
@@ -369,6 +436,7 @@ fight_button.addEventListener('click', async() => {
         const strike_button = document.createElement('button');
         strike_button.textContent = `Strike enemy ${i + 1} (${data.info[0].enemies_in_fight[i].type})`
         strike_button.classList.add('button');
+        strike_button.classList.add('attack');
         action_buttons.appendChild(strike_button);
 
         strike_button.addEventListener('click', async() => {
@@ -388,44 +456,6 @@ fight_button.addEventListener('click', async() => {
 
             }
 
-            //TODO when player defeated, add text etc
-            if (data.info[0].player_hp <= 0) {
-
-                //Hides everything, takes user back to actions menu
-                hideAll();
-                removeActions();
-                fight_div.querySelectorAll('p').forEach(child => {
-
-                        child.remove();
-
-                });
-
-                updateStats();
-
-                //TODO päänäkymä / kaupunki
-                show(main_buttons)
-
-            }
-
-            //TODO when amount of enemies = 0, add text etc
-            if (data.info[0].amount <= 0) {
-
-                //Hides everything, takes user back to actions menu
-                hideAll();
-                removeActions();
-                fight_div.querySelectorAll('p').forEach(child => {
-
-                        child.remove();
-
-                });
-
-                updateStats();
-
-                //TODO päänäkymä / kaupunki
-                main_buttons.classList.remove('hidden');
-
-            }
-
         });
 
     }
@@ -436,6 +466,7 @@ fight_button.addEventListener('click', async() => {
         const heal_button = document.createElement('button');
         heal_button.textContent = 'Heal';
         heal_button.classList.add('button');
+        heal_button.classList.add('nonattack');
         heal_button.addEventListener('click', async() => {
 
             //Heal player, update Python via Flask
@@ -463,6 +494,7 @@ fight_button.addEventListener('click', async() => {
     const guard_button = document.createElement('button');
     guard_button.textContent = 'Guard';
     guard_button.classList.add('button');
+    guard_button.classList.add('nonattack');
     guard_button.addEventListener('click', async() => {
 
         //Update fight in Python via Flask
@@ -478,8 +510,8 @@ fight_button.addEventListener('click', async() => {
     action_buttons.appendChild(guard_button);
 
     //Show everything
-    action_buttons.classList.remove('hidden');
-    fight_div.classList.remove('hidden');
+    show(action_buttons);
+    show(fight_div);
 
 
 });
@@ -508,8 +540,8 @@ work_button.addEventListener('click', async() => {
     },{once: true});
 
     //Show everything
-    action_buttons.classList.remove('hidden');
-    work_div.classList.remove('hidden');
+    show(action_buttons);
+    show(work_div);
 
 });
 
@@ -521,9 +553,12 @@ inv_button.addEventListener("click", async function()
 
 return_button.addEventListener("click", async function()
 {
-    hideAll()
-    hide(return_button)
-    show(main_buttons)
+    hideAll();
+    removeActions();
+    map_text.innerHTML = '';
+    hide(return_button);
+    show(main_buttons);
+
 });
 
 async function achievements() {

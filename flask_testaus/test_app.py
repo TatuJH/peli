@@ -231,10 +231,9 @@ def fight(action, enemy):
 def airports(action, atarget, ctarget):
     global airport, country, actions_left
     if action == "get":
-        actions_left -= 1
-
         return add_game_state(testi.get_airport(airport))
     elif action == "depart":
+        actions_left -= 1
         airport = atarget
         country = ctarget
         actions_left = 3

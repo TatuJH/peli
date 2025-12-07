@@ -9,147 +9,9 @@
     <script src="/javascript/game.js" defer></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <!--
-    legit vaan helpompi jos se on tässä
-    tässä on css joka tekee kaksi laatikkoa vierekkäin
-     -->
-    <style>
-
-        html {
-            height: 100%;
-            margin: 0;
-            /* ei nyt mitään times new romania */
-            font-family: "Comic Sans MS", serif;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            background-color: #32659B;
-            margin: 0;
-            padding: 0;
-
-        }
-
-        /* Grid container */
-        #main_div {
-            display: grid;
-
-            /* Sivuttainen tila */
-            grid-template-columns: 1fr 1fr;
-            /* niiden välinen tila */
-            gap: 2rem;
-            /* mikä vittu edes on vh? */
-            height: calc(100vh - 9rem);
-            /* jos halutaan paddingia niin tähän vaan
-             sivujen järjestys on myötäpäivään alkaen ylhäältä*/
-            padding: 0px 0px 0px 0px;
-
-        }
-
-        #map_div {
-            width: 100%;
-            height: 100%;
-        }
-
-
-        /*vas ja oikee */
-        .split_screen {
-            background-color: antiquewhite;
-            border: 5px solid #ccc;
-            border-radius: 5px;
-            padding: 1rem;
-            min-height: 400px;
-            position:relative;
-        }
-
-        .overlay{
-            position: absolute;
-            /*tää on kaiken päällä */
-            z-index: 1000;
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-            padding: 1% 5%;
-
-        }
-
-        /* todo paremmat värit lol */
-        #inventory_div {
-            background-color: rgb(77, 77, 105);
-            /*tää on oikealla*/
-            top: 0;
-            right: 0;
-        }
-
-        #achievement_div {
-            background-color: rgb(65, 85, 122);
-            /*tää on vasemmalla*/
-            top: 0;
-            left: 0;
-        }
-
-        /* reppulista */
-        .overlay_list {
-            display: grid;
-            list-style: none;
-            padding: 0;
-            grid-template-columns: 1fr 1fr;
-            flex-wrap: wrap;
-            gap: 25px;
-        }
-
-        /* yhtenevät tekijät molempien reppujuttujen alaotsikoiden välillä */
-        .overlay h2 {
-            text-align: center;
-            font-size: 40px;
-            padding: 15px 10px;
-            background-color: rgba(227, 162, 74, 0.36);
-            border: 4px solid #e29c46;
-            border-radius: 40px;
-        }
-        /*yhtenevät tekijät molempien listaesineiden välillä */
-        .overlay_list li {
-            border: 8px solid;
-            color: white;
-            padding: 20px 15px;
-            border-radius: 15px;
-            /*tää saa \n toimimaan linebreakkina */
-            white-space: pre-line;
-        }
-        /*yksittäiset esineet listalla */
-        #inventory_list li {
-            background-color: #b98a50;
-            border-color : #e29c46;
-            color: white;
-            padding: 20px 15px;
-            border-radius: 15px;
-            font-size: 20px;
-            /*tää saa \n toimimaan linebreakkina */
-            white-space: pre-line;
-            border-left-color: #fbbf76;
-            border-top-color: #fbbf76;
-
-        }
-
-        /* todo tee tähän miten ikinä tehdäänkään saavutukset */
-        #achievement_list li {
-            font-size: 20px;
-            background-color: rgba(80, 140, 80, 0.72);
-            border-color: rgb(93, 182, 93);
-            border-left-color: rgb(146, 240, 146);
-            border-top-color: rgb(146, 240, 146);
-            padding: 8px 12px;
-            cursor: pointer;
-        }
-
-        #achievement_list li:hover {
-            background-color: rgba(93, 182, 93, 0.85);
-        }
-
-
-    </style>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
 
 </head>
 
@@ -165,8 +27,8 @@
 
         </nav>
         <div id="loota_artefakti_kountterille_sekä_reppunapille">
-            <p id="artefacts_display">Artefacts: 0/7</p>
-            <button id="inv_button">Avaa reppu</button>
+            <p id="artefacts_display">Artefacts: 0/6</p>
+            <button id="inv_button">Check inventory</button>
         </div>
 
     </header>
@@ -187,15 +49,20 @@
 
             </div>
 
-            <div id="map_div" class="hidden">
+            <div id="map_container" class="hidden">
+                 <div id="map_div">
 
+                </div>
+                <div id="map_text">
+
+                </div>
             </div>
 
             <div id="shop_div" class="hidden">
 
             </div>
             <div class="hidden overlay" id="achievement_div">
-            <h2>SAAVUTUKSET</h2>
+            <h2>Achievements</h2>
                 <ul class="overlay_list" id="achievement_list">
 
                     <!-- todo laita saavutukset tänne -->
@@ -227,7 +94,7 @@
             </div>
 
         <div class="hidden overlay" id="inventory_div">
-            <h2>REPPU</h2>
+            <h2>Backpack</h2>
                 <ul class="overlay_list" id="inventory_list">
 
                 <!-- 12 reppuslottia lol todo laita tekstiin eri värit kuten ekassa pelissä-->
