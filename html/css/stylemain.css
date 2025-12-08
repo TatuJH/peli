@@ -29,33 +29,42 @@ body {
     align-items: center;
     position: sticky;
     top: 0;
-    padding: 0.8rem 1.2rem;
+    padding: 1.8rem 1.2rem;
     z-index: 2000;
     border-bottom: 4px solid #1a2838;
     box-shadow: inset 0 -2px 0 rgba(255,255,255,0.05), 0 4px 15px rgba(0,0,0,0.6);
+    max-height: 14vmin;
+    height: 14vh;
+    min-height: 14vh;
 }
 
 .main_header p {
-    font-size: 42px;
+    font-size: x-large;
+    min-font-size: 8rem;
     font-weight: 700;
     background: #3a4f6b;
-    padding: 1rem 1.6rem;
+    padding: 0.8vh 1.2vw;
     border-radius: 12px;
     color: #f7e7c4;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     box-shadow: inset 0 2px 2px rgba(255,255,255,0.05);
 }
 
+.main_header button {
+    padding: 2vh 3vw;
+}
+
+
 .main_nav {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1.5vw;
 }
 
 #loota_artefakti_kountterille_sekä_reppunapille {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1vw;
 }
 
 .main_nav p,
@@ -64,15 +73,17 @@ body {
     font-weight: 700;
     color: #c6d7e0; /* navbar icy blue */
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    max-height: 14vh;
+    height: auto;
 }
 
 /* -------------------- Layout -------------------- */
 #main_div {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    height: calc(100vh - 9.5rem);
-    padding: 1rem;
+    gap: 2vh;
+    height: calc(100vh - 16vh);
+    padding: 1vh 1vw;
 }
 
 /* -------------------- Panels -------------------- */
@@ -83,7 +94,7 @@ body {
     font-weight: 500;
     line-height: 1.5;
     font-size: 34px;
-    padding: 1rem;
+    padding: 1vh 1vw;
 }
 
 .split_screen {
@@ -153,18 +164,21 @@ body {
     list-style: none;
     padding: 0;
     grid-template-columns: 1fr 1fr;
-    gap: 26px;
+    gap: 2vh 2vw;
     width: 100%;
+    height: 100%;
+    overflow: auto;
 }
 
 .overlay_list li {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 32px;
+    font-size: x-large;
     font-weight: 500;
+    align-content: center;
     background: #6f7f95;
     border: 4px solid #29384d;
     color: #d9e3eb;
-    padding: 20px;
+    padding: 1vh 1vw;
     border-radius: 14px;
     white-space: pre-line;
     box-shadow: inset 0 0 0 2px rgba(255,255,255,0.06);
@@ -245,13 +259,14 @@ button.attack:hover {
     flex-direction: column;
     justify-content: center;
     align-items: stretch;
-    gap: 20px;
-    padding: 2rem;
+    gap: 2vh;
+    padding: 2vw 2vh;
     background: #6b5743;
     border: 4px solid #4b3624;
     border-radius: 16px;
     box-shadow: inset 0 0 20px rgba(0,0,0,0.15), 0 10px 20px rgba(0,0,0,0.4);
     width: 100%;
+    height: 100%;
     max-width: 1000px;
     margin: 0 auto;
     box-sizing: border-box;
@@ -263,17 +278,24 @@ button.attack:hover {
 
 /* -------------------- Main buttons container -------------------- */
 #main_buttons {
+    position: absolute;
+
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 2rem;
-    background: #6b5743;
-    border: 4px solid #4b3624;
+    gap: 2vh 2vw;
+    padding: 3vh 1vw;
+    /*background: #6b5743;*/
+    background: rgba(107, 87, 67, 0);
+    /*border: 4px solid #4b3624;*/
+    border: 4px solid rgba(75, 54, 36, 0);
     border-radius: 16px;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.15), 0 10px 20px rgba(0,0,0,0.4);
+    /*box-shadow: inset 0 0 20px rgba(0,0,0,0.15), 0 10px 20px rgba(0,0,0,0.4);*/
     width: 100%;
+    height: 100%;
+    max-height: 100%;
     box-sizing: border-box;
     align-items: stretch;
+    overflow: auto;
 }
 
 #main_buttons button {

@@ -193,7 +193,7 @@ map_button.addEventListener('click', async() => {
     // }).addTo(map);
 
     //Fetch list of airports from database via Flask
-    response = await fetch('http://127.0.0.1:3000/airport/get/0/0/0');
+    response = await fetch('http://127.0.0.1:3000/airport/get/0/0/0/0');
     data = await response.json();
 
     updateStats();
@@ -248,21 +248,29 @@ map_button.addEventListener('click', async() => {
 
               });
               universal_buttons[0].addEventListener('click', async () => {
+                  if (data.game_state.money >= data.info[0][i].cost) {
 
-                  //Let Flask know where user departed
-                  response = await fetch(`http://127.0.0.1:3000/airport/depart/${data.info[0][i].aname}/${data.info[0][i].cname}/${data.info[0][i].type}`);
-                  data = await response.json();
+                    //Let Flask know where user departed
+                    response = await fetch(
+                        `http://127.0.0.1:3000/airport/depart/${data.info[0][i].aname}/${data.info[0][i].cname}/${data.info[0][i].type}/${data.info[0][i].cost}`);
+                    data = await response.json();
 
-                  updateStats();
+                    updateStats();
 
-                  //Clear divs and reinitialize
-                  map_text.removeChild(maptext);
-                  hideAll();
-                  hide(universal_buttons[0]);
-                  show(main_buttons);
+                    //Clear divs and reinitialize
+                    map_text.removeChild(maptext);
+                    hideAll();
+                    universal_buttons[0].removeEventListener('click')
+                    hide(universal_buttons[0]);
+                    show(main_buttons);
 
+                  } else {
 
-              }, {once: true});
+                    //TODO POPUP
+
+                  }
+
+              });
               show(universal_buttons[0])
 
           });
@@ -270,7 +278,7 @@ map_button.addEventListener('click', async() => {
           //Add effects to circlemarker
           circle.on('mouseover', () => {
               circle.setStyle({fillOpacity: 0.5});
-              maptext.textContent = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont})`;
+              maptext.textContent = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont}), $${data.info[0][i].cost}`;
           });
           circle.on('mouseout', () => {
               circle.setStyle({fillOpacity: 1});
@@ -343,7 +351,9 @@ event_button.addEventListener('click', async() => {
                 }, {once: true});
 
             } else {
-                event_text.innerHTML += '<br>Not enough resources';
+
+              //TODO POPUP
+
             }
 
         });

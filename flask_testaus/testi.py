@@ -733,6 +733,12 @@ def get_airport(current_airport):
             airport["alt_cont"] = "North America"
         elif airport["continent"] == "AN":
             airport["alt_cont"] = "Antarctica"
+        if airport["type"] == "small_airport":
+            airport["cost"] = 150
+        elif airport["type"] == "medium_airport":
+            airport["cost"] = 300
+        elif airport["type"] == "large_airport":
+            airport["cost"] = 450
 
     return airport_list
 
