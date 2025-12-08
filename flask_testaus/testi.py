@@ -5,7 +5,7 @@ import data
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demogame',
+    database='demokanta',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -741,6 +741,60 @@ def get_airport(current_airport):
             airport["cost"] = 450
 
     return airport_list
+
+def achievement(visited_countries, money_earned, total_distance, artefacts_earned, events_completed, countries_index, money_index, artefacts_index, events_index, distance_index, money, achieved, converted_amount, convert_index):
+
+    new_achievements = []
+
+    if countries_index < len(achievements["countries"]) and len(visited_countries) >= achievements["countries"][countries_index][0]:
+        name = achievements["countries"][countries_index][1]
+        reward = achievements["countries"][countries_index][3]
+        money += reward
+        achieved.append(name)
+        countries_index += 1
+        new_achievements.append({"category": "countries", "name": name, "reward": reward})
+
+    if money_index < len(achievements["money"]) and money_earned >= achievements["money"][money_index][0]:
+        name = achievements["money"][money_index][1]
+        reward = achievements["money"][money_index][3]
+        money += reward
+        achieved.append(name)
+        money_index += 1
+        new_achievements.append({"category": "money", "name": name, "reward": reward})
+
+    if distance_index < len(achievements["distance"]) and total_distance >= achievements["distance"][distance_index][0]:
+        name = achievements["distance"][distance_index][1]
+        reward = achievements["distance"][distance_index][3]
+        money += reward
+        achieved.append(name)
+        distance_index += 1
+        new_achievements.append({"category": "distance", "name": name, "reward": reward})
+
+    if artefacts_index < len(achievements["artefacts"]) and artefacts_earned >= achievements["artefacts"][artefacts_index][0]:
+        name = achievements["artefacts"][artefacts_index][1]
+        reward = achievements["artefacts"][artefacts_index][3]
+        money += reward
+        achieved.append(name)
+        artefacts_index += 1
+        new_achievements.append({"category": "artefacts", "name": name, "reward": reward})
+
+    if events_index < len(achievements["events"]) and events_completed >= achievements["events"][events_index][0]:
+        name = achievements["events"][events_index][1]
+        reward = achievements["events"][events_index][3]
+        money += reward
+        achieved.append(name)
+        events_index += 1
+        new_achievements.append({"category": "events", "name": name, "reward": reward})
+
+    if convert_index < len(achievements["convert"]) and converted_amount >= achievements["convert"][convert_index][0]:
+        name = achievements["convert"][convert_index][1]
+        reward = achievements["convert"][convert_index][3]
+        money += reward
+        achieved.append(name)
+        convert_index += 1
+        new_achievements.append({"category": "convert", "name": name, "reward": reward})
+
+    return new_achievements
 
 def winning(money, time, total_distance, achieved, visited_countries):
     global cursor
