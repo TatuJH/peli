@@ -19,6 +19,9 @@ let sub_data; //<--- Just in case
 //Initialize map
 let map = null;
 
+//Random departure fix
+let departHandler = null;
+
 //--------------------------------------------------------
 
 //--------------Functions--------------
@@ -35,11 +38,7 @@ function hideAll() {
     left_div.className = '';
     left_div.classList.add('split_screen');
 
-    // go through all the buttons
-    for (let i = 0; i < universal_buttons.length; i++)
-    {
-        hide(universal_buttons[i]);
-    }
+    hide(universal_button);
 
     fight_div.querySelectorAll('p').forEach(child => {
         child.remove();
@@ -52,7 +51,7 @@ function removeActions() {
 
     action_buttons.querySelectorAll('button').forEach(child => {
 
-        if (!child.classList.contains('universal_button') && child.id !== "return_button") {
+        if (!child.classList.contains('universal_button') && child.id !== "return_button" && child.id !== "depart_button") {
             child.remove();
         }
 
@@ -81,6 +80,11 @@ function updateStats() {
         }
     }
 
+    if (data.game_state.money <= 0 || data.game_state.time <= 0 || data.game_state.actions < 0) {
+
+      location.href = 'lose_screen.html'
+
+    }
 }
 
 function hide(thing) {
@@ -127,9 +131,10 @@ const fight_button = document.getElementById('fight_button');
 const map_button = document.getElementById('map_button');
 const inv_button = document.getElementById('inv_button');
 const return_button = document.getElementById("return_button");
+const depart_button = document.getElementById('depart_button');
 
 // its a list incase we need more than 1 of them o_O
-const universal_buttons = document.getElementsByClassName('universal_button');
+const universal_button = document.getElementById('return_button');
 
 const money_display = document.getElementById('money_display');
 const time_display = document.getElementById('time_display');
@@ -201,7 +206,7 @@ map_button.addEventListener('click', async() => {
     // }).addTo(map);
 
     //Fetch list of airports from database via Flask
-    response = await fetch('http://127.0.0.1:3000/airport/get/0/0/0/0');
+    response = await fetch('http://127.0.0.1:3000/airport/get/0/0/0/0/0');
     data = await response.json();
 
     updateStats();
@@ -243,48 +248,58 @@ map_button.addEventListener('click', async() => {
         if (i !== 0) {
           circle.addEventListener('click', () => {
 
-              //Initialize depart button with the universal button element
-              universal_buttons[0].textContent = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont})`;
-              universal_buttons[0].addEventListener('mouseover', () => {
+            depart_button.textContent = 'Depart';
+              //Initialize depart button
+            const departHandler = async function() {
 
-                  universal_buttons[0].textContent = "Depart";
-
-              });
-              universal_buttons[0].addEventListener('mouseout', () => {
-
-                  universal_buttons[0].textContent = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont})`;
-
-              });
-              universal_buttons[0].addEventListener('click', async () => {
-                  if (data.game_state.money >= data.info[0][i].cost) {
+              if (data.game_state.money >= data.info[0][i].cost) {
 
                     //Let Flask know where user departed
                     response = await fetch(
-                        `http://127.0.0.1:3000/airport/depart/${data.info[0][i].aname}/${data.info[0][i].cname}/${data.info[0][i].type}/${data.info[0][i].cost}`);
+                        `http://127.0.0.1:3000/airport/depart/${data.info[0][i].aname}/${data.info[0][i].cname}/${data.info[0][i].type}/${data.info[0][i].cost}/${data.info[0][i].continent}`);
                     data = await response.json();
 
                     updateStats();
 
                     //Clear divs and reinitialize
                     map_text.removeChild(maptext);
+                    depart_button.removeEventListener('click', departHandler);
+                    depart_button.removeEventListener('mouseover', departHover);
+                    depart_button.removeEventListener('mouseout', departOut);
+                    removeActions();
                     hideAll();
-                    universal_buttons[0].removeEventListener('click')
-                    hide(universal_buttons[0]);
+                    hide(universal_button);
+                    hide(depart_button);
                     show(main_buttons);
 
                   } else {
                     no_money_popup()
                   }
+            }
+            const departHover = function() {
 
-              });
-              show(universal_buttons[0])
+              depart_button.textContent = "Depart";
+
+            }
+            const departOut = function() {
+
+              depart_button.textContent = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont})`;
+
+            }
+
+              depart_button.addEventListener('click', departHandler, {once: true});
+              depart_button.addEventListener('mouseover', departHover);
+              depart_button.addEventListener('mouseout', departOut);
+
+              show(universal_button);
+              show(depart_button);
 
           });
 
           //Add effects to circlemarker
           circle.on('mouseover', () => {
               circle.setStyle({fillOpacity: 0.5});
-              maptext.textContent = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont}), $${data.info[0][i].cost}`;
+              maptext.innerHTML = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont}), <span class='moneytext'>$${data.info[0][i].cost}</span>`;
           });
           circle.on('mouseout', () => {
               circle.setStyle({fillOpacity: 1});
@@ -314,6 +329,7 @@ map_button.addEventListener('click', async() => {
 event_button.addEventListener('click', async() => {
 
     hideAll();
+    hide(universal_button);
 
     //Fetch random event from Python via Flask
     response = await fetch('http://127.0.0.1:3000/events/get/0/x');
@@ -344,7 +360,7 @@ event_button.addEventListener('click', async() => {
                 removeActions();
 
                 //Update event text
-                event_text.textContent = data.info[0].text;
+                event_text.innerHTML = data.info[0].text;
 
                 //Initialize universal button for going back
                 return_button.textContent = "OK";
@@ -399,7 +415,7 @@ fight_button.addEventListener('click', async() => {
             return_button.textContent = "OK";
             show(return_button)
 
-            fight_text.textContent = "One of the heretics knocks you out for 10 days."
+            fight_text.innerHTML = "One of the heretics knocks you out for <span class='timetext'>10 days</span>."
             fight_div.appendChild(fight_text);
 
             updateStats();
@@ -418,7 +434,7 @@ fight_button.addEventListener('click', async() => {
             return_button.textContent = "OK";
             show(return_button)
 
-            fight_text.textContent = `You convert all the heretics. Your god is pleased and blesses you with $${data.info[0].money_get}.`
+            fight_text.innerHTML = `You convert all the heretics. Your god is pleased and blesses you with <span class='timetext'>$${data.info[0].money_get}</span>.`
             fight_div.appendChild(fight_text);
 
             updateStats();
@@ -428,6 +444,7 @@ fight_button.addEventListener('click', async() => {
     }
 
     hideAll();
+    hide(universal_button);
 
     //Fetch a fight starting position from Python via Flask
     response = await fetch('http://127.0.0.1:3000/fight/start/0');
@@ -528,7 +545,6 @@ fight_button.addEventListener('click', async() => {
     show(action_buttons);
     show(fight_div);
 
-
 });
 
 //Initialize functionality for work button
@@ -544,7 +560,7 @@ work_button.addEventListener('click', async() => {
 
     //Initialize non-permanent p element for work
     const work_text = document.createElement('p');
-    work_text.textContent = data.info[0].text;
+    work_text.innerHTML = `${data.info[0].text}`;
     work_div.appendChild(work_text);
 
 
