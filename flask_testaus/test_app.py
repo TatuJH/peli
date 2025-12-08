@@ -4,7 +4,8 @@ import flask
 from flask import Flask, render_template, request, session, jsonify
 from flask_cors import CORS
 import testi
-from testi import achievements
+from achievement_list import achievements
+import event_list
 
 artefacts = list()
 cont = "AN"
@@ -15,11 +16,11 @@ size = ""
 money = 0
 time = 365
 achieved = []
-total_distance = 0
+total_distance = 100000
 visited_countries = []
 actions_left = 1
 reason = "no_time"
-money_earned = 0
+money_earned = 1000
 artefacts_earned = 0
 events_completed = 0
 converted_amount = 0
@@ -77,7 +78,7 @@ def event(action, number, choice):
         # menetetyt ja maksettavat artefaktit
         removables = list()
 
-        costs = testi.getallevents(money_modifier)[number]['choices'][choice]['cost']
+        costs = event_list.getallevents(money_modifier)[number]['choices'][choice]['cost']
         money -= costs['money']
         time -= costs['time']
         response = testi.get_event_result(number, choice, money_modifier)

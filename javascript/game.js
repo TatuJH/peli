@@ -66,7 +66,6 @@ function updateStats() {
     time_display.textContent = `Time: ${data.game_state.time}`;
     actions_display.textContent = `Actions left: ${data.game_state.actions}`
 
-
     if (data.game_state.all_artefacts) {
 
         let arts = JSON.parse(data.game_state.all_artefacts)
