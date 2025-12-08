@@ -63,6 +63,66 @@ def score():
      return {
          "scores" : scores
      }
+# DEBUG
+@app.route("/shop/get", methods=["GET", "POST"])
+def shop():
+    # dbug
+    global cont
+    cont = "EU"
+    global actions_left
+    actions_left -= 1
+    return json.dumps([art.__dict__ for art in testi.shop_init(artefacts, cont)])
+
+
+# @app.route("/shop/action/<int:index>", methods=["GET", "POST"])
+# # shop init
+# def shop(action, index):
+#     global money
+#     global money_earned
+#     global actions_left
+#
+#     # kauppaan ilmestyy artefaktit
+#     if action == "get":
+#         # annetaan pelille nykyiset artefaktit sekä manner jotta kauppaan ei tuu duplikaatteja tai ulkomaisia aarteita
+#         actions_left -= 1
+#         return testi.shop_init(artefacts, cont)
+#
+#
+#     # Pelaaja ostaa artefaktin indeksillä index
+#     elif action == "buy":
+#         # hankitaan haluttu artefakti kauppalistasta
+#         art = testi.shop_buy(index)
+#         money -= art.value
+#
+#         # annetaan se pelaajlle :-)
+#         artefacts.append(art)
+#         DIC = {
+#                 "text" : f"Ostettu {art.name} hintaan {art.value}!!",
+#             }
+#         return add_game_state(DIC)
+#
+#
+#     # pelaaja myy artefaktin indeksillä index
+#     elif index == "sell":
+#         art = artefacts[int(index)]
+#         artefacts.remove(art)
+#
+#         # todo      To Leo
+#         # todo      Hei,
+#         # TODO      TÄN VOIS TOSIAANKIN TEHDÄ PAREMMIN FUNKTIOLLA!!
+#         # todo      Yt. Vilho
+#         money_earned += art.value
+#         money += art.value
+#         DIC = {
+#                 "text" : f"Myyty {art.name} hintaan {art.value}!!",
+#                }
+#
+#         return add_game_state(DIC)
+#
+#     else:
+#         print("MITÄ!!!!!")
+#         return None
+
 
 @app.route('/events/<action>/<int:number>/<choice>', methods=['GET', 'POST'])
 def event(action, number, choice):
@@ -196,6 +256,7 @@ def airports(action, atarget, ctarget, size, cost):
             money_modifier = 1.2
         money -= cost
         time -= 5
+
         return add_game_state({})
 
 @app.route('/work')

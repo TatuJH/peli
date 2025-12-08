@@ -19,6 +19,8 @@ let sub_data; //<--- Just in case
 //Initialize map
 let map = null;
 
+let shopping = true;
+
 //--------------------------------------------------------
 
 //--------------Functions--------------
@@ -76,7 +78,7 @@ function updateStats() {
             if (arts[i]) {
                 inv_list[i].textContent = `Artefact name: ${arts[i]["name"]} \nValue: $${arts[i]["value"]}\nContinent: ${arts[i]["continent"]}`
             } else {
-                inv_list[i].textContent = "tyhjä repputila :D"
+                inv_list[i].textContent = "backpack slot :p"
             }
 
         }
@@ -114,6 +116,7 @@ const main_buttons = document.getElementById('main_buttons');
 const work_button = document.getElementById('work_button');
 const event_button = document.getElementById('event_button');
 const fight_button = document.getElementById('fight_button');
+const shop_button = document.getElementById("shop_button");
 const map_button = document.getElementById('map_button');
 const inv_button = document.getElementById('inv_button');
 const return_button = document.getElementById("return_button");
@@ -557,7 +560,9 @@ work_button.addEventListener('click', async() => {
 
 inv_button.addEventListener("click", async function()
 {
-    inv_div.classList.toggle("hidden");
+    if(!shopping)
+        inv_div.classList.toggle("hidden");
+
     achievement_div.classList.toggle("hidden");
 });
 
@@ -568,6 +573,57 @@ return_button.addEventListener("click", async function()
     map_text.innerHTML = '';
     hide(return_button);
     show(main_buttons);
+
+});
+
+
+shop_button.addEventListener("click", async function() {
+
+    // pelaaja menee kauppaan
+    shop_div.innerHTML = ""
+
+    // pelaaja ei voi togglata reppunäkymää, jos on kaupassa :p
+    shopping = true;
+
+    hideAll();
+
+    show(inv_div);
+    show(shop_div);
+
+
+    try {
+
+        // get luo kaupan python puolella
+        response = await fetch(`http://127.0.0.1:3000/shop/get`);
+        console.log(response)
+        data = await response.json();
+        console.log(data);
+
+        // Iteroidaan kaikkien kaupan aarteiden läpi ja laitetaan ne kauppa diviin
+        for (let i = 0; i < data[0].length; i++) {
+            const art = data[0][i]
+            const b = document.createElement("button");
+            b.textContent = `${art.name}\nValue: $${art.value}\nContinent: ${art["continent"]}`
+
+            // kun kauppanappia painetaan !!
+            b.addEventListener("click", async function (evt) {
+                // laitetaan jokaiselle kauppaesineelle käytännössä oma indeksi linkin myötä :-)
+                response = await fetch(`http://127.0.0.1:3000/shop/buy/${i}`);
+                data = await response.json();
+                b.textContent = "Sold out!"
+
+            }, {once: true});
+            shop_div.appendChild(b);
+
+        }
+    }
+    catch(error)
+        {
+           console.log(error)
+        }
+
+
+
 
 });
 

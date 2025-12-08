@@ -5,7 +5,7 @@ import data
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demokanta',
+    database='demogame',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -20,6 +20,8 @@ class Artefact:
         self.continent = manner
 
 uncompleted_events = []
+# kauppa säilyttää myynnissä olevat aarteet tässä
+shop_cache = list()
 
 def getallevents(money_modifier):
     return {
@@ -653,6 +655,58 @@ def get_event_result(numero, choice, modifier):
         "time" : getallevents(modifier)[numero]["choices"][choice]["results"][result]["time"],
         "artefact_count" : getallevents(modifier)[numero]["choices"][choice]["results"][result]["artefacts"]
     }
+
+# poista listoilta ja palauta ostettu artefakti
+def shop_buy(index):
+    art = shop_cache[index]
+    shop_cache.remove(index)
+    return art
+
+# tehdään tänne yhdenmukaisuuden vuoksi
+#
+def shop_sell(arts, index):
+    art = arts[index]
+    arts.remove(art)
+    return art
+
+def shop_init(arts, cont):
+    # Tehdään listä johon laitetaan kaupan esineet
+    items = list()
+
+    # kaikki annetun mantereen aarteiden nimet
+    tup = list(data.artefact_names[cont])
+    # Sekoita artefaktien lista jotta pelaaja ei saa jokaisella pelikerralla samoja aarteita ekana
+    random.shuffle(tup)
+
+    # Tämä tekee listan artefakteja kauppaan
+    names = list()
+    for nm in arts:
+        names.append(nm.name)
+
+    # Montako artefaktia kaupassa
+    for i in range(0, random.randint(3, 6)):
+        val = random.randint(600, 1000)
+        # kaupan vero
+        val += 500
+        # Montako mahdollista nimeä on?
+        for n in range(0, len(tup) - 1):
+            nimi = tup[n]
+
+            # Kauppan ei ilmesty duplikaatteja
+            if nimi not in names:
+                items.append(Artefact(nimi, val, cont))
+                names.append(nimi)
+                # Poistu loopista jos löydettiin käyttämätön nimi
+                break
+            else:
+                if n == len(tup) - 1:
+                    # Heitä kauppaan satunnainen duplikaatti mikäli pelaajalla on 11 aarretta samalta mantereelta
+                    nimi = tup[random.randint(0, len(tup))]
+                    items.append(Artefact(nimi, val, cont))
+                    names.append(nimi)
+
+    # koko paskan lopuksi palautetaan aarreobjektit
+    return items
 
 def start_fight(amount):
     player_hp = 10 + 5 * amount
