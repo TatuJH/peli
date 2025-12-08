@@ -117,6 +117,7 @@ const fight_button = document.getElementById('fight_button');
 const map_button = document.getElementById('map_button');
 const inv_button = document.getElementById('inv_button');
 const return_button = document.getElementById("return_button");
+const popup = document.getElementById('popup')
 
 
 // its a list incase we need more than 1 of them o_O
@@ -561,6 +562,8 @@ return_button.addEventListener("click", async function()
 
 });
 
+hide(popup);
+
 async function achievements() {
     const achievements_list = document.getElementById('achievement_list');
 
@@ -585,6 +588,17 @@ async function achievements() {
             li.textContent = data.info[0][i].name;
         });
 
+        (function(ach, wait) {
+            setTimeout(() => {
+                show(popup);
+                popup.textContent = `New achievement: ${data.info[0][i].name}`;
+
+                setTimeout(() => {
+                    hide(popup);
+                }, 3000);
+
+            }, wait);
+        })(data.info[0][i], i * 3500);
     }
 }
 
