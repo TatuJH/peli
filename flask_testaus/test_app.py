@@ -235,9 +235,9 @@ def fight(action, enemy):
 
     return add_game_state(fight)
 
-@app.route('/airport/<action>/<atarget>/<ctarget>/<size>', methods=['GET', 'POST'])
-def airports(action, atarget, ctarget, size):
-    global airport, country, actions_left, money_modifier
+@app.route('/airport/<action>/<atarget>/<ctarget>/<size>/<int:cost>', methods=['GET', 'POST'])
+def airports(action, atarget, ctarget, size, cost):
+    global airport, country, actions_left, money_modifier, money, time
     if action == "get":
         return add_game_state(testi.get_airport(airport))
     elif action == "depart":
@@ -251,6 +251,8 @@ def airports(action, atarget, ctarget, size):
             money_modifier = 1
         elif size == "medium_airport":
             money_modifier = 1.2
+        money -= cost
+        time -= 5
         return add_game_state({})
 
 @app.route('/work')
