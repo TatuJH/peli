@@ -4,7 +4,8 @@ import flask
 from flask import Flask, render_template, request, session, jsonify
 from flask_cors import CORS
 import testi
-from testi import achievements
+from achievement_list import achievements
+import event_list
 
 artefacts = list()
 cont = "AN"
@@ -15,13 +16,13 @@ size = ""
 money = 1000
 time = 365
 achieved = []
-total_distance = 10000
+total_distance = 100000
 visited_countries = []
 actions_left = 1
 reason = "no_time"
-money_earned = 1000000
-artefacts_earned = 5
-events_completed = 10
+money_earned = 1000
+artefacts_earned = 0
+events_completed = 0
 converted_amount = 0
 countries_index = 0
 money_index = 0
@@ -36,12 +37,13 @@ money_modifier = 1
 app = flask.Flask(__name__)
 CORS(app)
 
+#Adds game state to the JSON response (all requests return game_state and info)
 def add_game_state(dict):
     response = {}
     response["info"] = dict,
     response["game_state"] = {
         "actions" : actions_left,
-        "money" : money,
+        "money" : int(money),
         "time" : time,
         "total_distance" : total_distance,
         "all_artefacts" : json.dumps([art.__dict__ for art in artefacts]),
@@ -137,7 +139,7 @@ def event(action, number, choice):
         # menetetyt ja maksettavat artefaktit
         removables = list()
 
-        costs = testi.getallevents(money_modifier)[number]['choices'][choice]['cost']
+        costs = event_list.getallevents(money_modifier)[number]['choices'][choice]['cost']
         money -= costs['money']
         time -= costs['time']
         response = testi.get_event_result(number, choice, money_modifier)
@@ -238,15 +240,16 @@ def fight(action, enemy):
 
     return add_game_state(fight)
 
-@app.route('/airport/<action>/<atarget>/<ctarget>/<size>/<int:cost>', methods=['GET', 'POST'])
-def airports(action, atarget, ctarget, size, cost):
-    global airport, country, actions_left, money_modifier, money, time
+@app.route('/airport/<action>/<atarget>/<ctarget>/<size>/<int:cost>/<continent>', methods=['GET', 'POST'])
+def airports(action, atarget, ctarget, size, cost, continent):
+    global airport, country, actions_left, money_modifier, money, time, cont
     if action == "get":
         return add_game_state(testi.get_airport(airport))
     elif action == "depart":
         actions_left -= 1
         airport = atarget
         country = ctarget
+        cont = continent
         actions_left = 3
         if size == "large_airport":
             money_modifier = 1.5

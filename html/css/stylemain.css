@@ -369,3 +369,15 @@ button.attack:hover {
 .instructions_text_action {
     margin-left: 3rem;
 }
+
+.moneytext {
+    color: #5fca61;
+}
+
+.timetext {
+    color: #6b77c3;
+}
+
+.artefacttext {
+    color: #d1c23f;
+}
