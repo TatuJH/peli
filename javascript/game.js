@@ -92,6 +92,17 @@ function show(thing) {
     thing.classList.remove('hidden');
 }
 
+hide(popup);
+
+function no_money_popup() {
+
+    show(popup);
+    popup.textContent = "Not enough money to do this";
+    setTimeout(() => {
+        hide(popup);
+        }, 3000);
+}
+
 //--------------------------------------------------------
 
 //--------------Permanent elements--------------
@@ -117,8 +128,6 @@ const fight_button = document.getElementById('fight_button');
 const map_button = document.getElementById('map_button');
 const inv_button = document.getElementById('inv_button');
 const return_button = document.getElementById("return_button");
-const popup = document.getElementById('popup')
-
 
 // its a list incase we need more than 1 of them o_O
 const universal_buttons = document.getElementsByClassName('universal_button');
@@ -265,9 +274,7 @@ map_button.addEventListener('click', async() => {
                     show(main_buttons);
 
                   } else {
-
-                    //TODO POPUP
-
+                    no_money_popup()
                   }
 
               });
@@ -351,9 +358,7 @@ event_button.addEventListener('click', async() => {
                 }, {once: true});
 
             } else {
-
-              //TODO POPUP
-
+                no_money_popup()
             }
 
         });
@@ -571,8 +576,6 @@ return_button.addEventListener("click", async function()
     show(main_buttons);
 
 });
-
-hide(popup);
 
 async function achievements() {
     const achievements_list = document.getElementById('achievement_list');
