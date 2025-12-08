@@ -7,7 +7,7 @@ from achievement_list import achievements
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demogame',
+    database='demokanta',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -661,15 +661,9 @@ def get_event_result(numero, choice, modifier):
 # poista listoilta ja palauta ostettu artefakti
 def shop_buy(index):
     art = shop_cache[index]
-    shop_cache.remove(index)
+    shop_cache.remove(art)
     return art
 
-# tehdään tänne yhdenmukaisuuden vuoksi
-#
-def shop_sell(arts, index):
-    art = arts[index]
-    arts.remove(art)
-    return art
 
 def shop_init(arts, cont):
     # Tehdään listä johon laitetaan kaupan esineet
@@ -708,6 +702,7 @@ def shop_init(arts, cont):
                     names.append(nimi)
 
     # koko paskan lopuksi palautetaan aarreobjektit
+    shop_cache.extend(items)
     return items
 
 def start_fight(amount):
@@ -873,3 +868,4 @@ def winning(money, time, total_distance, achieved, visited_countries):
         "time_score": time * 10,
         "distance_score": total_distance // 60
     }
+

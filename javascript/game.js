@@ -83,7 +83,8 @@ function updateStats() {
         }
     }
 
-    if (data.game_state.money <= 0 || data.game_state.time <= 0 || data.game_state.actions < 0) {
+    // rahan nollauksesta ei häviä :p
+    if (data.game_state.time <= 0 || data.game_state.actions < 0) {
 
       location.href = 'lose_screen.html'
 
@@ -617,14 +618,14 @@ shop_button.addEventListener("click", async function() {
     try {
 
         // get luo kaupan python puolella
-        response = await fetch(`http://127.0.0.1:3000/shop/get`);
+        response = await fetch(`http://127.0.0.1:3000/shop/get/0`);
         console.log(response)
         data = await response.json();
         console.log(data);
 
         // Iteroidaan kaikkien kaupan aarteiden läpi ja laitetaan ne kauppa diviin
-        for (let i = 0; i < data[0].length; i++) {
-            const art = data[0][i]
+        for (let i = 0; i < data.length; i++) {
+            const art = data[i]
             const b = document.createElement("button");
             b.textContent = `${art.name}\nValue: $${art.value}\nContinent: ${art["continent"]}`
 
@@ -633,12 +634,26 @@ shop_button.addEventListener("click", async function() {
                 // laitetaan jokaiselle kauppaesineelle käytännössä oma indeksi linkin myötä :-)
                 response = await fetch(`http://127.0.0.1:3000/shop/buy/${i}`);
                 data = await response.json();
-                b.textContent = "Sold out!"
+
+                // python puolelta tulee datan mukana info joka kertoo menikö myynti läpi
+                if(data["info"][0]["success"])
+                {
+                    // nappi veks päältä kun aarre on kaupattu
+                    b.textContent = "Sold out!"
+                    updateStats();
+                    b.disabled = true;
+                }
+
+                p.textContent = data["info"][0]["text"]
+
 
             }, {once: true});
             shop_div.appendChild(b);
-
         }
+        // tehdään throwaway tekstielementti joka antaa palautetta pelaajalle
+        const p = document.createElement("p")
+        shop_div.appendChild(p)
+
     }
     catch(error)
         {
