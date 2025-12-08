@@ -668,6 +668,7 @@ def shop_buy(index):
 def shop_init(arts, cont):
     # Tehdään listä johon laitetaan kaupan esineet
     items = list()
+    shop_cache.clear()
 
     # kaikki annetun mantereen aarteiden nimet
     tup = list(data.artefact_names[cont])
@@ -683,18 +684,19 @@ def shop_init(arts, cont):
     for i in range(0, random.randint(3, 6)):
         val = random.randint(600, 1000)
         # kaupan vero
-        val += 500
-        # Montako mahdollista nimeä on?
+        val += 350
+
+        # Käydään läpi kaikki mahd. nimet
         for n in range(0, len(tup) - 1):
             nimi = tup[n]
 
-            # Kauppan ei ilmesty duplikaatteja
+            # Mikäli pelaajan repussa sekä kaupassa ei vielä ole tätä aarretta, laitetaan se
             if nimi not in names:
                 items.append(Artefact(nimi, val, cont))
                 names.append(nimi)
-                # Poistu loopista jos löydettiin käyttämätön nimi
-                break
+
             else:
+                # ainoastaa nloopin viimeinen toisto
                 if n == len(tup) - 1:
                     # Heitä kauppaan satunnainen duplikaatti mikäli pelaajalla on 11 aarretta samalta mantereelta
                     nimi = tup[random.randint(0, len(tup))]

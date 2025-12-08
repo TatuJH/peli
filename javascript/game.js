@@ -654,6 +654,15 @@ shop_button.addEventListener("click", async function() {
         const p = document.createElement("p")
         shop_div.appendChild(p)
 
+        // inventaario diviin tulee lähe vetään nappi
+        shop_div.appendChild(return_button)
+        show(return_button)
+
+        // return nappi hetkellisesti laitetaan kauppaan, kun kaupasta lähdetään palauta se ennalleen
+        return_button.addEventListener("click", async function(evt){
+            action_buttons.appendChild(return_button)
+        },{once: true});
+
     }
     catch(error)
         {
