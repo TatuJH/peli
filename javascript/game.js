@@ -192,7 +192,7 @@ map_button.addEventListener('click', async() => {
     // }).addTo(map);
 
     //Fetch list of airports from database via Flask
-    response = await fetch('http://127.0.0.1:3000/airport/get/0/0');
+    response = await fetch('http://127.0.0.1:3000/airport/get/0/0/0');
     data = await response.json();
 
     updateStats();
@@ -249,7 +249,7 @@ map_button.addEventListener('click', async() => {
               universal_buttons[0].addEventListener('click', async () => {
 
                   //Let Flask know where user departed
-                  response = await fetch(`http://127.0.0.1:3000/airport/depart/${data.info[0][i].aname}/${data.info[0][i].cname}`);
+                  response = await fetch(`http://127.0.0.1:3000/airport/depart/${data.info[0][i].aname}/${data.info[0][i].cname}/${data.info[0][i].type}`);
                   data = await response.json();
 
                   updateStats();
@@ -384,7 +384,7 @@ fight_button.addEventListener('click', async() => {
             return_button.textContent = "OK";
             show(return_button)
 
-            fight_text.textContent = "One of the heretics knocks you out."
+            fight_text.textContent = "One of the heretics knocks you out for 10 days."
             fight_div.appendChild(fight_text);
 
             updateStats();
@@ -403,7 +403,7 @@ fight_button.addEventListener('click', async() => {
             return_button.textContent = "OK";
             show(return_button)
 
-            fight_text.textContent = "You convert all the heretics."
+            fight_text.textContent = `You convert all the heretics. Your god is pleased and blesses you with $${data.info[0].money_get}.`
             fight_div.appendChild(fight_text);
 
             updateStats();

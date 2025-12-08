@@ -31,6 +31,7 @@ events_index = 0
 convert_index = 0
 enemy_amount = 0
 fight = {}
+money_modifier = 1
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -127,16 +128,16 @@ def event(action, number, choice):
     if action == "get":
         actions_left -= 1
 
-        return add_game_state(testi.get_event())
+        return add_game_state(testi.get_event(money_modifier))
 
     if action == "result":
         # menetetyt ja maksettavat artefaktit
         removables = list()
 
-        costs = testi.eventit[number]['choices'][choice]['cost']
+        costs = testi.getallevents(money_modifier)[number]['choices'][choice]['cost']
         money -= costs['money']
         time -= costs['time']
-        response = testi.get_event_result(number, choice)
+        response = testi.get_event_result(number, choice, money_modifier)
         # pelaajan maksama artefakti HINTA
         if costs['artefacts'] > 0:
             removables.extend(testi.remove_artefacts(artefacts, cont, costs['artefacts']))
@@ -169,11 +170,11 @@ def event(action, number, choice):
 
         # debug
         # print(response)
-        return add_game_state(testi.get_event_result(number, choice))
+        return add_game_state(testi.get_event_result(number, choice, money_modifier))
 
 @app.route('/fight/<action>/<int:enemy>', methods=['GET', 'POST'])
 def fight(action, enemy):
-    global fight, enemy_amount, actions_left, money, time
+    global fight, enemy_amount, actions_left, money, time, money_modifier
     if action == "start":
         actions_left -= 1
         enemy_amount = random.randint(2, 4)
@@ -225,11 +226,18 @@ def fight(action, enemy):
 
     fight['guarding'] = False
 
+    if fight["amount"] <= 0:
+        fight["money_get"] = 100 * enemy_amount * money_modifier
+        money += enemy_amount * 100 * money_modifier
+
+    if fight["player_hp"] <= 0:
+        time -= 10
+
     return add_game_state(fight)
 
-@app.route('/airport/<action>/<atarget>/<ctarget>', methods=['GET', 'POST'])
-def airports(action, atarget, ctarget):
-    global airport, country, actions_left
+@app.route('/airport/<action>/<atarget>/<ctarget>/<size>', methods=['GET', 'POST'])
+def airports(action, atarget, ctarget, size):
+    global airport, country, actions_left, money_modifier
     if action == "get":
         return add_game_state(testi.get_airport(airport))
     elif action == "depart":
@@ -237,14 +245,20 @@ def airports(action, atarget, ctarget):
         airport = atarget
         country = ctarget
         actions_left = 3
+        if size == "large_airport":
+            money_modifier = 1.5
+        elif size == "small_airport":
+            money_modifier = 1
+        elif size == "medium_airport":
+            money_modifier = 1.2
         return add_game_state({})
 
 @app.route('/work')
 def work():
-    global money, time, actions_left
+    global money, time, actions_left, money_modifier
 
-    response = testi.work()
-    money += response['money']
+    response = testi.work(money_modifier)
+    money += response['money'] * money_modifier
     time -= response['time']
     actions_left -= 1
 

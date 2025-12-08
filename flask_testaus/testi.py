@@ -20,8 +20,9 @@ class Artefact:
         self.continent = manner
 
 uncompleted_events = []
-money_modifier = 1
-eventit = {
+
+def getallevents(money_modifier):
+    return {
         1:{
             "event":f"You are given an investment opportunity on the street by a man in a trench coat. He says that by giving him ${int(round(100*money_modifier))} you could make ${int(round(300*money_modifier))}." ,
             "input":"Do you want to invest or decline the opportunity?",
@@ -518,7 +519,7 @@ achievements = {
 }
 
 def start():
-    for eve in eventit:
+    for eve in getallevents(0):
         uncompleted_events.append(eve)
 
 def scores():
@@ -596,11 +597,11 @@ def remove_artefacts(artefacts, cont, count = 1, index = -1):
     # palautetaan artefakti, joka poistetaan
     return removables
 
-def get_event():
+def get_event(modifier):
     global uncompleted_events
     # testausta varten laitetaan lista täyteen taas jos se on tyhjä
     if len(uncompleted_events) == 0:
-        for eve in eventit:
+        for eve in getallevents(modifier):
             uncompleted_events.append(eve)
     numero = random.choice(uncompleted_events)
     uncompleted_events.remove(numero)
@@ -612,16 +613,16 @@ def get_event():
     tcosts = []
     acosts = []
 
-    for choice in eventit[numero]["choices"]:
+    for choice in getallevents(modifier)[numero]["choices"]:
         choices.append(choice)
-        mcosts.append(eventit[numero]["choices"][choice]['cost']['money'])
-        tcosts.append(eventit[numero]["choices"][choice]['cost']['time'])
-        acosts.append(eventit[numero]["choices"][choice]['cost']['artefacts'])
+        mcosts.append(getallevents(modifier)[numero]["choices"][choice]['cost']['money'] * modifier)
+        tcosts.append(getallevents(modifier)[numero]["choices"][choice]['cost']['time'])
+        acosts.append(getallevents(modifier)[numero]["choices"][choice]['cost']['artefacts'])
 
     return {
         "number": numero,
-        "text": eventit[numero]["event"],
-        "question": eventit[numero]["input"],
+        "text": getallevents(modifier)[numero]["event"],
+        "question": getallevents(modifier)[numero]["input"],
         "choices": choices,
         "money_costs": mcosts,
         "time_costs": tcosts,
@@ -631,9 +632,9 @@ def get_event():
     # print(thing)
     return thing
 
-def work():
-    max_money = int(round(200 * money_modifier))
-    min_money = int(round(100 * money_modifier))
+def work(modifier):
+    max_money = int(round(200 * modifier))
+    min_money = int(round(100 * modifier))
     jobs = ["janitor", "fast food cook", "secretary", "freelance actor", "substitute teacher","cucumber quality inspector", "tree doctor", "farmer's assistant","professional supermarket greeter"]
     moneygain = random.randint(min_money, max_money)
 
@@ -643,14 +644,14 @@ def work():
         "time":15
     }
 
-def get_event_result(numero, choice):
-    result = random.randint(1, len(eventit[numero]["choices"][choice]["results"]))
+def get_event_result(numero, choice, modifier):
+    result = random.randint(1, len(getallevents(modifier)[numero]["choices"][choice]["results"]))
 
     return {
-        "text" : eventit[numero]["choices"][choice]["results"][result]["text"],
-        "money" : eventit[numero]["choices"][choice]["results"][result]["money"],
-        "time" : eventit[numero]["choices"][choice]["results"][result]["time"],
-        "artefact_count" : eventit[numero]["choices"][choice]["results"][result]["artefacts"]
+        "text" : getallevents(modifier)[numero]["choices"][choice]["results"][result]["text"],
+        "money" : getallevents(modifier)[numero]["choices"][choice]["results"][result]["money"] * modifier,
+        "time" : getallevents(modifier)[numero]["choices"][choice]["results"][result]["time"],
+        "artefact_count" : getallevents(modifier)[numero]["choices"][choice]["results"][result]["artefacts"]
     }
 
 def start_fight(amount):
