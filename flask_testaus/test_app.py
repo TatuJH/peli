@@ -17,7 +17,7 @@ size = ""
 money = 1000
 time = 365
 achieved = []
-total_distance = 100000
+total_distance = 0
 visited_countries = []
 actions_left = 3
 reason = "no_time"
@@ -78,14 +78,14 @@ def score():
 def shop(action, index):
     global money, money_earned, actions_left, cont, artefacts_earned
 
-
     # kauppaan ilmestyy artefaktit
     if action == "get":
         # annetaan pelille nykyiset artefaktit sekä manner jotta kauppaan ei tuu duplikaatteja tai ulkomaisia aarteita
         actions_left += 1
         arts = testi.shop_init(artefacts, cont)
-        print(arts)
-        return json.dumps([art.__dict__ for art in arts])
+        for n in arts:
+            print(n.name)
+        return add_game_state(json.dumps([art.__dict__ for art in arts]))
 
 
     # Pelaaja ostaa artefaktin indeksillä index

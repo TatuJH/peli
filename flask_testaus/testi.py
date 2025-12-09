@@ -172,40 +172,53 @@ def shop_buy(index):
 def shop_init(arts, cont):
     # Tehdään listä johon laitetaan kaupan esineet
     items = list()
+    # otetaan välimuistista veks aiemman kaupan esineet
     shop_cache.clear()
 
     # kaikki annetun mantereen aarteiden nimet
-    tup = list(data.artefact_names[cont])
+    possible_names = list(data.artefact_names[cont])
     # Sekoita artefaktien lista jotta pelaaja ei saa jokaisella pelikerralla samoja aarteita ekana
-    random.shuffle(tup)
+    random.shuffle(possible_names)
 
-    # Tämä tekee listan artefakteja kauppaan
+    # Löydettyjen artefaktien lista!!
     names = list()
+
+
+
+    # pelaajan artefaktit lisätään listaan
     for nm in arts:
         names.append(nm.name)
 
+    print(len(names))
+
     # Montako artefaktia kaupassa
-    for i in range(0, random.randint(3, 6)):
+    # maksimi on neljä!!
+    for i in range(0, random.randint(2,4)):
+
+        # tulevan aarteen arvo
         val = random.randint(600, 1000)
         # kaupan vero
         val += 350
 
         # Käydään läpi kaikki mahd. nimet
-        for n in range(0, len(tup) - 1):
-            nimi = tup[n]
+        for n in range(0, len(possible_names) - 1):
+            nimi = possible_names[n]
 
-            # Mikäli pelaajan repussa sekä kaupassa ei vielä ole tätä aarretta, laitetaan se
+            # Mikäli pelaajan repussa sekä kaupassa ei vielä ole tätä aarretta, laitetaan se kauppaan
             if nimi not in names:
+                # lisää kaupan esineisiin aarre nimellä nimi
                 items.append(Artefact(nimi, val, cont))
+                # lisää löydettyjen aarteiden listaan nimi
                 names.append(nimi)
+                break
 
             else:
-                # ainoastaa nloopin viimeinen toisto
-                if n == len(tup) - 1:
+                # ainoastaan loopin viimeinen toisto
+                if n == len(possible_names) - 1:
                     # Heitä kauppaan satunnainen duplikaatti mikäli pelaajalla on 11 aarretta samalta mantereelta
-                    nimi = tup[random.randint(0, len(tup))]
+                    nimi = possible_names[random.randint(0, len(possible_names))]
                     items.append(Artefact(nimi, val, cont))
-                    names.append(nimi)
+                    break
 
     # koko paskan lopuksi palautetaan aarreobjektit
     shop_cache.extend(items)

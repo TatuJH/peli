@@ -110,10 +110,33 @@ async function updateStats() {
 
         let arts = JSON.parse(data.game_state.all_artefacts)
 
+        // käydään läpi kaikki reppunapit ja lisätään aarre, jos sellainen on
         for (let i = 0; i < inv_list.length; i++) {
 
             if (arts[i]) {
+                // reppunappi
+                const button = inv_list[i];
+                // päivitetään sen teksti
                 inv_list[i].textContent = `Artefact name: ${arts[i]["name"]} \nValue: $${arts[i]["value"]}\nContinent: ${arts[i]["continent"]}`
+
+                // jokaiselle reppunapille tulee myyntiominaisuus kun ollaan kaupassa
+                button.addEventListener("click", async function (evt) {
+
+                    // jokaiselle reppunapille annetaan kauppareissun ajaksi myyntifunktio
+                    response = await fetch(`http://127.0.0.1:3000/shop/sell/${i}`);
+                    data = await response.json();
+
+
+                    // päivitetään tiedot manuaalisti tässä, joten repun sisältö ei päivity välittömästi
+                    money_display.textContent = `Money: ${data.game_state.money}`;
+
+                    button.textContent = "Myyty!"
+                    button.removeEventListener("click", evt)
+                }, {once:true});
+
+                // nappi on pois päältä kunnes kauppa laittaa sen päälle :pd
+                button.disabled = true;
+
             } else {
                 inv_list[i].textContent = "backpack slot :p"
             }
@@ -130,6 +153,7 @@ async function updateStats() {
         location.href = 'lose_screen.html';
     }
 }
+
 
 function hide(thing) {
     thing.classList.add('hidden');
@@ -643,8 +667,12 @@ work_button.addEventListener('click', async() => {
 
 inv_button.addEventListener("click", async function()
 {
+    // pelimies ei voi laittaa reppua veks jos on kaupassa !!
     if(!shopping)
+    {
         inv_div.classList.toggle("hidden");
+    }
+
 
     achievement_div.classList.toggle("hidden");
 });
@@ -670,8 +698,10 @@ return_button.addEventListener("click", async function()
 
 shop_button.addEventListener("click", async function() {
 
-    // pelaaja menee kauppaan
-    shop_div.innerHTML = ""
+    // esineet kaupassa
+    const shop_list = document.getElementById("shop_list");
+    // nollataan esineet
+    shop_list.innerHTML = ""
 
     // pelaaja ei voi togglata reppunäkymää, jos on kaupassa :p
     shopping = true;
@@ -679,21 +709,26 @@ shop_button.addEventListener("click", async function() {
     hideAll();
 
     show(inv_div);
-    show(shop_div);
 
+    // kauppateksti joka antaa palautetta
+    const p = document.getElementById("shop_text")
+    // tehdään siitä tyhjä mutta tilaa vievä
+    p.innerHTML = "&nbsp"
+    show(p)
 
     try {
 
         // get luo kaupan python puolella
         response = await fetch(`http://127.0.0.1:3000/shop/get/0`);
-        console.log(response)
         data = await response.json();
-        console.log(data);
 
-        // Iteroidaan kaikkien kaupan aarteiden läpi ja laitetaan ne kauppa diviin
-        for (let i = 0; i < data.length; i++) {
-            const art = data[i]
+        // tää on lista aarreobjekteja. pitää parsettaa
+        const arts = JSON.parse(data["info"][0])
+        // Luodaan nappi jokaiselle kaupan aarteelle!!
+        for (let i = 0; i < arts.length; i++) {
+            const art = arts[i]
             const b = document.createElement("button");
+            b.classList.add("shop_button")
             b.textContent = `${art.name}\nValue: $${art.value}\nContinent: ${art["continent"]}`
 
             // kun kauppanappia painetaan !!
@@ -711,23 +746,41 @@ shop_button.addEventListener("click", async function() {
                     b.disabled = true;
                 }
 
+                // kauppateksti päivitetään aarreostoksen mukaan (kertoo pelaajalle riittikö raha tai ei)
                 p.textContent = data["info"][0]["text"]
 
 
             }, {once: true});
-            shop_div.appendChild(b);
+            shop_list.appendChild(b);
         }
-        // tehdään throwaway tekstielementti joka antaa palautetta pelaajalle
-        const p = document.createElement("p")
-        shop_div.appendChild(p)
+
+
+        // jokaisesta reppunapista tulee myyntinappi
+        for(let i = 0; i < inv_list.length; i++)
+        {
+            let arts = JSON.parse(data.game_state.all_artefacts)
+            const button = inv_list[i]
+
+        }
 
         // inventaario diviin tulee lähe vetään nappi
         shop_div.appendChild(return_button)
         show(return_button)
 
+
+        // vasta kun kaikki esineet on ladattu, näytetään nämä pelaajalle
+        show(shop_list)
+        show(shop_div);
+
         // return nappi hetkellisesti laitetaan kauppaan, kun kaupasta lähdetään palauta se ennalleen
         return_button.addEventListener("click", async function(evt){
             action_buttons.appendChild(return_button)
+
+            // kun lähdetään kaupasta, iteroidaan kaikki reppunapit ja poistetaan myyntiominaisuus
+            for(let i = 0; i < inv_list.length; i++)
+            {
+
+            }
         },{once: true});
 
     }
