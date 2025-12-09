@@ -352,3 +352,15 @@ button.attack:hover {
     color: #d1c23f;
 }
 
+.hp-text {
+    color: #da3c3c;
+}
+
+.spd-text {
+    color: #d6a65d;
+}
+
+.ptn-text {
+    color: #389e38;
+}
+

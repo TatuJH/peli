@@ -2,17 +2,7 @@
 
 /* tääl on käytännössä vaan roska jota harvemmin muutetaan */
 
-.hp-text {
-    color: red;
-}
 
-.spd-text {
-    color: orange;
-}
-
-.ptn-text {
-    color: forestgreen;
-}
 
 /* jutut yläpalkissa */
 .main_header p {

@@ -35,6 +35,7 @@ enemy_amount = 0
 fight = {}
 money_modifier = 1
 current_airport_list = {}
+co2 = 0
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -55,7 +56,8 @@ def add_game_state(dict):
         "current_airport" : airport,
         "current_country" : country,
         "current_continent" : cont,
-        "distance" : total_distance
+        "distance" : total_distance,
+        "co2" : co2
     }
 
     return response
@@ -243,7 +245,7 @@ def fight(action, enemy):
 
 @app.route('/airport/<action>/<atarget>/<ctarget>/<size>/<int:cost>/<continent>/<int:index>', methods=['GET', 'POST'])
 def airports(action, atarget, ctarget, size, cost, continent, index):
-    global airport, country, actions_left, money_modifier, money, time, cont, total_distance, current_airport_list
+    global airport, country, actions_left, money_modifier, money, time, cont, total_distance, current_airport_list, co2
     if action == "get":
         current_airport_list = testi.get_airport(airport)
         return add_game_state(current_airport_list)
@@ -251,6 +253,7 @@ def airports(action, atarget, ctarget, size, cost, continent, index):
         latlong = (current_airport_list[index]["latitude"], current_airport_list[index]["longitude"])
         current_latlong = (current_airport_list[0]["latitude"], current_airport_list[0]["longitude"])
         total_distance += int(distance.distance(latlong, current_latlong).km)
+        co2 += int(distance.distance(latlong, current_latlong).km) // 5
         actions_left -= 1
         airport = atarget
         country = ctarget

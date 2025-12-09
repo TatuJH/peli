@@ -299,6 +299,7 @@ def get_airport(current_airport):
         latlong = (airport["latitude"], airport["longitude"])
         current_latlong = (airport_list[0]["latitude"], airport_list[0]["longitude"])
         airport["distance"] = int(distance.distance(latlong, current_latlong).km)
+        airport["co2"] = int(airport["distance"] // 5)
 
     return airport_list
 

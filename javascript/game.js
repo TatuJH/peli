@@ -56,6 +56,7 @@ const depart_button = document.getElementById('depart_button');
 const money_display = document.getElementById('money_display');
 const time_display = document.getElementById('time_display');
 const actions_display = document.getElementById('actions_display');
+const co2_display = document.getElementById('co2_display');
 const popup = document.getElementById('popup');
 
 
@@ -100,7 +101,8 @@ function removeActions() {
 async function updateStats() {
     money_display.textContent = `Money: ${data.game_state.money}`;
     time_display.textContent = `Time: ${data.game_state.time}`;
-    actions_display.textContent = `Actions left: ${data.game_state.actions}`
+    actions_display.textContent = `Actions left: ${data.game_state.actions}`;
+    co2_display.textContent = `CO₂: ${data.game_state.co2}`;
 
 
     if (data.game_state.all_artefacts) {
@@ -244,7 +246,7 @@ async function depart() {
         if (i !== 0) {
           circle.addEventListener('click', () => {
 
-            airport_info.innerHTML = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont}), <span class="moneytext">$${data.info[0][i].cost}</span>, ${data.info[0][i].distance}km<br><br>Thus far you have travelled ${data.game_state.distance}km.`;
+            airport_info.innerHTML = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont}), <span class="moneytext">$${data.info[0][i].cost}</span>, ${data.info[0][i].distance}km, ${data.info[0][i].co2} CO₂<br><br>Thus far you have travelled ${data.game_state.distance}km.`;
             show(airport_info)
               //Initialize depart button
             const departHandler = async function() {
@@ -300,7 +302,7 @@ async function depart() {
           //Add effects to circlemarker
           circle.on('mouseover', () => {
               circle.setStyle({fillOpacity: 0.5});
-              maptext.innerHTML = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont}), <span class='moneytext'>$${data.info[0][i].cost}</span>, ${data.info[0][i].distance}km`;
+              maptext.innerHTML = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont}), <span class='moneytext'>$${data.info[0][i].cost}</span>, ${data.info[0][i].distance}km, ${data.info[0][i].co2} CO₂`;
           });
           circle.on('mouseout', () => {
               circle.setStyle({fillOpacity: 1});
@@ -484,7 +486,7 @@ fight_button.addEventListener('click', async() => {
             return_button.textContent = "OK";
             show(return_button)
 
-            fight_text.innerHTML = `You convert all the heretics. Your god is pleased and blesses you with <span class='timetext'>$${data.info[0].money_get}</span>.`
+            fight_text.innerHTML = `You convert all the heretics. Your god is pleased and blesses you with <span class='moneytext'>$${data.info[0].money_get}</span>.`
             fight_div.appendChild(fight_text);
 
             updateStats();
