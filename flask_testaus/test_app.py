@@ -13,10 +13,10 @@ conts = []
 airport = "Ancient Chamber"
 country = "Antarctica"
 size = ""
-money = 1500
+money = 1000
 time = 365
 achieved = []
-total_distance = 100000
+total_distance = 0
 visited_countries = []
 actions_left = 3
 reason = "no_time"
@@ -319,5 +319,54 @@ def lose_screen():
         "visited_countries": visited_countries,
         "reason": reason
     }
+
+DEFAULT_STATE = {
+        "actions" : 3,
+        "money" : 1000,
+        "time" : 365,
+        "total_distance" : 0,
+        "all_artefacts" : [],
+        "artefacts" : list(),
+        "visited_countries" : [],
+        "achieved" : [],
+        "current_aiport" : "Ancient Chamber",
+        "current_country" : "Antarctica",
+        "current_continent" : "AN"
+    }
+
+@app.route('/reset', methods=['POST'])
+def reset_game():
+    global actions_left, money, time, total_distance, artefacts, countries_index, money_index
+    global visited_countries, achieved, airport, country, cont, distance_index
+    global conts, size, money_earned, artefacts_earned, events_completed, converted_amount
+    global artefacts_index, events_index, convert_index, enemy_amount, fight, money_modifier
+
+    artefacts = list()
+    cont = "AN"
+    conts = []
+    airport = "Ancient Chamber"
+    country = "Antarctica"
+    size = ""
+    money = 1000
+    time = 365
+    achieved = []
+    total_distance = 0
+    visited_countries = []
+    actions_left = 3
+    money_earned = 0
+    artefacts_earned = 0
+    events_completed = 0
+    converted_amount = 0
+    countries_index = 0
+    money_index = 0
+    distance_index = 0
+    artefacts_index = 0
+    events_index = 0
+    convert_index = 0
+    enemy_amount = 0
+    fight = {}
+    money_modifier = 1
+
+    return add_game_state({"success": True})
 
 app.run(use_reloader=True, host='127.0.0.1', port=3000)
