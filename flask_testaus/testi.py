@@ -8,7 +8,7 @@ import event_list
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demokanta',
+    database='demogame',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
@@ -83,24 +83,23 @@ def add_artefacts(artefacts, cont, count = 1):
 
     return new_artefacts
 
-# tälle annetaan artefaktilista sekä nykyinen manner sekä annettu indeksi (jos myydään artefakti, -1 meinaa ei myydä)
-def remove_artefacts(artefacts, cont, count = 1, index = -1):
+# tälle annetaan artefaktilista sekä nykyinen manner sekä annettu indeksi. Poistaa yhden artefaktin
+def remove_artefacts(artefacts, cont):
     # Poista tältä mantereelta kotoisin artefakti ekana
     priority = list()
+
+    # poistettavien lista
     removables = list()
 
     for a in artefacts:
         if a.continent == cont:
             priority.append(a)
-    # Tee randomilla jos ei anneta indeksiä (eli jos jokin event ottaa pelaajalta)
-    if index == -1:
-        for a in range(0,count):
-            if len(priority) > 0:
-                removables.append(artefacts[random.randint(0, len(priority)-1)])
-            else:
-                removables.append(artefacts[random.randint(0, len(artefacts)-1)])
+
+    if len(priority) > 0:
+        removables.append(artefacts[random.randint(0, len(priority)-1)])
     else:
-        removables.append(artefacts[index])
+        removables.append(artefacts[random.randint(0, len(artefacts)-1)])
+
 
     # palautetaan artefakti, joka poistetaan
     return removables
@@ -112,10 +111,12 @@ def get_event(modifier):
         for eve in event_list.getallevents(modifier):
             uncompleted_events.append(eve)
     numero = random.choice(uncompleted_events)
+
     uncompleted_events.remove(numero)
 
-    # TESTI EVENT
-    # numero = 14
+    # lol
+    if numero == 12:
+        numero = 11
     choices = []
     mcosts = []
     tcosts = []

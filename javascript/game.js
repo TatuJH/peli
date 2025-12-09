@@ -768,13 +768,9 @@ shop_button.addEventListener("click", async function() {
 
         // return nappi hetkellisesti laitetaan kauppaan, kun kaupasta lähdetään palauta se ennalleen
         return_button.addEventListener("click", async function(evt){
-            action_buttons.appendChild(return_button)
-
-            // kun lähdetään kaupasta, iteroidaan kaikki reppunapit ja poistetaan myyntiominaisuus
-            for(let i = 0; i < inv_list.length; i++)
-            {
-
-            }
+            action_buttons.appendChild(return_button);
+            shopping = false;
+            updateStats();
         },{once: true});
 
     }

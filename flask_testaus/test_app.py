@@ -14,7 +14,7 @@ conts = []
 airport = "Ancient Chamber"
 country = "Antarctica"
 size = ""
-money = 10000
+money = 2000
 time = 365
 achieved = []
 total_distance = 0
@@ -63,8 +63,7 @@ def add_game_state(dict):
         "current_continent" : cont,
         "distance" : total_distance,
         "artefact_display" : thing,
-        "co2" : co2,
-        "reason" : reason
+        "co2" : co2
     }
 
     return response
@@ -118,13 +117,11 @@ def shop(action, index):
     # pelaaja myy artefaktin indeksillä index
     if action == "sell":
         for arrrr in artefacts:
-            print (arrrr.name)
+            print ("aarteet nyt " + arrrr.name)
 
-        #TODO TÄRKEÄ: ETSI KEINO, JOLLA LISTA EI PÄIVITY HETI KUN PELAAJA POISTAA ARTEFAKTIN
-        #TODO           PELAAJAN REPPU MUUTTUU VASTA KUN LÄHTEE VETÄÄN KAUPASTA!!
-        #TODO           NAPIT JS PUOLELLA ON KERTAKÄYTTÖISIÄ
-        #TODO           MUUTA SE AARREKOUNTTERI SAMALLA!!!!!
         art = artefacts[int(index)]
+
+        # poista listalta myyty artefakti
         artefacts.pop(index)
 
         # pakko olla parempi tapa tehdä tämä
@@ -159,7 +156,7 @@ def event(action, number, choice):
         response = testi.get_event_result(number, choice, money_modifier)
         # pelaajan maksama artefakti HINTA
         if costs['artefacts'] > 0:
-            removables.extend(testi.remove_artefacts(artefacts, cont, costs['artefacts']))
+            removables.extend(testi.remove_artefacts(artefacts, cont))
 
         money += response['money']
         money_earned += response['money']
@@ -170,6 +167,7 @@ def event(action, number, choice):
         if time < 0:
             time = 0
 
+        print(response["artefact_count"])
         if response["artefact_count"] > 0:
             # extend lisää pelkästään annetun listan jäsenet eikä itse listaa
             newarts = testi.add_artefacts(artefacts, cont, response["artefact_count"])
@@ -180,7 +178,7 @@ def event(action, number, choice):
         elif response["artefact_count"] < 0:
             # ainoastaan poista artefakti jos SELLAINEN ON
             if len(artefacts) > 0:
-                removables.extend(testi.remove_artefacts(artefacts, cont, abs(response["artefact_count"])))
+                removables.extend(testi.remove_artefacts(artefacts, cont))
 
         # poistetaan kulutetut artefaktit listasta
         for art in artefacts:
@@ -261,7 +259,6 @@ def fight(action, enemy):
 @app.route('/airport/<action>/<atarget>/<ctarget>/<size>/<int:cost>/<continent>/<int:index>', methods=['GET', 'POST'])
 def airports(action, atarget, ctarget, size, cost, continent, index):
     global airport, country, actions_left, money_modifier, money, time, cont, total_distance, current_airport_list, visited_countries, co2
-    print(ctarget)
 
     if action == "get":
         current_airport_list = testi.get_airport(airport)
@@ -335,8 +332,6 @@ def ach():
             "category": category,
             "reward": reward
         })
-
-    print(visited_countries)
 
     return add_game_state(achievements_info)
 
