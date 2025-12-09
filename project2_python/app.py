@@ -277,7 +277,6 @@ def fight(action, enemy):
 @app.route('/airport/<action>/<atarget>/<ctarget>/<size>/<int:cost>/<continent>/<int:index>', methods=['GET', 'POST'])
 def airports(action, atarget, ctarget, size, cost, continent, index):
     global airport, country, actions_left, money_modifier, money, time, cont, total_distance, current_airport_list, visited_countries, co2
-    visited_countries.append(ctarget)
 
     if action == "get":
         current_airport_list = game.get_airport(airport)
@@ -306,6 +305,7 @@ def airports(action, atarget, ctarget, size, cost, continent, index):
         money -= cost
         time -= 10
 
+        visited_countries.append(ctarget)
         return add_game_state({})
 
 
@@ -375,11 +375,6 @@ def ach():
             "reward": reward
         })
 
-    print(money_earned)
-    print(money)
-    print(total_distance)
-    print(achievements_info)
-
     return add_game_state(achievements_info)
 
 
@@ -388,7 +383,6 @@ def win_screen():
     global money, time, total_distance, achieved
 
     return game.winning(money, time, total_distance, achieved, visited_countries)
-
 
 @app.route('/lose_screen', methods=['GET'])
 def lose_screen():
