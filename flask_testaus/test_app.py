@@ -4,6 +4,7 @@ import flask
 from flask import Flask, render_template, request, session, jsonify
 from flask_cors import CORS
 import testi
+from geopy import distance
 from achievement_list import achievements
 import event_list
 
@@ -33,6 +34,7 @@ convert_index = 0
 enemy_amount = 0
 fight = {}
 money_modifier = 1
+current_airport_list = {}
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -52,7 +54,8 @@ def add_game_state(dict):
         "achieved" : achieved,
         "current_airport" : airport,
         "current_country" : country,
-        "current_continent" : cont
+        "current_continent" : cont,
+        "distance" : total_distance
     }
 
     return response
@@ -238,12 +241,16 @@ def fight(action, enemy):
 
     return add_game_state(fight)
 
-@app.route('/airport/<action>/<atarget>/<ctarget>/<size>/<int:cost>/<continent>', methods=['GET', 'POST'])
-def airports(action, atarget, ctarget, size, cost, continent):
-    global airport, country, actions_left, money_modifier, money, time, cont
+@app.route('/airport/<action>/<atarget>/<ctarget>/<size>/<int:cost>/<continent>/<int:index>', methods=['GET', 'POST'])
+def airports(action, atarget, ctarget, size, cost, continent, index):
+    global airport, country, actions_left, money_modifier, money, time, cont, total_distance, current_airport_list
     if action == "get":
-        return add_game_state(testi.get_airport(airport))
+        current_airport_list = testi.get_airport(airport)
+        return add_game_state(current_airport_list)
     elif action == "depart":
+        latlong = (current_airport_list[index]["latitude"], current_airport_list[index]["longitude"])
+        current_latlong = (current_airport_list[0]["latitude"], current_airport_list[0]["longitude"])
+        total_distance += int(distance.distance(latlong, current_latlong).km)
         actions_left -= 1
         airport = atarget
         country = ctarget

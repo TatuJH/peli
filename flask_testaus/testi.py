@@ -1,6 +1,7 @@
 import mysql.connector
 import random
 import data
+from geopy import distance
 from achievement_list import achievements
 import event_list
 
@@ -295,6 +296,9 @@ def get_airport(current_airport):
             airport["cost"] = 300
         elif airport["type"] == "large_airport":
             airport["cost"] = 450
+        latlong = (airport["latitude"], airport["longitude"])
+        current_latlong = (airport_list[0]["latitude"], airport_list[0]["longitude"])
+        airport["distance"] = int(distance.distance(latlong, current_latlong).km)
 
     return airport_list
 

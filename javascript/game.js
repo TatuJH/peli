@@ -202,7 +202,7 @@ async function depart() {
     // }).addTo(map);
 
     //Fetch list of airports from database via Flask
-    response = await fetch('http://127.0.0.1:3000/airport/get/0/0/0/0/0');
+    response = await fetch('http://127.0.0.1:3000/airport/get/0/0/0/0/0/0');
     data = await response.json();
 
     updateStats();
@@ -244,7 +244,7 @@ async function depart() {
         if (i !== 0) {
           circle.addEventListener('click', () => {
 
-            airport_info.textContent = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont})`;
+            airport_info.innerHTML = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont}), <span class="moneytext">$${data.info[0][i].cost}</span>, ${data.info[0][i].distance}km<br><br>Thus far you have travelled ${data.game_state.distance}km.`;
             show(airport_info)
               //Initialize depart button
             const departHandler = async function() {
@@ -253,7 +253,7 @@ async function depart() {
 
                     //Let Flask know where user departed
                     response = await fetch(
-                        `http://127.0.0.1:3000/airport/depart/${data.info[0][i].aname}/${data.info[0][i].cname}/${data.info[0][i].type}/${data.info[0][i].cost}/${data.info[0][i].continent}`);
+                        `http://127.0.0.1:3000/airport/depart/${data.info[0][i].aname}/${data.info[0][i].cname}/${data.info[0][i].type}/${data.info[0][i].cost}/${data.info[0][i].continent}/${i}`);
                     data = await response.json();
 
                     updateStats();
@@ -300,7 +300,7 @@ async function depart() {
           //Add effects to circlemarker
           circle.on('mouseover', () => {
               circle.setStyle({fillOpacity: 0.5});
-              maptext.innerHTML = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont}), <span class='moneytext'>$${data.info[0][i].cost}</span>`;
+              maptext.innerHTML = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont}), <span class='moneytext'>$${data.info[0][i].cost}</span>, ${data.info[0][i].distance}km`;
           });
           circle.on('mouseout', () => {
               circle.setStyle({fillOpacity: 1});
