@@ -22,12 +22,12 @@ async function win_screen() {
 
 const play_again_button = document.getElementById('new_game_button');
 play_again_button.addEventListener('click', () => {
-   location.href='game.html';
+   location.href='game.project2_htm';
 });
 
 const main_menu_button = document.getElementById('main_menu_button');
 main_menu_button.addEventListener('click', () => {
-   location.href='index.html';
+   location.href='index.project2_htm';
 });
 
 win_screen()
