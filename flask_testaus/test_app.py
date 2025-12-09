@@ -14,7 +14,7 @@ conts = []
 airport = "Ancient Chamber"
 country = "Antarctica"
 size = ""
-money = 10000
+money = 1000
 time = 365
 achieved = []
 total_distance = 0
@@ -313,9 +313,14 @@ def ach():
         name = achievementti["name"]
 
         reward = achievementti.get("reward", 0)
-        if reward:
+        if reward > 0:
             money += reward
             money_earned += reward
+        else:
+            money += reward
+            if money < 0:
+                money = 0
+
 
         description = ""
         for item in achievements[category]:
@@ -325,8 +330,16 @@ def ach():
 
         achievements_info.append({
             "name": name,
-            "description": description
+            "description": description,
+            "category": category,
+            "reward": reward
         })
+
+    print(money_earned)
+    print(money)
+    print(total_distance)
+
+    print(achievements_info)
 
     return add_game_state(achievements_info)
 

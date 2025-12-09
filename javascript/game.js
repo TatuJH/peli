@@ -57,7 +57,6 @@ const money_display = document.getElementById('money_display');
 const time_display = document.getElementById('time_display');
 const actions_display = document.getElementById('actions_display');
 const artefact_display = document.getElementById("artefacts_display");
-const seenAchievements = new Set();
 const co2_display = document.getElementById('co2_display');
 const popup = document.getElementById('popup');
 
@@ -149,11 +148,9 @@ async function updateStats() {
 
         }
 
-    achievements()
-
     }
 
-
+    achievements()
 
     // rahan nollauksesta ei häviä :p
     if (data.game_state.time <= 0 || data.game_state.actions < 0) {
@@ -285,7 +282,6 @@ async function depart() {
             show(airport_info)
               //Initialize depart button
             const departHandler = async function() {
-
               if (data.game_state.money >= data.info[0][i].cost) {
 
                     //Let Flask know where user departed
@@ -307,8 +303,13 @@ async function depart() {
                     show(main_buttons);
 
                   } else {
+                        if (data.game_state.money < data.info[0][i].cost && data.game_state.actions === 0) {
+                            location.href = 'lose_screen.html';
+                        }
+                    else {
                     popupfunc("Not enough money to fly!")
                   }
+                    }
             }
             const departHover = function() {
 
@@ -363,13 +364,13 @@ async function depart() {
 
 }
 
+const seenAchievements = {};
+
 async function achievements() {
     const achievements_list = document.getElementById('achievement_list');
 
     let response = await fetch('http://127.0.0.1:3000/ach');
     let data = await response.json();
-
-    achievements_list.innerHTML = "";
 
     // Käydään läpi kaikki saavutukset ja lisätään listaan
     for (let i = 0; i < data.info[0].length; i++) {
@@ -388,25 +389,26 @@ async function achievements() {
             li.textContent = ach.name;
         });
 
-        // jos saavutusta ei ole vielä näytetty, ajoita popup
-        if (!seenAchievements.has(ach.name)) {
-            // lisää heti settiin, jotta samaa ei ajoiteta kahteen kertaan
-            seenAchievements.add(ach.name);
+        if (!seenAchievements[ach.name]) {
+            seenAchievements[ach.name] = true;
+        }
 
-            // closure käyttää tässä suoraan ach-oliota
             (function(achievement, wait) {
                 setTimeout(() => {
                     show(popup);
-                    popup.textContent = `New achievement: ${achievement.name}`;
+                    if (achievement.category === "distance") {
+                        popup.textContent = `Enviroment Tax: ${achievement.name} for $${achievement.reward}!`;
+                    } else {
+                        popup.textContent = `New achievement: ${achievement.name} for $${achievement.reward}!`;
+                    }
 
                     setTimeout(() => {
                         hide(popup);
-                    }, 3000);
+                    }, 4000);
 
                 }, wait);
-            })(ach, i * 3500);
+            })(ach, i * 4300);
         }
-    }
 }
 
 //--------------------------------------------------------

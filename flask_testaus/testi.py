@@ -345,71 +345,65 @@ def achievement(visited_countries, money_earned, total_distance, artefacts_earne
 
     new_achievements = []
 
-    if countries_index < len(achievements["countries"]) and len(visited_countries) >= achievements["countries"][countries_index][0]:
+    while countries_index < len(achievements["countries"]) and len(visited_countries) >= achievements["countries"][countries_index][0]:
         name = achievements["countries"][countries_index][1]
+        reward = achievements["countries"][countries_index][3]
         if name not in achieved:
-            reward = achievements["countries"][countries_index][3]
             money += reward
+            money_earned += reward
             achieved.append(name)
-            countries_index += 1
             new_achievements.append({"category": "countries", "name": name, "reward": reward})
-        else:
-            countries_index += 1
+        countries_index += 1
 
-    if money_index < len(achievements["money"]) and money_earned >= achievements["money"][money_index][0]:
+    while money_index < len(achievements["money"]) and money_earned >= achievements["money"][money_index][0]:
         name = achievements["money"][money_index][1]
+        reward = achievements["money"][money_index][3]
         if name not in achieved:
-            reward = achievements["money"][money_index][3]
             money += reward
+            money_earned += reward
             achieved.append(name)
-            money_index += 1
             new_achievements.append({"category": "money", "name": name, "reward": reward})
-        else:
-            money_index += 1
+        money_index += 1
 
-    if distance_index < len(achievements["distance"]) and total_distance >= achievements["distance"][distance_index][0]:
+    while distance_index < len(achievements["distance"]) and total_distance >= achievements["distance"][distance_index][0]:
         name = achievements["distance"][distance_index][1]
+        reward = achievements["distance"][distance_index][3]
         if name not in achieved:
-            reward = achievements["distance"][distance_index][3]
             money += reward
+            money_earned += reward
             achieved.append(name)
-            distance_index += 1
             new_achievements.append({"category": "distance", "name": name, "reward": reward})
-        else:
-            distance_index += 1
+        distance_index += 1
 
-    if artefacts_index < len(achievements["artefacts"]) and artefacts_earned >= achievements["artefacts"][artefacts_index][0]:
+    while artefacts_index < len(achievements["artefacts"]) and artefacts_earned >= achievements["artefacts"][artefacts_index][0]:
         name = achievements["artefacts"][artefacts_index][1]
+        reward = achievements["artefacts"][artefacts_index][3]
         if name not in achieved:
-            reward = achievements["artefacts"][artefacts_index][3]
             money += reward
+            money_earned += reward
             achieved.append(name)
-            artefacts_index += 1
             new_achievements.append({"category": "artefacts", "name": name, "reward": reward})
-        else:
-            artefacts_index += 1
+        artefacts_index += 1
 
-    if events_index < len(achievements["events"]) and events_completed >= achievements["events"][events_index][0]:
+    while events_index < len(achievements["events"]) and events_completed >= achievements["events"][events_index][0]:
         name = achievements["events"][events_index][1]
+        reward = achievements["events"][events_index][3]
         if name not in achieved:
-            reward = achievements["events"][events_index][3]
             money += reward
+            money_earned += reward
             achieved.append(name)
-            events_index += 1
             new_achievements.append({"category": "events", "name": name, "reward": reward})
-        else:
-            events_index += 1
+        events_index += 1
 
-    if convert_index < len(achievements["convert"]) and converted_amount >= achievements["convert"][convert_index][0]:
+    while convert_index < len(achievements["convert"]) and converted_amount >= achievements["convert"][convert_index][0]:
         name = achievements["convert"][convert_index][1]
+        reward = achievements["convert"][convert_index][3]
         if name not in achieved:
-            reward = achievements["convert"][convert_index][3]
             money += reward
+            money_earned += reward
             achieved.append(name)
-            convert_index += 1
             new_achievements.append({"category": "convert", "name": name, "reward": reward})
-        else:
-            convert_index += 1
+        convert_index += 1
 
     return new_achievements
 
