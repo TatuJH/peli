@@ -41,7 +41,6 @@ const airport_info = document.getElementById('airport_text');
 const shop_div = document.getElementById('shop_div');
 const inv_div = document.getElementById('inventory_div');
 const achievement_div = document.getElementById('achievement_div');
-
 const action_buttons = document.getElementById('action_buttons');
 const main_buttons = document.getElementById('main_buttons');
 const work_button = document.getElementById('work_button');
@@ -52,15 +51,12 @@ const map_button = document.getElementById('map_button');
 const inv_button = document.getElementById('inv_button');
 const return_button = document.getElementById("return_button");
 const depart_button = document.getElementById('depart_button');
-
 const money_display = document.getElementById('money_display');
 const time_display = document.getElementById('time_display');
 const actions_display = document.getElementById('actions_display');
 const artefact_display = document.getElementById("artefacts_display");
 const co2_display = document.getElementById('co2_display');
 const popup = document.getElementById('popup');
-
-
 const inv_list = document.getElementsByClassName("art");
 
 //--------------Functions--------------
@@ -93,9 +89,7 @@ function removeActions() {
         if (!child.classList.contains('return_button') && child.id !== "return_button" && child.id !== "depart_button") {
             child.remove();
         }
-
     });
-
 }
 
 //Updates all user stats on the page
@@ -129,7 +123,6 @@ async function updateStats() {
                     response = await fetch(`http://127.0.0.1:3000/shop/sell/${i}`);
                     data = await response.json();
 
-
                     // päivitetään tiedot manuaalisti tässä, joten repun sisältö ei päivity välittömästi
                     money_display.textContent = `Money: ${data.game_state.money}`;
 
@@ -145,9 +138,7 @@ async function updateStats() {
             } else {
                 inv_list[i].textContent = "backpack slot :p"
             }
-
         }
-
     }
 
     achievements()
@@ -309,7 +300,7 @@ async function depart() {
                     else {
                     popupfunc("Not enough money to fly!")
                   }
-                    }
+              }
             }
             const departHover = function() {
 
@@ -355,9 +346,7 @@ async function depart() {
               circle.setStyle({fillOpacity: 1});
               maptext.textContent = "Select airport. The darker the blue, the larger the airport."
             });
-
         }
-
     }
 
     show(action_buttons);
@@ -472,7 +461,6 @@ event_button.addEventListener('click', async() => {
             } else {
                 popupfunc("Not enough resources!")
             }
-
         });
 
         action_buttons.appendChild(choice_button);
@@ -497,7 +485,6 @@ fight_button.addEventListener('click', async() => {
             if (data.info[0].enemies_in_fight[i].hp > 0) {
                 fight_text.innerHTML += `<br>Enemy ${i + 1}: ${data.info[0].enemies_in_fight[i].type} <span class="hp-text">${data.info[0].enemies_in_fight[i].hp}</span> <span class="spd-text">(charging for ${data.info[0].enemies_in_fight[i].spd} turns)</span>`;
             }
-
         }
 
         if (data.info[0].player_hp <= 0) {
@@ -642,7 +629,6 @@ fight_button.addEventListener('click', async() => {
     show(action_buttons);
     show(fight_div);
 
-
 });
 
 //Initialize functionality for work button
@@ -660,7 +646,6 @@ work_button.addEventListener('click', async() => {
     const work_text = document.createElement('p');
     work_text.innerHTML = `${data.info[0].text}`;
     work_div.appendChild(work_text);
-
 
     return_button.textContent = 'OK';
     show(return_button)
@@ -682,7 +667,6 @@ inv_button.addEventListener("click", async function()
         inv_div.classList.toggle("hidden");
     }
 
-
     achievement_div.classList.toggle("hidden");
 });
 
@@ -701,9 +685,7 @@ return_button.addEventListener("click", async function()
       show(main_buttons);
 
   }
-
 });
-
 
 shop_button.addEventListener("click", async function() {
 
@@ -800,10 +782,6 @@ shop_button.addEventListener("click", async function() {
         {
            console.log(error)
         }
-
-
-
-
 });
 
 depart();

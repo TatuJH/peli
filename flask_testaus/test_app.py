@@ -14,7 +14,7 @@ conts = []
 airport = "Ancient Chamber"
 country = "Antarctica"
 size = ""
-money = 1000
+money = 10000
 time = 365
 achieved = []
 total_distance = 0
@@ -63,7 +63,8 @@ def add_game_state(dict):
         "current_continent" : cont,
         "distance" : total_distance,
         "artefact_display" : thing,
-        "co2" : co2
+        "co2" : co2,
+        "reason" : reason
     }
 
     return response
@@ -260,7 +261,7 @@ def fight(action, enemy):
 @app.route('/airport/<action>/<atarget>/<ctarget>/<size>/<int:cost>/<continent>/<int:index>', methods=['GET', 'POST'])
 def airports(action, atarget, ctarget, size, cost, continent, index):
     global airport, country, actions_left, money_modifier, money, time, cont, total_distance, current_airport_list, visited_countries, co2
-    visited_countries.append(ctarget)
+    print(ctarget)
 
     if action == "get":
         current_airport_list = testi.get_airport(airport)
@@ -283,6 +284,7 @@ def airports(action, atarget, ctarget, size, cost, continent, index):
             money_modifier = 1.2
         money -= cost
         time -= 10
+        visited_countries.append(ctarget)
 
         return add_game_state({})
 
@@ -321,7 +323,6 @@ def ach():
             if money < 0:
                 money = 0
 
-
         description = ""
         for item in achievements[category]:
             if item[1] == name:
@@ -335,11 +336,7 @@ def ach():
             "reward": reward
         })
 
-    print(money_earned)
-    print(money)
-    print(total_distance)
-
-    print(achievements_info)
+    print(visited_countries)
 
     return add_game_state(achievements_info)
 
