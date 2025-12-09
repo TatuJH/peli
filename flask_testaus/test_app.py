@@ -117,13 +117,11 @@ def shop(action, index):
     # pelaaja myy artefaktin indeksillä index
     if action == "sell":
         for arrrr in artefacts:
-            print (arrrr.name)
+            print ("aarteet nyt " + arrrr.name)
 
-        #TODO TÄRKEÄ: ETSI KEINO, JOLLA LISTA EI PÄIVITY HETI KUN PELAAJA POISTAA ARTEFAKTIN
-        #TODO           PELAAJAN REPPU MUUTTUU VASTA KUN LÄHTEE VETÄÄN KAUPASTA!!
-        #TODO           NAPIT JS PUOLELLA ON KERTAKÄYTTÖISIÄ
-        #TODO           MUUTA SE AARREKOUNTTERI SAMALLA!!!!!
         art = artefacts[int(index)]
+
+        # poista listalta myyty artefakti
         artefacts.pop(index)
 
         # pakko olla parempi tapa tehdä tämä
@@ -158,7 +156,7 @@ def event(action, number, choice):
         response = testi.get_event_result(number, choice, money_modifier)
         # pelaajan maksama artefakti HINTA
         if costs['artefacts'] > 0:
-            removables.extend(testi.remove_artefacts(artefacts, cont, costs['artefacts']))
+            removables.extend(testi.remove_artefacts(artefacts, cont))
 
         money += response['money']
         money_earned += response['money']
@@ -169,6 +167,7 @@ def event(action, number, choice):
         if time < 0:
             time = 0
 
+        print(response["artefact_count"])
         if response["artefact_count"] > 0:
             # extend lisää pelkästään annetun listan jäsenet eikä itse listaa
             newarts = testi.add_artefacts(artefacts, cont, response["artefact_count"])
@@ -179,7 +178,7 @@ def event(action, number, choice):
         elif response["artefact_count"] < 0:
             # ainoastaan poista artefakti jos SELLAINEN ON
             if len(artefacts) > 0:
-                removables.extend(testi.remove_artefacts(artefacts, cont, abs(response["artefact_count"])))
+                removables.extend(testi.remove_artefacts(artefacts, cont))
 
         # poistetaan kulutetut artefaktit listasta
         for art in artefacts:
