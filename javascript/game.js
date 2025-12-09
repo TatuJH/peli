@@ -149,7 +149,6 @@ async function updateStats() {
 
     // rahan nollauksesta ei häviä :p
     if (data.game_state.time <= 0 || data.game_state.actions < 0) {
-        await fetch('http://127.0.0.1:3000/reset', { method: 'POST' });
         location.href = 'lose_screen.html';
     }
 }
@@ -300,7 +299,7 @@ async function depart() {
                     show(main_buttons);
 
                   } else {
-                    popup("Not enough money to fly!")
+                    popupfunc("Not enough money to fly!")
                   }
             }
             const departHover = function() {

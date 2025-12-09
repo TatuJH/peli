@@ -1,5 +1,6 @@
 const play_again_button = document.getElementById('new_game_button');
-play_again_button.addEventListener('click', () => {
+play_again_button.addEventListener('click', async() => {
+    await fetch('http://127.0.0.1:3000/reset', { method: 'POST' });
    location.href='game.html';
 });
 

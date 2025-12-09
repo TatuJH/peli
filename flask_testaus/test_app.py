@@ -40,8 +40,6 @@ co2 = 0
 app = flask.Flask(__name__)
 CORS(app)
 
-
-
 #Adds game state to the JSON response (all requests return game_state and info)
 def add_game_state(dict):
     response = {}
@@ -249,7 +247,9 @@ def fight(action, enemy):
 
 @app.route('/airport/<action>/<atarget>/<ctarget>/<size>/<int:cost>/<continent>/<int:index>', methods=['GET', 'POST'])
 def airports(action, atarget, ctarget, size, cost, continent, index):
-    global airport, country, actions_left, money_modifier, money, time, cont, total_distance, current_airport_list, co2
+    global airport, country, actions_left, money_modifier, money, time, cont, total_distance, current_airport_list, visited_countries, co2
+    visited_countries.append(ctarget)
+
     if action == "get":
         current_airport_list = testi.get_airport(airport)
         return add_game_state(current_airport_list)
@@ -340,24 +340,10 @@ def lose_screen():
         "reason": reason
     }
 
-DEFAULT_STATE = {
-        "actions" : 3,
-        "money" : 1000,
-        "time" : 365,
-        "total_distance" : 0,
-        "all_artefacts" : [],
-        "artefacts" : list(),
-        "visited_countries" : [],
-        "achieved" : [],
-        "current_aiport" : "Ancient Chamber",
-        "current_country" : "Antarctica",
-        "current_continent" : "AN"
-    }
-
 @app.route('/reset', methods=['POST'])
 def reset_game():
     global actions_left, money, time, total_distance, artefacts, countries_index, money_index
-    global visited_countries, achieved, airport, country, cont, distance_index
+    global visited_countries, achieved, airport, country, cont, distance_index, co2
     global conts, size, money_earned, artefacts_earned, events_completed, converted_amount
     global artefacts_index, events_index, convert_index, enemy_amount, fight, money_modifier
 
@@ -386,6 +372,7 @@ def reset_game():
     enemy_amount = 0
     fight = {}
     money_modifier = 1
+    co2 = 0
 
     return add_game_state({"success": True})
 

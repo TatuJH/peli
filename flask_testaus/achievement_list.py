@@ -1,14 +1,14 @@
 achievements = {
     "distance":[
-        (10000, "First Steps", "Travelled 10000 km", 50),
-        (30000, "Beginner Traveler", "Travelled 30000 km", 75),
-        (60000, "Intermediate Traveler", "Travelled 60000 km", 100),
-        (80000, "Advanced Traveler", "Travelled 80000 km", 150),
-        (125000, "Master Traveler", "Travelled 125000 km", 300),
-        (175000, "Business Class", "Travelled 175000 km", 400),
-        (200000, "First Class", "Travelled 200000 km", 500),
-        (250000, "Apostle", "Travelled 250000 km", 500),
-        (9999999999999999999999, "error", "error", 999999999999)
+        (10000, "First Steps", "Travelled 10000 km", -50),
+        (30000, "Beginner Traveler", "Travelled 30000 km", -75),
+        (60000, "Intermediate Traveler", "Travelled 60000 km", -100),
+        (80000, "Advanced Traveler", "Travelled 80000 km", -150),
+        (125000, "Master Traveler", "Travelled 125000 km", -200),
+        (175000, "Business Class", "Travelled 175000 km", -300),
+        (200000, "First Class", "Travelled 200000 km", -400),
+        (250000, "Apostle", "Travelled 250000 km", -500),
+        (9999999999999999999999, "error", "error", -999999999999)
     ],
     "countries":[
         (3, "Sightseer", "Visited 4 countries", 75),
