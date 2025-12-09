@@ -236,6 +236,8 @@ async function depart() {
     maptext.textContent = "Select airport. The darker the blue, the larger the airport."
     map_text.appendChild(maptext);
 
+
+
     //Add a circle to the map for each airport
     for (let i = 0; i < data.info[0].length; i++) {
 
@@ -274,6 +276,9 @@ async function depart() {
               //Initialize depart button
             const departHandler = async function() {
               if (data.game_state.money >= data.info[0][i].cost) {
+                  // PELIN VOITTAAA JOS ON KAIKKI ARTEFAKTIT JA MENEE ETELÄNAVALLE!!
+                    if(i === 1 && data.info[0].length !== 19 && data.game_state.unique_artefacts === 6)
+                        response = await fetch(`http://127.0.0.1:3000/win_screen`);
 
                     //Let Flask know where user departed
                     response = await fetch(

@@ -179,10 +179,11 @@ def artefact_displayer(arts):
             continent_tally_array_deluxe.append(art.continent)
         else:
             duplicate_artefacts += 1
+    # palautetaan lista, jossa [0] on tekstielementti nettisivulle ja [1] on win condition
     if duplicate_artefacts > 0:
-        return f"Artefacts: {unique_artefacts}/6 +{duplicate_artefacts}"
+        return [f"Artefacts: {unique_artefacts}/6 +{duplicate_artefacts}", unique_artefacts]
     else:
-        return f"Artefacts: {unique_artefacts}/6"
+        return [f"Artefacts: {unique_artefacts}/6", unique_artefacts]
 
 
 
