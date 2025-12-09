@@ -2,10 +2,11 @@ import random
 import json
 import flask
 from flask_cors import CORS
-import testi
+import game
 from geopy import distance
 from project2_python.achievement_list import achievements
 from project2_python import event_list
+
 
 artefacts = list()
 cont = "AN"
@@ -24,6 +25,7 @@ money_earned = 0
 artefacts_earned = 0
 events_completed = 0
 converted_amount = 0
+
 # saavutuksia
 countries_index = 0
 money_index = 0
@@ -45,44 +47,47 @@ unique_artefacts = 0
 # Jos artefakteja on kaksi samalta mantereelta, merkitään 1/6 +1
 artefact_display = "0/6"
 
+
 app = flask.Flask(__name__)
 CORS(app)
 
-#Adds game state to the JSON response (all requests return game_state and info)
+
+# Adds game state to the JSON response (all requests return game_state and info)
 def add_game_state(dict):
     response = {}
-    thing = testi.artefact_displayer(artefacts)
+    thing = game.artefact_displayer(artefacts)
     # [0] on 0/6, [1] on raaka numero 0-6
     unique_artefacts = thing[1]
+
     response["info"] = dict,
     response["game_state"] = {
-        "actions" : actions_left,
-        "money" : int(money),
-        "time" : time,
-        "total_distance" : total_distance,
-        "all_artefacts" : json.dumps([art.__dict__ for art in artefacts]),
-        "artefacts" : len(artefacts),
-        "visited_countries" : visited_countries,
-        "achieved" : achieved,
-        "current_airport" : airport,
-        "current_country" : country,
-        "current_continent" : cont,
-        "distance" : total_distance,
-        "artefact_display" : thing[0],
-        "unique_artefacts" : unique_artefacts,
-        "co2" : co2
+        "actions": actions_left,
+        "money": int(money),
+        "time": time,
+        "total_distance": total_distance,
+        "all_artefacts": json.dumps([art.__dict__ for art in artefacts]),
+        "artefacts": len(artefacts),
+        "visited_countries": visited_countries,
+        "achieved": achieved,
+        "current_airport": airport,
+        "current_country": country,
+        "current_continent": cont,
+        "distance": total_distance,
+        "artefact_display": thing[0],
+        "unique_artefacts": unique_artefacts,
+        "co2": co2
     }
 
     return response
 
+
 @app.route('/scores', methods=['GET'])
 def score():
+    scores = game.scores()
+    return {
+        "scores": scores
+    }
 
-     scores = testi.scores()
-
-     return {
-         "scores" : scores
-     }
 
 @app.route("/shop/<action>/<int:index>", methods=["GET", "POST"])
 # shop init
@@ -93,19 +98,18 @@ def shop(action, index):
     if action == "get":
         # annetaan pelille nykyiset artefaktit sekä manner jotta kauppaan ei tuu duplikaatteja tai ulkomaisia aarteita
         actions_left += 1
-        arts = testi.shop_init(artefacts, cont)
-
+        arts = game.shop_init(artefacts, cont)
         return add_game_state(json.dumps([art.__dict__ for art in arts]))
-
 
     # Pelaaja ostaa artefaktin indeksillä index
     if action == "buy":
         # hankitaan haluttu artefakti kauppalistasta
-        art = testi.shop_buy(index)
+        art = game.shop_buy(index)
+
         if money < art.value:
             DIC = {
                 "text": f"Sinun rahat eivät riitä tähän !!",
-                "success" : False
+                "success": False
             }
         else:
             money -= art.value
@@ -113,18 +117,17 @@ def shop(action, index):
             # annetaan se pelaajlle :-)
             artefacts.append(art)
             DIC = {
-                    "text" : f"Ostettu {art.name} hintaan ${art.value}!!",
-                    "success" : True
-                }
+                "text": f"Bought {art.name} for ${art.value}!",
+                "success": True
+            }
             artefacts_earned += 1
 
         return add_game_state(DIC)
 
-
     # pelaaja myy artefaktin indeksillä index
     if action == "sell":
         for arrrr in artefacts:
-            print ("aarteet nyt " + arrrr.name)
+            print("aarteet nyt " + arrrr.name)
 
         art = artefacts[int(index)]
 
@@ -134,12 +137,12 @@ def shop(action, index):
         # pakko olla parempi tapa tehdä tämä
         money_earned += art.value
         money += art.value
+
         DIC = {
-                "text" : f"Myyty {art.name} hintaan {art.value}!!",
-               }
+            "text": f"Myyty {art.name} hintaan {art.value}!!",
+        }
 
         return add_game_state(DIC)
-
 
 
 @app.route('/events/<action>/<int:number>/<choice>', methods=['GET', 'POST'])
@@ -151,7 +154,7 @@ def event(action, number, choice):
         time -= 5
         events_completed += 1
 
-        return add_game_state(testi.get_event(money_modifier))
+        return add_game_state(game.get_event(money_modifier))
 
     if action == "result":
         # menetetyt ja maksettavat artefaktit
@@ -160,10 +163,12 @@ def event(action, number, choice):
         costs = event_list.getallevents(money_modifier)[number]['choices'][choice]['cost']
         money -= costs['money']
         time -= costs['time']
-        response = testi.get_event_result(number, choice, money_modifier)
+
+        response = game.get_event_result(number, choice, money_modifier)
+
         # pelaajan maksama artefakti HINTA
         if costs['artefacts'] > 0:
-            removables.extend(testi.remove_artefacts(artefacts, cont))
+            removables.extend(game.remove_artefacts(artefacts, cont))
 
         money += response['money']
         money_earned += response['money']
@@ -175,9 +180,10 @@ def event(action, number, choice):
             time = 0
 
         print(response["artefact_count"])
+
         if response["artefact_count"] > 0:
             # extend lisää pelkästään annetun listan jäsenet eikä itse listaa
-            newarts = testi.add_artefacts(artefacts, cont, response["artefact_count"])
+            newarts = game.add_artefacts(artefacts, cont, response["artefact_count"])
             artefacts.extend(newarts)
             artefacts_earned += response['artefact_count']
 
@@ -185,27 +191,28 @@ def event(action, number, choice):
         elif response["artefact_count"] < 0:
             # ainoastaan poista artefakti jos SELLAINEN ON
             if len(artefacts) > 0:
-                removables.extend(testi.remove_artefacts(artefacts, cont))
+                removables.extend(game.remove_artefacts(artefacts, cont))
 
         # poistetaan kulutetut artefaktit listasta
         for art in artefacts:
             if art in removables:
                 artefacts.remove(art)
 
-        # heitetään vaan koko lista js puolelle
-
         # debug
         # print(response)
-        return add_game_state(testi.get_event_result(number, choice, money_modifier))
+
+        return add_game_state(game.get_event_result(number, choice, money_modifier))
+
 
 @app.route('/fight/<action>/<int:enemy>', methods=['GET', 'POST'])
 def fight(action, enemy):
     global fight, enemy_amount, actions_left, money, time, money_modifier, money_earned
+
     if action == "start":
         actions_left -= 1
         time -= 5
         enemy_amount = random.randint(2, 4)
-        fight = testi.start_fight(enemy_amount)
+        fight = game.start_fight(enemy_amount)
 
         return add_game_state(fight)
 
@@ -214,13 +221,14 @@ def fight(action, enemy):
             fight['text'] = f'You missed {fight["enemies_in_fight"][enemy]["type"]}.'
         else:
             if random.random() <= 0.3:
-                dmg = int(round(random.randint(3,6)*1.5))
+                dmg = int(round(random.randint(3, 6) * 1.5))
                 fight['text'] = f'You hit {fight["enemies_in_fight"][enemy]["type"]} critically with {dmg} damage.'
             else:
                 dmg = int(round(random.randint(3, 6)))
                 fight['text'] = f'You hit {fight["enemies_in_fight"][enemy]["type"]} with {dmg} damage.'
 
             fight['enemies_in_fight'][enemy]['hp'] = fight['enemies_in_fight'][enemy]['hp'] - dmg
+
             if fight['enemies_in_fight'][enemy]['hp'] <= 0:
                 fight['amount'] = fight['amount'] - 1
                 fight['text'] = fight['text'] + f' {fight["enemies_in_fight"][enemy]["type"]} converts.'
@@ -229,6 +237,7 @@ def fight(action, enemy):
         heal_amount = 15 - fight['player_hp']
         if heal_amount < 1:
             heal_amount = 1
+
         fight['text'] = f"You reach for a red potion and drink from it. You gain {heal_amount} HP."
         fight['player_hp'] = fight['player_hp'] + heal_amount
         fight['player_heals'] = fight['player_heals'] - 1
@@ -248,6 +257,7 @@ def fight(action, enemy):
                     fight['text'] = fight['text'] + f' {fight["enemies_in_fight"][i]["type"]} attacks you with {fight["enemies_in_fight"][i]["dmg"]} damage.'
                     fight['player_hp'] = fight['player_hp'] - fight["enemies_in_fight"][i]["dmg"]
                     fight["enemies_in_fight"][i]["spd"] = fight["enemies_in_fight"][i]["d_spd"]
+
             elif fight["enemies_in_fight"][i]["hp"] > 0:
                 fight["enemies_in_fight"][i]["spd"] = fight["enemies_in_fight"][i]["spd"] - 1
 
@@ -263,40 +273,47 @@ def fight(action, enemy):
 
     return add_game_state(fight)
 
+
 @app.route('/airport/<action>/<atarget>/<ctarget>/<size>/<int:cost>/<continent>/<int:index>', methods=['GET', 'POST'])
 def airports(action, atarget, ctarget, size, cost, continent, index):
     global airport, country, actions_left, money_modifier, money, time, cont, total_distance, current_airport_list, visited_countries, co2
     visited_countries.append(ctarget)
 
     if action == "get":
-        current_airport_list = testi.get_airport(airport)
+        current_airport_list = game.get_airport(airport)
         return add_game_state(current_airport_list)
+
     elif action == "depart":
         latlong = (current_airport_list[index]["latitude"], current_airport_list[index]["longitude"])
         current_latlong = (current_airport_list[0]["latitude"], current_airport_list[0]["longitude"])
+
         total_distance += int(distance.distance(latlong, current_latlong).km)
         co2 += int(distance.distance(latlong, current_latlong).km) // 5
+
         actions_left -= 1
         airport = atarget
         country = ctarget
         cont = continent
         actions_left = 3
+
         if size == "large_airport":
             money_modifier = 1.5
         elif size == "small_airport":
             money_modifier = 1
         elif size == "medium_airport":
             money_modifier = 1.2
+
         money -= cost
         time -= 10
 
         return add_game_state({})
 
+
 @app.route('/work')
 def work():
     global money, time, actions_left, money_modifier, money_earned
 
-    response = testi.work(money_modifier)
+    response = game.work(money_modifier)
     money += response['money'] * money_modifier
     money_earned += response['money']
     time -= response['time']
@@ -305,20 +322,38 @@ def work():
 
     return add_game_state(response)
 
+
 @app.route("/ach", methods=["GET"])
 def ach():
     global visited_countries, money_earned, total_distance, artefacts_earned, events_completed
     global countries_index, money_index, artefacts_index, events_index, distance_index, money, achieved
     global converted_amount, convert_index
 
-    new_achievements = testi.achievement(visited_countries, money_earned, total_distance, artefacts_earned, events_completed, countries_index, money_index, artefacts_index, events_index, distance_index, money, achieved, converted_amount, convert_index)
+    new_achievements = game.achievement(
+        visited_countries,
+        money_earned,
+        total_distance,
+        artefacts_earned,
+        events_completed,
+        countries_index,
+        money_index,
+        artefacts_index,
+        events_index,
+        distance_index,
+        money,
+        achieved,
+        converted_amount,
+        convert_index
+    )
 
     achievements_info = []
+
     for achievementti in new_achievements:
         category = achievementti["category"]
         name = achievementti["name"]
 
         reward = achievementti.get("reward", 0)
+
         if reward > 0:
             money += reward
             money_earned += reward
@@ -326,7 +361,6 @@ def ach():
             money += reward
             if money < 0:
                 money = 0
-
 
         description = ""
         for item in achievements[category]:
@@ -344,16 +378,17 @@ def ach():
     print(money_earned)
     print(money)
     print(total_distance)
-
     print(achievements_info)
 
     return add_game_state(achievements_info)
+
 
 @app.route('/win_screen', methods=['GET'])
 def win_screen():
     global money, time, total_distance, achieved
 
-    return testi.winning(money, time, total_distance, achieved, visited_countries)
+    return game.winning(money, time, total_distance, achieved, visited_countries)
+
 
 @app.route('/lose_screen', methods=['GET'])
 def lose_screen():
@@ -370,6 +405,7 @@ def lose_screen():
         "visited_countries": visited_countries,
         "reason": reason
     }
+
 
 @app.route('/reset', methods=['POST'])
 def reset_game():
@@ -407,5 +443,6 @@ def reset_game():
     co2 = 0
 
     return add_game_state({"success": True})
+
 
 app.run(use_reloader=True, host='127.0.0.1', port=3000)

@@ -34,12 +34,12 @@ async function lose_screen() {
 const play_again_button = document.getElementById('new_game_button');
 play_again_button.addEventListener('click', async() => {
     await fetch('http://127.0.0.1:3000/reset', { method: 'POST' });
-   location.href='game.html';
+   location.href='game.project2_htm';
 });
 
 const main_menu_button = document.getElementById('main_menu_button');
 main_menu_button.addEventListener('click', () => {
-   location.href='index.html';
+   location.href='index.project2_htm';
 });
 
 lose_screen()

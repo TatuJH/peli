@@ -13,7 +13,7 @@ let p;
 
 const target = document.getElementById("pictures")
 
-// joo ei toiminut kun yritti vaan muuttaa inner html arvoa :p
+// joo ei toiminut kun yritti vaan muuttaa inner project2_htm arvoa :p
 for (let i = 0; i < picArray.length; i++)
 {
     // tee KAIKKI ja laita niihin oikeat arvot
