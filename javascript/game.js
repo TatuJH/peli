@@ -356,6 +356,7 @@ const depart_button = document.getElementById('depart_button');
 const money_display = document.getElementById('money_display');
 const time_display = document.getElementById('time_display');
 const actions_display = document.getElementById('actions_display');
+const popup = document.getElementById('popup');
 
 
 const inv_list = document.getElementsByClassName("art");
