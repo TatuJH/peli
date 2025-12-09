@@ -115,7 +115,7 @@ async function updateStats() {
     achievements();
 
     if (data.game_state.time <= 0 || data.game_state.actions < 0) {
-        location.href = 'lose_screen.project2_htm';
+        location.href = '../project2_htm/lose_screen.html';
     }
 }
 
@@ -190,7 +190,7 @@ async function depart() {
                         show(main_buttons);
                     } else {
                         if (data.game_state.money < data.info[0][i].cost && data.game_state.actions === 0) {
-                            location.href = 'lose_screen.project2_htm';
+                            location.href = '../project2_htm/lose_screen.html';
                         } else {
                             popupfunc("Not enough money to fly!");
                         }
