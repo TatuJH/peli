@@ -112,10 +112,12 @@ def get_event(modifier):
         for eve in event_list.getallevents(modifier):
             uncompleted_events.append(eve)
     numero = random.choice(uncompleted_events)
+
     uncompleted_events.remove(numero)
 
-    # TESTI EVENT
-    # numero = 14
+    # lol
+    if numero == 12:
+        numero = 11
     choices = []
     mcosts = []
     tcosts = []
