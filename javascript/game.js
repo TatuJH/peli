@@ -62,7 +62,7 @@ function removeActions() {
 }
 
 //Updates all user stats on the page
-function updateStats() {
+async function updateStats() {
     money_display.textContent = `Money: ${data.game_state.money}`;
     time_display.textContent = `Time: ${data.game_state.time}`;
     actions_display.textContent = `Actions left: ${data.game_state.actions}`
@@ -85,9 +85,8 @@ function updateStats() {
 
     // rahan nollauksesta ei häviä :p
     if (data.game_state.time <= 0 || data.game_state.actions < 0) {
-
-      location.href = 'lose_screen.html'
-
+        await fetch('http://127.0.0.1:3000/reset', { method: 'POST' });
+        location.href = 'lose_screen.html';
     }
 }
 
