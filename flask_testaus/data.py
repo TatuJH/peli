@@ -24,3 +24,6 @@ artefact_names = \
 "AN" : ("Carved Bone", "Rusted Anchor")
 
 }
+
+
+continent_names = ["OC", "AF", "SA", "NA", "AS", "EU"]
