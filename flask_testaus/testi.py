@@ -136,9 +136,7 @@ def get_event(modifier):
         "time_costs": tcosts,
         "artefacts_costs": acosts
     }
-    # debug
-    # print(thing)
-    return thing
+
 
 def work(modifier):
     max_money = int(round(200 * modifier))
@@ -161,6 +159,31 @@ def get_event_result(numero, choice, modifier):
         "time" : event_list.getallevents(modifier)[numero]["choices"][choice]["results"][result]["time"],
         "artefact_count" : event_list.getallevents(modifier)[numero]["choices"][choice]["results"][result]["artefacts"]
     }
+
+
+# Katsotaan pelaajan aarteet ja palautetaan muodossa (uniikit artefaktit)/6 +(duplikaatit)
+def artefact_displayer(arts):
+
+    # ->0<-/6 +1
+    unique_artefacts = 0
+    # 0/6 ->+1<-
+    duplicate_artefacts = 0
+
+    continent_tally_array_deluxe = []
+
+    for art in arts:
+        if art.continent not in continent_tally_array_deluxe:
+            unique_artefacts += 1
+            # lisätään aarteen manner mannerlistaan
+            continent_tally_array_deluxe.append(art.continent)
+        else:
+            duplicate_artefacts += 1
+    if duplicate_artefacts > 0:
+        return f"Artefacts: {unique_artefacts}/6 +{duplicate_artefacts}"
+    else:
+        return f"Artefacts: {unique_artefacts}/6"
+
+
 
 # poista listoilta ja palauta ostettu artefakti
 def shop_buy(index):
@@ -189,7 +212,7 @@ def shop_init(arts, cont):
     for nm in arts:
         names.append(nm.name)
 
-    print(len(names))
+
 
     # Montako artefaktia kaupassa
     # maksimi on neljä!!

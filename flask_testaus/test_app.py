@@ -14,7 +14,7 @@ conts = []
 airport = "Ancient Chamber"
 country = "Antarctica"
 size = ""
-money = 1000
+money = 10000
 time = 365
 achieved = []
 total_distance = 0
@@ -37,6 +37,10 @@ money_modifier = 1
 current_airport_list = {}
 co2 = 0
 
+# Tämä on merkkijono joka näytetään sellaisenaan ruudun yläosassa
+# Jos artefakteja on kaksi samalta mantereelta, merkitään 1/6 +1
+artefact_display = "0/6"
+
 app = flask.Flask(__name__)
 CORS(app)
 
@@ -45,6 +49,7 @@ CORS(app)
 #Adds game state to the JSON response (all requests return game_state and info)
 def add_game_state(dict):
     response = {}
+    thing = testi.artefact_displayer(artefacts)
     response["info"] = dict,
     response["game_state"] = {
         "actions" : actions_left,
@@ -59,6 +64,7 @@ def add_game_state(dict):
         "current_country" : country,
         "current_continent" : cont,
         "distance" : total_distance,
+        "artefact_display" : thing,
         "co2" : co2
     }
 
@@ -83,8 +89,7 @@ def shop(action, index):
         # annetaan pelille nykyiset artefaktit sekä manner jotta kauppaan ei tuu duplikaatteja tai ulkomaisia aarteita
         actions_left += 1
         arts = testi.shop_init(artefacts, cont)
-        for n in arts:
-            print(n.name)
+
         return add_game_state(json.dumps([art.__dict__ for art in arts]))
 
 
@@ -363,6 +368,7 @@ def reset_game():
 
     artefacts = list()
     cont = "AN"
+    # tarviiko tätä resetoida?
     conts = []
     airport = "Ancient Chamber"
     country = "Antarctica"

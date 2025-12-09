@@ -56,6 +56,7 @@ const depart_button = document.getElementById('depart_button');
 const money_display = document.getElementById('money_display');
 const time_display = document.getElementById('time_display');
 const actions_display = document.getElementById('actions_display');
+const artefact_display = document.getElementById("artefacts_display");
 const seenAchievements = new Set();
 const co2_display = document.getElementById('co2_display');
 const popup = document.getElementById('popup');
@@ -104,9 +105,12 @@ async function updateStats() {
     time_display.textContent = `Time: ${data.game_state.time}`;
     actions_display.textContent = `Actions left: ${data.game_state.actions}`;
     co2_display.textContent = `CO₂: ${data.game_state.co2}`;
+    artefact_display.textContent = data.game_state.artefact_display
 
+    console.log("artefaktien lkm seuraava")
+    console.log(data.game_state.artefacts)
 
-    if (data.game_state.all_artefacts) {
+    if (data.game_state.artefacts > 0) {
 
         let arts = JSON.parse(data.game_state.all_artefacts)
 
@@ -134,8 +138,10 @@ async function updateStats() {
                     button.removeEventListener("click", evt)
                 }, {once:true});
 
-                // nappi on pois päältä kunnes kauppa laittaa sen päälle :pd
-                button.disabled = true;
+                // nappi on pois päältä kunnes kauppa laittaa sen päälle :p
+                // jos ollaan jo kaupassa niin laitetaan heti päälle
+                if(!shopping)
+                    button.disabled = true;
 
             } else {
                 inv_list[i].textContent = "backpack slot :p"
@@ -146,6 +152,8 @@ async function updateStats() {
     achievements()
 
     }
+
+
 
     // rahan nollauksesta ei häviä :p
     if (data.game_state.time <= 0 || data.game_state.actions < 0) {
@@ -737,12 +745,15 @@ shop_button.addEventListener("click", async function() {
                 response = await fetch(`http://127.0.0.1:3000/shop/buy/${i}`);
                 data = await response.json();
 
+                console.log("artefakti ostettu")
+                console.log(data["info"][0])
+
                 // python puolelta tulee datan mukana info joka kertoo menikö myynti läpi
                 if(data["info"][0]["success"])
                 {
                     // nappi veks päältä kun aarre on kaupattu
                     b.textContent = "Sold out!"
-                    updateStats();
+                    await updateStats();
                     b.disabled = true;
                 }
 
@@ -758,8 +769,8 @@ shop_button.addEventListener("click", async function() {
         // jokaisesta reppunapista tulee myyntinappi
         for(let i = 0; i < inv_list.length; i++)
         {
-            let arts = JSON.parse(data.game_state.all_artefacts)
             const button = inv_list[i]
+            button.disabled = false;
 
         }
 
