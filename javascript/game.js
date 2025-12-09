@@ -25,7 +25,6 @@ let departHandler = null;
 let shopping = true;
 
 //--------------------------------------------------------
-
 //--------------Permanent elements--------------
 
 const main_div = document.getElementById("main");
@@ -37,6 +36,7 @@ const work_div = document.getElementById('work_div');
 const map_container = document.getElementById('map_container');
 const map_div = document.getElementById('map_div');
 const map_text = document.getElementById('map_text');
+const airport_info = document.getElementById('airport_text');
 const shop_div = document.getElementById('shop_div');
 const inv_div = document.getElementById('inventory_div');
 const achievement_div = document.getElementById('achievement_div');
@@ -60,6 +60,7 @@ const popup = document.getElementById('popup');
 
 const inv_list = document.getElementsByClassName("art");
 
+//--------------------------------------------------------
 //--------------Functions--------------
 
 //Hides all relevant elements
@@ -132,7 +133,7 @@ function show(thing) {
     thing.classList.remove('hidden');
 }
 
-hide(popup);
+
 
 function popupfunc(text) {
 
