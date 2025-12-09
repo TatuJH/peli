@@ -25,7 +25,42 @@ let departHandler = null;
 let shopping = true;
 
 //--------------------------------------------------------
+//--------------Permanent elements--------------
 
+const main_div = document.getElementById("main");
+const left_div = document.getElementById('left_div');
+const right_div = document.getElementById('right_div');
+const event_div = document.getElementById('event_div');
+const fight_div = document.getElementById('fight_div');
+const work_div = document.getElementById('work_div');
+const map_container = document.getElementById('map_container');
+const map_div = document.getElementById('map_div');
+const map_text = document.getElementById('map_text');
+const airport_info = document.getElementById('airport_text');
+const shop_div = document.getElementById('shop_div');
+const inv_div = document.getElementById('inventory_div');
+const achievement_div = document.getElementById('achievement_div');
+
+const action_buttons = document.getElementById('action_buttons');
+const main_buttons = document.getElementById('main_buttons');
+const work_button = document.getElementById('work_button');
+const event_button = document.getElementById('event_button');
+const fight_button = document.getElementById('fight_button');
+const shop_button = document.getElementById("shop_button");
+const map_button = document.getElementById('map_button');
+const inv_button = document.getElementById('inv_button');
+const return_button = document.getElementById("return_button");
+const depart_button = document.getElementById('depart_button');
+
+const money_display = document.getElementById('money_display');
+const time_display = document.getElementById('time_display');
+const actions_display = document.getElementById('actions_display');
+const popup = document.getElementById('popup');
+
+
+const inv_list = document.getElementsByClassName("art");
+
+//--------------------------------------------------------
 //--------------Functions--------------
 
 //Hides all relevant elements
@@ -98,7 +133,7 @@ function show(thing) {
     thing.classList.remove('hidden');
 }
 
-hide(popup);
+
 
 function popupfunc(text) {
 
@@ -327,42 +362,6 @@ async function achievements() {
 
 //--------------------------------------------------------
 
-//--------------Permanent elements--------------
-
-const main_div = document.getElementById("main");
-const left_div = document.getElementById('left_div');
-const right_div = document.getElementById('right_div');
-const event_div = document.getElementById('event_div');
-const fight_div = document.getElementById('fight_div');
-const work_div = document.getElementById('work_div');
-const map_container = document.getElementById('map_container');
-const map_div = document.getElementById('map_div');
-const map_text = document.getElementById('map_text');
-const airport_info = document.getElementById('airport_text');
-const shop_div = document.getElementById('shop_div');
-const inv_div = document.getElementById('inventory_div');
-const achievement_div = document.getElementById('achievement_div');
-
-const action_buttons = document.getElementById('action_buttons');
-const main_buttons = document.getElementById('main_buttons');
-const work_button = document.getElementById('work_button');
-const event_button = document.getElementById('event_button');
-const fight_button = document.getElementById('fight_button');
-const shop_button = document.getElementById("shop_button");
-const map_button = document.getElementById('map_button');
-const inv_button = document.getElementById('inv_button');
-const return_button = document.getElementById("return_button");
-const depart_button = document.getElementById('depart_button');
-
-const money_display = document.getElementById('money_display');
-const time_display = document.getElementById('time_display');
-const actions_display = document.getElementById('actions_display');
-const popup = document.getElementById('popup');
-
-
-const inv_list = document.getElementsByClassName("art");
-
-//--------------------------------------------------------
 
 //--------------Permanent eventListeners--------------
 
