@@ -284,13 +284,17 @@ async function depart() {
 
             }
 
-              depart_button.addEventListener('click', departHandler, {once: true});
-              depart_button.addEventListener('mouseover', departHover);
-              depart_button.addEventListener('mouseout', departOut);
+            depart_button.addEventListener('click', departHandler, {once: true});
+            depart_button.addEventListener('mouseover', departHover);
+            depart_button.addEventListener('mouseout', departOut);
 
-              show(return_button);
-              show(depart_button);
+            show(return_button);
+            show(depart_button);
 
+            // PIILOTA depart button silloin kun returnataan lentokentästä
+            return_button.addEventListener('click', () => {
+            hide(depart_button)
+            },{once: true});
           });
 
           //Add effects to circlemarker
