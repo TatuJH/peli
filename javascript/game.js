@@ -101,10 +101,10 @@ function show(thing) {
 
 hide(popup);
 
-function no_money_popup() {
+function popupfunc(text) {
 
     show(popup);
-    popup.textContent = "Not enough money to do this";
+    popup.textContent = text;
     setTimeout(() => {
         hide(popup);
         }, 3000);
@@ -235,7 +235,7 @@ async function depart() {
                     show(main_buttons);
 
                   } else {
-                    no_money_popup()
+                    popup("Not enough money to fly!")
                   }
             }
             const departHover = function() {
@@ -419,7 +419,7 @@ event_button.addEventListener('click', async() => {
                 }, {once: true});
 
             } else {
-                no_money_popup()
+                popupfunc("Not enough resources!")
             }
 
         });
@@ -633,11 +633,19 @@ inv_button.addEventListener("click", async function()
 
 return_button.addEventListener("click", async function()
 {
-    hideAll();
-    removeActions();
-    map_text.innerHTML = '';
-    hide(return_button);
-    show(main_buttons);
+  if (data.info[0][0].aname === "Ancient Chamber") {
+
+    popupfunc("You can't return at this point.")
+
+  } else {
+
+      hideAll();
+      removeActions();
+      map_text.innerHTML = '';
+      hide(return_button);
+      show(main_buttons);
+
+  }
 
 });
 

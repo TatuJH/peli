@@ -128,6 +128,7 @@ def event(action, number, choice):
 
     if action == "get":
         actions_left -= 1
+        time -= 5
 
         return add_game_state(testi.get_event(money_modifier))
 
@@ -178,6 +179,7 @@ def fight(action, enemy):
     global fight, enemy_amount, actions_left, money, time, money_modifier
     if action == "start":
         actions_left -= 1
+        time -= 5
         enemy_amount = random.randint(2, 4)
         fight = testi.start_fight(enemy_amount)
 
@@ -254,7 +256,7 @@ def airports(action, atarget, ctarget, size, cost, continent):
         elif size == "medium_airport":
             money_modifier = 1.2
         money -= cost
-        time -= 5
+        time -= 10
 
         return add_game_state({})
 
@@ -266,6 +268,7 @@ def work():
     money += response['money'] * money_modifier
     time -= response['time']
     actions_left -= 1
+    time -= 5
 
     return add_game_state(response)
 
