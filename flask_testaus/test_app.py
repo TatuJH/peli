@@ -50,7 +50,7 @@ def add_game_state(dict):
         "artefacts" : len(artefacts),
         "visited_countries" : visited_countries,
         "achieved" : achieved,
-        "current_aiport" : airport,
+        "current_airport" : airport,
         "current_country" : country,
         "current_continent" : cont
     }

@@ -25,6 +25,7 @@ let departHandler = null;
 let shopping = true;
 
 //--------------------------------------------------------
+
 //--------------Permanent elements--------------
 
 const main_div = document.getElementById("main");
@@ -60,7 +61,6 @@ const popup = document.getElementById('popup');
 
 const inv_list = document.getElementsByClassName("art");
 
-//--------------------------------------------------------
 //--------------Functions--------------
 
 //Hides all relevant elements
@@ -133,7 +133,7 @@ function show(thing) {
     thing.classList.remove('hidden');
 }
 
-
+hide(popup);
 
 function popupfunc(text) {
 
@@ -633,7 +633,7 @@ inv_button.addEventListener("click", async function()
 
 return_button.addEventListener("click", async function()
 {
-  if (data.info[0][0].aname === "Ancient Chamber") {
+  if (data.game_state.current_airport === "Ancient Chamber") {
 
     popupfunc("You can't return at this point.")
 
