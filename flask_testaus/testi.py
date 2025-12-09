@@ -188,7 +188,7 @@ def artefact_displayer(arts):
 # poista listoilta ja palauta ostettu artefakti
 def shop_buy(index):
     art = shop_cache[index]
-    shop_cache.remove(art)
+    #shop_cache.remove(art)
     return art
 
 

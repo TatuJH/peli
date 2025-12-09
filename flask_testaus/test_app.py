@@ -118,8 +118,15 @@ def shop(action, index):
 
     # pelaaja myy artefaktin indeksillä index
     if action == "sell":
+        for arrrr in artefacts:
+            print (arrrr.name)
+
+        #TODO TÄRKEÄ: ETSI KEINO, JOLLA LISTA EI PÄIVITY HETI KUN PELAAJA POISTAA ARTEFAKTIN
+        #TODO           PELAAJAN REPPU MUUTTUU VASTA KUN LÄHTEE VETÄÄN KAUPASTA!!
+        #TODO           NAPIT JS PUOLELLA ON KERTAKÄYTTÖISIÄ
+        #TODO           MUUTA SE AARREKOUNTTERI SAMALLA!!!!!
         art = artefacts[int(index)]
-        artefacts.remove(art)
+        artefacts.pop(index)
 
         # pakko olla parempi tapa tehdä tämä
         money_earned += art.value
