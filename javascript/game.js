@@ -210,7 +210,8 @@ async function depart() {
         if (i !== 0) {
           circle.addEventListener('click', () => {
 
-            depart_button.textContent = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont})`;
+            airport_info.textContent = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont})`;
+            show(airport_info)
               //Initialize depart button
             const departHandler = async function() {
 
@@ -240,12 +241,12 @@ async function depart() {
             }
             const departHover = function() {
 
-              depart_button.textContent = "Depart";
+              //depart_button.textContent = "Depart";
 
             }
             const departOut = function() {
 
-              depart_button.textContent = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont})`;
+              //depart_button.textContent = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont})`;
 
             }
 
@@ -338,6 +339,7 @@ const work_div = document.getElementById('work_div');
 const map_container = document.getElementById('map_container');
 const map_div = document.getElementById('map_div');
 const map_text = document.getElementById('map_text');
+const airport_info = document.getElementById('airport_text');
 const shop_div = document.getElementById('shop_div');
 const inv_div = document.getElementById('inventory_div');
 const achievement_div = document.getElementById('achievement_div');
