@@ -56,6 +56,7 @@ const depart_button = document.getElementById('depart_button');
 const money_display = document.getElementById('money_display');
 const time_display = document.getElementById('time_display');
 const actions_display = document.getElementById('actions_display');
+const seenAchievements = new Set();
 const co2_display = document.getElementById('co2_display');
 const popup = document.getElementById('popup');
 
@@ -118,6 +119,9 @@ async function updateStats() {
             }
 
         }
+
+    achievements()
+
     }
 
     // rahan nollauksesta ei häviä :p
@@ -336,33 +340,41 @@ async function achievements() {
 
     achievements_list.innerHTML = "";
 
+    // Käydään läpi kaikki saavutukset ja lisätään listaan
     for (let i = 0; i < data.info[0].length; i++) {
+        const ach = data.info[0][i];
+
         const li = document.createElement('li');
-
-        li.textContent = data.info[0][i].name;
-
+        li.textContent = ach.name;
         li.className = "ach";
         achievements_list.appendChild(li);
 
         li.addEventListener('mouseover', () =>{
-            li.textContent = data.info[0][i].description;
+            li.textContent = ach.description;
         });
 
         li.addEventListener('mouseout', () =>{
-            li.textContent = data.info[0][i].name;
+            li.textContent = ach.name;
         });
 
-        (function(ach, wait) {
-            setTimeout(() => {
-                show(popup);
-                popup.textContent = `New achievement: ${data.info[0][i].name}`;
+        // jos saavutusta ei ole vielä näytetty, ajoita popup
+        if (!seenAchievements.has(ach.name)) {
+            // lisää heti settiin, jotta samaa ei ajoiteta kahteen kertaan
+            seenAchievements.add(ach.name);
 
+            // closure käyttää tässä suoraan ach-oliota
+            (function(achievement, wait) {
                 setTimeout(() => {
-                    hide(popup);
-                }, 3000);
+                    show(popup);
+                    popup.textContent = `New achievement: ${achievement.name}`;
 
-            }, wait);
-        })(data.info[0][i], i * 3500);
+                    setTimeout(() => {
+                        hide(popup);
+                    }, 3000);
+
+                }, wait);
+            })(ach, i * 3500);
+        }
     }
 }
 
@@ -728,7 +740,5 @@ shop_button.addEventListener("click", async function() {
 
 
 });
-
-achievements()
 
 depart();
