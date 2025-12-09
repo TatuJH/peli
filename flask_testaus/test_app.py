@@ -7,6 +7,7 @@ import testi
 from geopy import distance
 from achievement_list import achievements
 import event_list
+from python.main import BOOLEAN_player_has_all_artefacts_and_can_go_to_antarctica
 
 artefacts = list()
 cont = "AN"
@@ -25,17 +26,22 @@ money_earned = 0
 artefacts_earned = 0
 events_completed = 0
 converted_amount = 0
+# saavutuksia
 countries_index = 0
 money_index = 0
 distance_index = 0
 artefacts_index = 0
 events_index = 0
 convert_index = 0
+
 enemy_amount = 0
 fight = {}
 money_modifier = 1
 current_airport_list = {}
 co2 = 0
+
+# 6 meinaa peluri pääsee etelänavalle !!
+unique_artefacts = 0
 
 # Tämä on merkkijono joka näytetään sellaisenaan ruudun yläosassa
 # Jos artefakteja on kaksi samalta mantereelta, merkitään 1/6 +1
@@ -48,6 +54,8 @@ CORS(app)
 def add_game_state(dict):
     response = {}
     thing = testi.artefact_displayer(artefacts)
+    # [0] on 0/6, [1] on raaka numero 0-6
+    unique_artefacts = thing[1]
     response["info"] = dict,
     response["game_state"] = {
         "actions" : actions_left,
@@ -62,7 +70,8 @@ def add_game_state(dict):
         "current_country" : country,
         "current_continent" : cont,
         "distance" : total_distance,
-        "artefact_display" : thing,
+        "artefact_display" : thing[0],
+        "unique_artefacts" : unique_artefacts,
         "co2" : co2
     }
 
