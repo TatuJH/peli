@@ -17,7 +17,7 @@ size = ""
 money = 1000
 time = 365
 achieved = []
-total_distance = 0
+total_distance = 100000
 visited_countries = []
 actions_left = 3
 reason = "no_time"
@@ -38,6 +38,8 @@ current_airport_list = {}
 
 app = flask.Flask(__name__)
 CORS(app)
+
+
 
 #Adds game state to the JSON response (all requests return game_state and info)
 def add_game_state(dict):
@@ -72,10 +74,7 @@ def score():
 @app.route("/shop/<action>/<int:index>", methods=["GET", "POST"])
 # shop init
 def shop(action, index):
-    global money
-    global money_earned
-    global actions_left
-    global cont
+    global money, money_earned, actions_left, cont, artefacts_earned
 
 
     # kauppaan ilmestyy artefaktit
@@ -105,6 +104,7 @@ def shop(action, index):
                     "text" : f"Ostettu {art.name} hintaan ${art.value}!!",
                     "success" : True
                 }
+            artefacts_earned += 1
 
         return add_game_state(DIC)
 
@@ -127,11 +127,12 @@ def shop(action, index):
 
 @app.route('/events/<action>/<int:number>/<choice>', methods=['GET', 'POST'])
 def event(action, number, choice):
-    global money, time, artefacts, actions_left
+    global money, time, artefacts, actions_left, money_earned, artefacts_earned, events_completed
 
     if action == "get":
         actions_left -= 1
         time -= 5
+        events_completed += 1
 
         return add_game_state(testi.get_event(money_modifier))
 
@@ -148,6 +149,7 @@ def event(action, number, choice):
             removables.extend(testi.remove_artefacts(artefacts, cont, costs['artefacts']))
 
         money += response['money']
+        money_earned += response['money']
         time += response['time']
 
         if money < 0:
@@ -159,6 +161,7 @@ def event(action, number, choice):
             # extend lisää pelkästään annetun listan jäsenet eikä itse listaa
             newarts = testi.add_artefacts(artefacts, cont, response["artefact_count"])
             artefacts.extend(newarts)
+            artefacts_earned += response['artefact_count']
 
         # jos negatiivinen arvo niin poistetaan se määrä ja passitetaan tieto eteenpäin
         elif response["artefact_count"] < 0:
@@ -179,7 +182,7 @@ def event(action, number, choice):
 
 @app.route('/fight/<action>/<int:enemy>', methods=['GET', 'POST'])
 def fight(action, enemy):
-    global fight, enemy_amount, actions_left, money, time, money_modifier
+    global fight, enemy_amount, actions_left, money, time, money_modifier, money_earned
     if action == "start":
         actions_left -= 1
         time -= 5
@@ -234,6 +237,7 @@ def fight(action, enemy):
 
     if fight["amount"] <= 0:
         fight["money_get"] = 100 * enemy_amount * money_modifier
+        money_earned += 100 * enemy_amount * money_modifier
         money += enemy_amount * 100 * money_modifier
 
     if fight["player_hp"] <= 0:
@@ -269,10 +273,11 @@ def airports(action, atarget, ctarget, size, cost, continent, index):
 
 @app.route('/work')
 def work():
-    global money, time, actions_left, money_modifier
+    global money, time, actions_left, money_modifier, money_earned
 
     response = testi.work(money_modifier)
     money += response['money'] * money_modifier
+    money_earned += response['money']
     time -= response['time']
     actions_left -= 1
     time -= 5
@@ -291,6 +296,11 @@ def ach():
     for achievementti in new_achievements:
         category = achievementti["category"]
         name = achievementti["name"]
+
+        reward = achievementti.get("reward", 0)
+        if reward:
+            money += reward
+            money_earned += reward
 
         description = ""
         for item in achievements[category]:
