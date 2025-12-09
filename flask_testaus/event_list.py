@@ -305,16 +305,16 @@ def getallevents(money_modifier):
                     "results": {
                         1: {"money": 0, "time": 0, "artefacts": 0,
                             "text": f"You bet ${int(round(200 * money_modifier))} on one of the roosters and join the crowd to watch the battle."
-                                    "The birds are placed into the ring and the bell rings!!"
+                                    " The birds are placed into the ring and the bell rings!! "
                                     "After a few minutes, your rooster waddles away from the opponent and sits down. It's declared the loser and you leave the ring disappointed."},
                         2: {"money": int(round(400 * money_modifier)), "time": 0, "artefacts": 0,
                             "text": f"You bet ${int(round(200 * money_modifier))} on one of the roosters and join the crowd to watch the battle."
-                                    "The birds are placed into the ring and the bell rings!!"
-                                    "The referee tries egging on the roosters to engage in battle, but fails."
-                                    f"After a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation. You've gained ${int(round(400 * money_modifier))}!!"},
+                                    " The birds are placed into the ring and the bell rings!! "
+                                    " The referee tries egging on the roosters to engage in battle, but fails."
+                                    f" After a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation. You've gained ${int(round(400 * money_modifier))}!!"},
                         3: {"money": int(round(200 * money_modifier)), "time": 0, "artefacts": 0,
                             "text": f"You bet ${int(round(200 * money_modifier))} on one of the roosters and join the crowd to watch the battle."
-                                    "The birds are placed into the ring and the bell rings!!"
+                                    " The birds are placed into the ring and the bell rings!! "
                                     f"The roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw. You're refunded ${int(round(200 * money_modifier))}."}
                     }
                 },
@@ -327,13 +327,13 @@ def getallevents(money_modifier):
                                     "After a few minutes, your rooster waddles away from the opponent and sits down. It's declared the loser and you leave the ring disappointed."},
                         2: {"money": int(round(800 * money_modifier)), "time": 0, "artefacts": 0,
                             "text": f"You bet ${int(round(400 * money_modifier))} on one of the roosters and join the crowd to watch the battle."
-                                    f"The birds are placed into the ring and the bell rings!!"
-                                    f"The referee tries egging on the roosters to engage in battle, but fails."
-                                    f"After a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation. You've gained ${int(round(800 * money_modifier))}!!"},
+                                    f" The birds are placed into the ring and the bell rings!!"
+                                    f" The referee tries egging on the roosters to engage in battle, but fails."
+                                    f" After a while, the opposing rooster sits down and you immediately declare your bird the winner by resignation. You've gained ${int(round(800 * money_modifier))}!!"},
                         3: {"money": int(round(400 * money_modifier)), "time": 0, "artefacts": 0,
-                            "text": f"You bet ${int(round(400 * money_modifier))} on one of the roosters and join the crowd to watch the battle."
-                                    "The birds are placed into the ring and the bell rings!!"
-                                    f"The roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw. You're refunded ${int(round(400 * money_modifier))}."}
+                            "text": f" You bet ${int(round(400 * money_modifier))} on one of the roosters and join the crowd to watch the battle."
+                                    " The birds are placed into the ring and the bell rings!!"
+                                    f" The roosters eat seeds off the ground for 20 minutes until the referee gets bored and declares the bout a draw. You're refunded ${int(round(400 * money_modifier))}."}
                     }
                 },
                 "Artefact": {
