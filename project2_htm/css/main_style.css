@@ -205,3 +205,8 @@ body {
     height: 100%;
     width: 100%;
 }
+
+.button {
+    padding: 5rem;
+    font-size: 2rem;
+}
