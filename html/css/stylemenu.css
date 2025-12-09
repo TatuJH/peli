@@ -43,7 +43,7 @@ html, body {
 
 .intro_container p,
 .intro_container ul {
-    font-size: 28px;
+    font-size: 1.5rem;
 }
 
 .intro_container ul {
@@ -69,18 +69,28 @@ html, body {
     border-radius: 16px;
     padding: 2rem 3rem;
     width: fit-content;
+    height: fit-content;
     max-width: 100%;
     margin: 2rem auto 0;
     box-sizing: border-box;
+
 }
 
 /* -------------------- Buttons -------------------- */
-.intro_buttons {
+
+.menu_buttons, .intro_buttons {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    align-items: center;  /* center buttons horizontally */
+    align-items: center;
 }
+/*intro screen buttons are at the bottom right of the screen */
+.intro_buttons {
+    position: absolute;
+    right: 8rem;
+    bottom: 8rem;
+}
+
 
 .intro_button {
     font-family: 'Cinzel', serif;

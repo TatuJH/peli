@@ -22,7 +22,7 @@ let map = null;
 //Random departure fix
 let departHandler = null;
 
-let shopping = true;
+let shopping = false;
 
 //--------------------------------------------------------
 
@@ -413,7 +413,7 @@ event_button.addEventListener('click', async() => {
                 show(return_button)
                 return_button.addEventListener('click', () => {
                     event_text.remove();
-
+                    hideAll()
                     show(main_buttons)
 
                 }, {once: true});
