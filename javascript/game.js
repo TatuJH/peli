@@ -1,9 +1,9 @@
 //Removed obsolete variables, functions, etc.
 //Added permanent elements instead of initializing them in JS; check HTML
-//universal_button for simple tasks (OK-button, etc.)
-//When adding eventListener to universal_button, use {once: true}
+//return_button for simple tasks (OK-button, etc.)
+//When adding eventListener to return_button, use {once: true}
 //Don't use classList.toggle, use either .add or .remove
-//hideAll() hides all elements from right_div and left_div + additionally universal_button
+//hideAll() hides all elements from right_div and left_div + additionally return_button
 //removeActions() removes all non-permanent action buttons (like event choices)
 //updateInventory() now updateStats() for clarity
 //Everything related to inventory (artefacts etc.) unchanged
@@ -40,7 +40,7 @@ function hideAll() {
     left_div.className = '';
     left_div.classList.add('split_screen');
 
-    hide(universal_button);
+    hide(return_button);
 
     fight_div.querySelectorAll('p').forEach(child => {
         child.remove();
@@ -53,7 +53,7 @@ function removeActions() {
 
     action_buttons.querySelectorAll('button').forEach(child => {
 
-        if (!child.classList.contains('universal_button') && child.id !== "return_button" && child.id !== "depart_button") {
+        if (!child.classList.contains('return_button') && child.id !== "return_button" && child.id !== "depart_button") {
             child.remove();
         }
 
@@ -110,52 +110,9 @@ function no_money_popup() {
         }, 3000);
 }
 
-//--------------------------------------------------------
+async function depart() {
 
-//--------------Permanent elements--------------
-
-const main_div = document.getElementById("main");
-const left_div = document.getElementById('left_div');
-const right_div = document.getElementById('right_div');
-const event_div = document.getElementById('event_div');
-const fight_div = document.getElementById('fight_div');
-const work_div = document.getElementById('work_div');
-const map_container = document.getElementById('map_container');
-const map_div = document.getElementById('map_div');
-const map_text = document.getElementById('map_text');
-const shop_div = document.getElementById('shop_div');
-const inv_div = document.getElementById('inventory_div');
-const achievement_div = document.getElementById('achievement_div');
-
-const action_buttons = document.getElementById('action_buttons');
-const main_buttons = document.getElementById('main_buttons');
-const work_button = document.getElementById('work_button');
-const event_button = document.getElementById('event_button');
-const fight_button = document.getElementById('fight_button');
-const shop_button = document.getElementById("shop_button");
-const map_button = document.getElementById('map_button');
-const inv_button = document.getElementById('inv_button');
-const return_button = document.getElementById("return_button");
-const depart_button = document.getElementById('depart_button');
-
-// its a list incase we need more than 1 of them o_O
-const universal_button = document.getElementById('return_button');
-
-const money_display = document.getElementById('money_display');
-const time_display = document.getElementById('time_display');
-const actions_display = document.getElementById('actions_display');
-
-
-const inv_list = document.getElementsByClassName("art");
-
-//--------------------------------------------------------
-
-//--------------Permanent eventListeners--------------
-
-//Initialize functionality for map button
-map_button.addEventListener('click', async() => {
-
-    hideAll()
+  hideAll()
 
     return_button.textContent = 'Return';
     show(map_container);
@@ -253,7 +210,7 @@ map_button.addEventListener('click', async() => {
         if (i !== 0) {
           circle.addEventListener('click', () => {
 
-            depart_button.textContent = 'Depart';
+            depart_button.textContent = `${data.info[0][i].aname}, ${data.info[0][i].cname} (${data.info[0][i].alt_cont})`;
               //Initialize depart button
             const departHandler = async function() {
 
@@ -273,7 +230,7 @@ map_button.addEventListener('click', async() => {
                     depart_button.removeEventListener('mouseout', departOut);
                     removeActions();
                     hideAll();
-                    hide(universal_button);
+                    hide(return_button);
                     hide(depart_button);
                     show(main_buttons);
 
@@ -296,7 +253,7 @@ map_button.addEventListener('click', async() => {
               depart_button.addEventListener('mouseover', departHover);
               depart_button.addEventListener('mouseout', departOut);
 
-              show(universal_button);
+              show(return_button);
               show(depart_button);
 
           });
@@ -328,13 +285,97 @@ map_button.addEventListener('click', async() => {
 
     show(action_buttons);
 
+}
+
+async function achievements() {
+    const achievements_list = document.getElementById('achievement_list');
+
+    let response = await fetch('http://127.0.0.1:3000/ach');
+    let data = await response.json();
+
+    achievements_list.innerHTML = "";
+
+    for (let i = 0; i < data.info[0].length; i++) {
+        const li = document.createElement('li');
+
+        li.textContent = data.info[0][i].name;
+
+        li.className = "ach";
+        achievements_list.appendChild(li);
+
+        li.addEventListener('mouseover', () =>{
+            li.textContent = data.info[0][i].description;
+        });
+
+        li.addEventListener('mouseout', () =>{
+            li.textContent = data.info[0][i].name;
+        });
+
+        (function(ach, wait) {
+            setTimeout(() => {
+                show(popup);
+                popup.textContent = `New achievement: ${data.info[0][i].name}`;
+
+                setTimeout(() => {
+                    hide(popup);
+                }, 3000);
+
+            }, wait);
+        })(data.info[0][i], i * 3500);
+    }
+}
+
+//--------------------------------------------------------
+
+//--------------Permanent elements--------------
+
+const main_div = document.getElementById("main");
+const left_div = document.getElementById('left_div');
+const right_div = document.getElementById('right_div');
+const event_div = document.getElementById('event_div');
+const fight_div = document.getElementById('fight_div');
+const work_div = document.getElementById('work_div');
+const map_container = document.getElementById('map_container');
+const map_div = document.getElementById('map_div');
+const map_text = document.getElementById('map_text');
+const shop_div = document.getElementById('shop_div');
+const inv_div = document.getElementById('inventory_div');
+const achievement_div = document.getElementById('achievement_div');
+
+const action_buttons = document.getElementById('action_buttons');
+const main_buttons = document.getElementById('main_buttons');
+const work_button = document.getElementById('work_button');
+const event_button = document.getElementById('event_button');
+const fight_button = document.getElementById('fight_button');
+const shop_button = document.getElementById("shop_button");
+const map_button = document.getElementById('map_button');
+const inv_button = document.getElementById('inv_button');
+const return_button = document.getElementById("return_button");
+const depart_button = document.getElementById('depart_button');
+
+const money_display = document.getElementById('money_display');
+const time_display = document.getElementById('time_display');
+const actions_display = document.getElementById('actions_display');
+
+
+const inv_list = document.getElementsByClassName("art");
+
+//--------------------------------------------------------
+
+//--------------Permanent eventListeners--------------
+
+//Initialize functionality for map button
+map_button.addEventListener('click', async() => {
+
+    depart();
+
 });
 
 //Initialize functionality for event button
 event_button.addEventListener('click', async() => {
 
     hideAll();
-    hide(universal_button);
+    hide(return_button);
 
     //Fetch random event from Python via Flask
     response = await fetch('http://127.0.0.1:3000/events/get/0/x');
@@ -449,7 +490,7 @@ fight_button.addEventListener('click', async() => {
     }
 
     hideAll();
-    hide(universal_button);
+    hide(return_button);
 
     //Fetch a fight starting position from Python via Flask
     response = await fetch('http://127.0.0.1:3000/fight/start/0');
@@ -674,42 +715,6 @@ shop_button.addEventListener("click", async function() {
 
 });
 
-async function achievements() {
-    const achievements_list = document.getElementById('achievement_list');
-
-    let response = await fetch('http://127.0.0.1:3000/ach');
-    let data = await response.json();
-
-    achievements_list.innerHTML = "";
-
-    for (let i = 0; i < data.info[0].length; i++) {
-        const li = document.createElement('li');
-
-        li.textContent = data.info[0][i].name;
-
-        li.className = "ach";
-        achievements_list.appendChild(li);
-
-        li.addEventListener('mouseover', () =>{
-            li.textContent = data.info[0][i].description;
-        });
-
-        li.addEventListener('mouseout', () =>{
-            li.textContent = data.info[0][i].name;
-        });
-
-        (function(ach, wait) {
-            setTimeout(() => {
-                show(popup);
-                popup.textContent = `New achievement: ${data.info[0][i].name}`;
-
-                setTimeout(() => {
-                    hide(popup);
-                }, 3000);
-
-            }, wait);
-        })(data.info[0][i], i * 3500);
-    }
-}
-
 achievements()
+
+depart();

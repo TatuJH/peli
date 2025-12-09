@@ -7,7 +7,7 @@ from achievement_list import achievements
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demokanta',
+    database='demogame',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
