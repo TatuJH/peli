@@ -253,15 +253,17 @@ async function achievements() {
         li.addEventListener('mouseover', () => li.textContent = ach.description);
         li.addEventListener('mouseout',  () => li.textContent = ach.name);
 
-        if (!seenAchievements[ach.name]) {
+        if (seenAchievements[ach.name] !== true) {
             seenAchievements[ach.name] = true;
 
             (function(achievement, delay) {
                 setTimeout(() => {
                     show(popup);
-                    popup.textContent = achievement.category === "distance"
-                        ? `Enviroment Tax: ${achievement.name} for $${achievement.reward}!`
-                        : `New achievement: ${achievement.name} for $${achievement.reward}!`;
+                    if (achievement.category === "distance") {
+                        popup.textContent =  `Enviroment Tax: ${achievement.name} for $${achievement.reward}!`;
+                        } else {
+                        popup.textContent = `New achievement: ${achievement.name} for $${achievement.reward}!`;
+                        }
 
                     setTimeout(() => hide(popup), 4000);
                 }, delay);

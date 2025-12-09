@@ -4,18 +4,16 @@ from project2_python import data, event_list
 from geopy import distance
 from project2_python.achievement_list import achievements
 
-
 conn = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='demogame',
+    database='demokanta',
     user='tatu',
     password='Tietokannat1',
     autocommit=True
 )
 
 cursor = conn.cursor()
-
 
 class Artefact:
     def __init__(self, nimi, arvo, manner):
@@ -28,11 +26,9 @@ uncompleted_events = []
 # kauppa säilyttää myynnissä olevat aarteet tässä
 shop_cache = list()
 
-
 def start():
     for eve in event_list.getallevents(0):
         uncompleted_events.append(eve)
-
 
 def scores():
     cursor.execute("SELECT id, score FROM scores;")
@@ -42,7 +38,6 @@ def scores():
         return {score[0]: score[1] for score in scores}
     else:
         return {}
-
 
 # tää returnaa nyt listan uusista artefakteista
 # parametreina nykyiset artefaktit, nykyinen manner ja annettava määrä
@@ -88,7 +83,6 @@ def add_artefacts(artefacts, cont, count=1):
 
     return new_artefacts
 
-
 # tälle annetaan artefaktilista sekä nykyinen manner sekä annettu indeksi. Poistaa yhden artefaktin
 def remove_artefacts(artefacts, cont):
     # Poista tältä mantereelta kotoisin artefakti ekana
@@ -108,7 +102,6 @@ def remove_artefacts(artefacts, cont):
 
     # palautetaan artefakti, joka poistetaan
     return removables
-
 
 def get_event(modifier):
     global uncompleted_events
@@ -375,7 +368,6 @@ def get_airport(current_airport):
 
     return airport_list
 
-
 def achievement(
     visited_countries,
     money_earned,
@@ -456,16 +448,15 @@ def achievement(
 
     return new_achievements
 
-
 def winning(money, time, total_distance, achieved, visited_countries):
     global cursor
 
     score = money + total_distance // 60 + time * 10
 
     # lisää score databaseen, testauksen aikana ei käytössä
-    # cursor = conn.cursor()
-    # cursor.execute("INSERT INTO scores (score) VALUES (%s)", (score,))
-    # conn.commit()
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO scores (score) VALUES (%s)", (score,))
+    conn.commit()
 
     return {
         "achievements": achieved,

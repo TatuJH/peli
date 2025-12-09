@@ -12,13 +12,7 @@ async function lose_screen() {
     response = await fetch('http://127.0.0.1:3000/lose_screen');
     data = await response.json();
 
-    if (data.reason === "no_time") {
-        losing_reason_p.textContent = "You ran out of time. You have failed to fulfill your god's wishes and are banished from this realm.";
-    } else if (data.reason === "no_money") {
-        losing_reason_p.textContent = "Lacking money to escape the spirit, you have failed to fulfill your god's wishes and are banished from this realm.";
-    } else if (data.reason === "no_actions") {
-        losing_reason_p.textContent = "The spirit catches you. You have failed to fulfill your god's wishes and are banished from this realm.";
-    }
+    losing_reason_p.textContent = "Unfortunately, you hava lost. But don't worry! You can still play again anytime you want :)!"
 
     location_li.textContent = "Your journey ended in " + data.airport + " in " + data.country + ", " + data.cont + ".";
     visited_li.textContent = "Along your journey you visited " + data.visited_countries.join(", ") + "and travelled a total of " + data.total_distance + "km.";

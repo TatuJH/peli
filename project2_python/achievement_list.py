@@ -1,6 +1,5 @@
 achievements = {
     "distance":[
-        (10000, "First Steps", "Travelled 10000 km", -50),
         (30000, "Beginner Traveler", "Travelled 30000 km", -75),
         (60000, "Intermediate Traveler", "Travelled 60000 km", -100),
         (80000, "Advanced Traveler", "Travelled 80000 km", -150),
