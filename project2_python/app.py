@@ -97,7 +97,7 @@ def shop(action, index):
     # kauppaan ilmestyy artefaktit
     if action == "get":
         # annetaan pelille nykyiset artefaktit sekä manner jotta kauppaan ei tuu duplikaatteja tai ulkomaisia aarteita
-        actions_left += 1
+        actions_left -= 1
         arts = game.shop_init(artefacts, cont)
         return add_game_state(json.dumps([art.__dict__ for art in arts]))
 

@@ -155,7 +155,7 @@ body {
     border-radius: 40px;
 }
 /*yhtenevät tekijät molempien listaesineiden välillä */
-.overlay_list li {
+.overlay_list li, .overlay_list button {
     border: 8px solid;
     color: white;
     padding: 20px 15px;
@@ -164,7 +164,8 @@ body {
     white-space: pre-line;
 }
 /*yksittäiset esineet listalla */
-#inventory_list li {
+#inventory_list button {
+
     background-color: #b98a50;
     border-color : #e29c46;
     color: white;
